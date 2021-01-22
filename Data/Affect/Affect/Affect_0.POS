@@ -1,0 +1,290 @@
+Affect_0
+5192
+001   1 2 $SEXE$
+002   2 4  $Avez-vous appris des choses que vous ne connaissiez pas durant les cours d'éducation sexuelle à l'école?$
+003   310  $Si oui, sur quel(s) thème(s) avez-vous appris des choses?  (Nb réponses - détails : voir variables suivantes)$
+004   5 2  $Les MST, Risques, Santé$
+005   6 2  $La contraception, l'IVG$
+006   7 2  $Rapports hommes/femmes$
+007   8 2  $Le fonctionnement du corps, l'anatomie$
+008   9 2  $La masturbation$
+009  10 2  $Conseils et informations sur la pratique sexuelle$
+010  11 2  $Le premier rapport sexuel$
+011  12 2  $Sexisme/Homophobie$
+012  13 2  $Contacts de professionnels, d'établissements spécialisés (planning familial) etc.$
+013  14 2  $Autre$
+014  15 3  $Aviez-vous déjà eu une relation sexuelle avant votre premier cours d’éducation sexuelle ?$
+015  16 3  $Enseignement PUB/PRIV - Au collège$
+016  17 3  $Enseignement PUB/PRIV - Au Lycée$
+017  18 3  $Taille Agglo - Au collège$
+018  19 3  $Taille Agglo - Au lycée$
+019  20 7  $Combien de soeurs avez-vous?$
+020  21 7  $Combien de frères avez-vous?$
+284 32111  $Total frères et sœurs$
+021  2212  $Combien de demi-soeurs avez-vous?$
+022  24 9  $Combien de demi-frères avez-vous?$
+285 32315  $Total demi frères et sœurs$
+286 32522  $Total fratrie$
+023  25 7  $Vos parents sont actuellement :$
+024  26 5  $A quel moment vos parents se sont-ils séparés ?$
+025  27 5  $Au cours de votre adolescence (collège/lycée), avez-vous parlé de sexualité avec l'un de vos parents ?$
+026  28 3  $Au cours de votre adolescence (collège/lycée), avez-vous parlé de sexualité avec d'autres membres de votre famille ?$
+027  29 7  $Si oui, lesquels?  (Nb réponses - détails : voir variables suivantes)$
+028  30 2  $Grand-frère$
+029  31 2  $Petit-frère$
+030  32 2  $Grande-soeur$
+031  33 2  $Petite-soeur$
+032  34 2  $Grand-mère$
+033  35 2  $Grand-père$
+034  36 2  $Cousin$
+035  37 2  $Cousine$
+036  38 2  $Autre$
+037  39L3  $Autre :$
+038  4211  $De quel(s) sujet(s) avez-vous déjà parlé avec cette/ces personne(s) (Nb réponses - détails : voir variables suivantes)$
+039  44 2  $MST, Risques, Santé$
+040  45 2  $Contraception et protection$
+041  46 2  $Comportement en couple, respect de l'autre$
+042  47 2  $Fonctionnement du corps$
+043  48 2  $Problème(s) sexuel(s)$
+044  49 2  $La masturbation$
+045  50 2  $Conseils et informations sur la pratique sexuelle$
+046  51 2  $Le premier rapport sexuel$
+047  52 2  $Les autres rapports sexuels$
+048  53 2  $L'orientation sexuelle$
+049  54 2  $Autre$
+050  5539  $Autre :$
+051  57 7  $Pensez-vous que vos parents sont au courant de l’âge auquel vous avez eu votre premier rapport sexuel?$
+052  58 6  $Quel âge aviez-vous environ lorsque vous avez dormi pour la première fois chez votre petit copain/petite copine (avec l'accord de vos parents)?$
+053  59 6  $Quel âge aviez-vous environ lorsque votre petit copain / petite copine a pu venir dormir chez vous (avec l'accord de vos parents)?$
+054  60 2  $Avez-vous déjà parlé de sexualité / moyen de contraception avec un professionnel de santé?$
+055  6112  $De quel(s) sujet(s) avez-vous déjà parlé avec ce/ces professionnel(s) de santé ? (Nb réponses - détails : voir variables suivantes)$
+056  63 2  $MST, Risques, Santé$
+057  64 2  $Contraception$
+058  65 2  $Grossesse$
+059  66 2  $Comportement en couple, respect de l'autre$
+060  67 2  $Fonctionnement du corps$
+061  68 2  $Problème(s) sexuel(s)$
+062  69 2  $La masturbation$
+063  70 2  $Conseils et informations sur la pratique sexuelle$
+064  71 2  $Le premier rapport sexuel$
+065  72 2  $Les autres rapports sexuels$
+066  73 2  $L'orientation sexuelle$
+067  74 2  $Autre$
+068  7522  $Autre :$
+069  77 2  $Pour quelle(s) raison(s) avez-vous eu cette discussion avec ce/ces professionnel(s) de santé ? (Nb réponses - détails : voir variables suivantes)$
+070  78 2  $Je ne savais pas à qui en parler$
+071  79 2  $C’était le mieux placé pour ce qui me concernait$
+072  80 2  $Il me l’a demandé$
+073  81 2  $Par envie, ou par curiosité$
+074  82 2  $A la demande de mes parents$
+075  83 2  $Autre$
+076  84L3  $Autre :$
+077  87 3  $Etes-vous suivie par un gynécologue?$
+078  88 4  $Depuis quel âge êtes-vous suivie?$
+079  89 2  $Avez-vous déjà eu un(e) petit(e) ami(e)?$
+080  90 6  $A quel âge avez-vous eu votre premier(e) petit(e)-ami(e) ?$
+081  91 2  $Etait-ce une personne...$
+082  92 2  $Avez-vous déjà eu un rapport sexuel ?$
+083  9323  $A quel âge avez-vous eu votre premier rapport sexuel ?$
+287 32734  $Ancienneté 1er rapport (en années)$
+084  95 3  $Etait-ce également la première fois pour votre partenaire ?$
+085  96 4  $Lors de votre première relation sexuelle, diriez-vous que vous étiez amoureux(se) ?$
+086  97 3  $Lors de votre première relation sexuelle, étiez-vous en couple avec votre partenaire ?$
+087  98 7  $Si oui, à partir de combien de temps de relation de couple avez-vous eu votre premier rapport sexuel?$
+088  99 6  $Si oui, combien de temps êtes-vous resté(e) avec la personne ?$
+089 100 2  $Si oui, êtes-vous toujours en couple avec cette personne ?$
+090 101 6  $Actuellement comment définissez-vous votre orientation sexuelle ?$
+091 102 2  $Votre orientation a-t-elle connu des changements au cours de votre vie?$
+092 103 2  $Avez-vous parfois des doutes sur votre orientation sexuelle?$
+093 104 5  $Vers quel âge avez-vous commencé à vous poser des questions?$
+094 105 4  $Vos parents sont-ils au courant de votre orientation sexuelle?$
+095 106 5  $Votre orientation sexuelle a-t-elle modifié vos rapports avec vos parents?$
+096 10734  $Autre :$
+097 109 3  $Insultes liées à votre orientation sexuelle$
+098 110 3  $Violences physiques$
+099 111 3  $Menaces$
+100 112 3  $Remarques déplacées$
+101 113 3  $Dans votre quartier, voisinage$
+102 114 3  $Au collège$
+103 115 3  $Au lycée$
+104 116 3  $Dans vos activités de loisirs (sportives, culturelles...)$
+105 117 3  $A votre domicile$
+106 118 3  $Dans un lieu public (transports, rue, commerces, bars, boîtes de nuit...)$
+107 119 3  $Quelle est votre opinion par rapport à ces sexualités? - Homosexualité masculine$
+108 120 3  $Quelle est votre opinion par rapport à ces sexualités? - Homosexualité féminine$
+109 12180  $Avec combien d’hommes considérez-vous avoir été en couple ?$
+110 12377  $Avec combien de femmes considérez-vous avoir été en couple ?$
+111 125 6  $Combien de temps a duré la plus longue de vos relations (ou celle en cours si c'est la plus longue)?$
+112 126 7  $Avec combien de partenaires avez-vous eu des relations sexuelles au cours de votre vie?$
+113 127 2  $Avez-vous déjà eu recours à un test de dépistage de maladies d'infections sexuellement transmissibles?$
+114 128 3  $Avez-vous déjà été affecté(e) personnellement par des maladies ou des infections sexuellement transmissibles?$
+115 129 2  $Avez-vous déjà utilisé une pilule du lendemain?$
+116 130 2  $Prenez-vous actuellement la pilule?$
+117 13126  $Depuis quel âge prenez-vous la pilule?$
+118 133 2  $Utilisez-vous d'autres moyens de contraception / protection?$
+119 134 7  $Si oui, le(s)quel(s) ?$
+120 135 7  $Autre :$
+121 136 4  $Avez-vous des préservatifs sur vous ?$
+122 137 2  $Etes-vous déjà tombée enceinte ?$
+123 13832  $Si oui, quel âge aviez-vous ?$
+124 140 3  $L'une de vos partenaires est-elle déjà tombée enceinte ?$
+125 141 2  $Avez-vous déjà eu recours à un avortement ?$
+126 142 3  $L'une de vos partenaires a-t-elle déjà avorté?$
+127 143 3  $Etiez-vous à l'origine de cette grossesse ?$
+128 144 4  $A quelle fréquence sortez-vous, en moyenne, pendant l’année universitaire (bar, concert, boîte de nuit etc.)?$
+129 145 4  $Lorsque vous sortez le soir, le fait de trouver un(e) partenaire sexuel(le) fait-il partie de vos motivations?$
+130 146 5  $D'une façon générale, quelle est votre fréquence de consommation d'alcool?$
+131 147 4  $Au cours des 12 derniers mois, combien de fois vous êtes-vous senti(e) en état d'ivresse?$
+132 148 6  $Consommez-vous ou avez-vous déjà consommé du cannabis?$
+133 149 6  $Consommez-vous, ou avez-vous déjà consommé une autre substance psychoactive (cocaïne, drogues de synthèse etc.)?$
+134 150 3  $Etes-vous actif(ve) sur un site de rencontres?$
+135 151 5  $Si oui, sur quel(s) site(s) ?  (Nb réponses - détails : voir variables suivantes)$
+136 152 2  $Tinder$
+137 153 2  $Meetic$
+138 154 2  $Adopteunmec$
+139 155 2  $Badoo$
+140 156 2  $Mektoub (ou Inchallah)$
+141 157 2  $Autre$
+142 15847  $Autre :$
+143 160 4  $Avez-vous déjà fait des rencontres sur un site de rencontre (Nb réponses - détails : voir variables suivantes)?$
+144 161 2  $Oui, une (ou des) rencontre(s) amoureuse(s)$
+145 162 2  $Oui, une (ou des) rencontre(s) sexuelle(s)$
+146 163 2  $Oui, une (ou des) rencontre(s) amicale(s)$
+147 164 2  $Oui, j'ai fait des rencontres mais ça n'a jamais donné suite$
+148 165 2  $Non, je n'y ai jamais fait de rencontre$
+149 166 3  $Avez-vous déjà fait des rencontres sur les réseaux sociaux (Nb réponses - détails : voir variables suivantes)?$
+150 167 2  $Oui, une (ou des) rencontre(s) amoureuse(s)$
+151 168 2  $Oui, une (ou des) rencontre(s) sexuelle(s)$
+152 169 2  $Oui, une (ou des) rencontre(s) amicale(s)$
+153 170 2  $Non, je n'y ai jamais fait de rencontre$
+154 171 2  $Non, je n'ai pas compte sur les réseaux sociaux$
+155 172 3  $Achetez-vous de nouveaux vêtements ?$
+156 173 3  $Allez-vous chez le coiffeur/barbier ?$
+157 174 3  $Allez-vous chez l'esthéticienne ou vous épilez-vous ?$
+158 175 3  $Vous rasez/taillez-vous la barbe ?$
+159 176 3  $Vous maquillez-vous d'une manière différente de d'habitude?$
+160 177 3  $Vous parfumez-vous?$
+161 178 5  $Le matin avant d’aller en cours ?$
+162 179 5  $Avant de sortir en soirée ?$
+163 180 5  $Avant un rendez-vous amoureux ?$
+164 181 8  $Est-ce qu'il vous arrive de suivre des conseils en matière de vêtements, maquillage, coiffure  (Nb réponses - détails : voir variables suivantes)?$
+165 182 2  $De vos parents$
+166 183 2  $De vos amis$
+167 184 2  $De vos frères / soeurs$
+168 185 2  $De magazines (mode, beauté, féminin, people …)$
+169 186 2  $De blogs et réseaux sociaux (Tutoriels Youtube, blogs …)$
+170 187 2  $D’émissions télévisées (téléréalités, divertissements …)$
+171 188 2  $De spécialistes (esthéticiens, coiffeurs, vendeurs...)$
+172 189 2  $Je n'ai jamais suivi les conseils de personne$
+173 190 2  $Autre$
+174 191 4  $Le corps de votre dernier partenaire correspondait-il à vos critères de beauté ?$
+175 192 2  $Etes-vous actuellement en couple?$
+176 193 3  $Essayez-vous de faire des rencontres ?$
+177 194 2  $Est-ce que vous avez des partenaires sexuels réguliers (hors d'une relation de couple)?$
+178 19512  $Dans quel lieu avez-vous connu pour la première fois votre partenaire actuel?$
+179 197L3  $Autre :$
+180 200 7  $Avant qu'il (ou elle) ne devienne votre partenaire, était-il (elle)?$
+181 20133  $Autre :$
+182 203 3  $Qui a fait le premier pas ?$
+183 204 7  $Depuis combien de temps êtes-vous avec cette personne ?$
+184 205 4  $À partir de quel moment vous êtes-vous considéré(e) en couple?$
+185 206L3  $Autre :$
+186 209 9  $Au bout de combien de temps avez-vous eu un rapport sexuel avec votre partenaire?$
+187 210 4  $Existe-t-il une différence d’âge entre vous et votre partenaire?$
+188 211 2  $Lequel d’entre vous est le plus âgé?$
+189 212 2  $Votre partenaire est-il/elle également étudiant ou en formation?$
+190 213 8  $Quelle est la profession de votre partenaire?$
+191 214 8  $Quel est le niveau d'études de votre partenaire?$
+192 21513  $A quel niveau d'études est-il (elle) inscrit(e) cette année?$
+193 217 4  $L’apparence physique a-t-elle été importante dans le choix de votre partenaire?$
+194 21815  $Quelles caractéristiques vous ont le plus attiré(e) chez lui/elle (rang 1)$
+195 22015  $Quelles caractéristiques vous ont le plus attiré(e) chez lui/elle (rang 2)$
+196 22215  $Quelles caractéristiques vous ont le plus attiré(e) chez lui/elle (rang 3)$
+197 224 2  $réfléchi(e)$
+198 225 2  $sensible$
+199 226 2  $souriant(e), gai(e)$
+200 227 2  $dynamique$
+201 228 2  $sportif(ve)$
+202 229 2  $affectif(ve)$
+203 230 2  $drôle$
+204 231 2  $intelligent(e)$
+205 232 2  $cultivé(e)$
+206 233 2  $charmeur/charmeuse$
+207 234 2  $rassurant(e)$
+208 235 2  $travailleur/travailleuse$
+209 236 2  $beau/belle$
+210 237 2  $généreux(se)$
+211 238 2  $élégant(e)$
+212 239 6  $En moyenne, à quelle fréquence voyez-vous votre partenaire?$
+213 240 8  $Au cours du mois dernier, vous est-il déjà arrivé de faire ces activités avec votre partenaire ?  (Nb réponses - détails : voir variables suivantes)?$
+214 241 2  $Aller au restaurant (hors fast food)$
+215 242 2  $Aller au cinéma$
+216 243 2  $Aller à un concert, spectacle de danse$
+217 244 2  $Aller à une exposition, un musée$
+218 245 2  $Aller au théâtre$
+219 246 2  $Sortir dans un bar, café$
+220 247 2  $Aller en boite de nuit, discothèque$
+221 248 2  $Soirée entre amis$
+222 249 2  $Nous ne nous sommes pas vus durant le dernier mois$
+223 250 2  $Avez-vous régulièrement des activités sportives communes avec votre partenaire?$
+224 251 5  $Avez-vous déjà eu l'occasion de rencontrer les parents de votre partenaire?$
+225 252 5  $Est-ce que votre partenaire a rencontré vos parents?$
+226 253 4  $Pourquoi l'avez-vous présenté(e) à vos parents?$
+227 254 5  $Est-ce que vos parents et ceux de votre partenaire se sont déjà rencontrés?$
+228 25530  $Combien de partenaires avez-vous présenté(e)s à vos parents$
+229 257 2  $Connaissez-vous la profession des parents de votre petit(e)  ami(e)?$
+230 258 4  $Vous pensez que la situation professionnelle des parents de votre petit(e) ami(e)...$
+231 259 2  $Avez-vous mis en ligne des photos de votre couple (sur vos profils facebook, twitter etc.)?$
+232 260 3  $Êtes-vous officiellement en couple sur votre profil facebook?$
+233 261 4  $Partagez-vous un même logement?$
+234 262 4  $D'une manière générale, êtes-vous attiré(e) par le mariage?$
+235 263 4  $Pensez-vous qu'on puisse aimer une seule personne toute sa vie?$
+236 264 4  $Aimeriez-vous avoir des enfants à l’avenir?$
+237 26520  $Combien d'enfants aimeriez-vous avoir?$
+238 267 4  $Au cours des 12 derniers mois, avez-vous eu un rapport sexuels?$
+239 26810  $Quelle importance accordez-vous à votre épanouissement sexuel dans votre vie? (sur une échelle de 1 à 10 ? (1 n’étant « pas important » et 10 étant « essentiel »)$
+240 27010  $Quelle importance accordez-vous à l'épanouissement sexuel de votre/vos partenaire(s) ? (sur une échelle de 1 à 10 ? (1 n’étant « pas important » et 10 étant « essentiel »)$
+288 32921  $Différentiel épanouissement sexuel (répondant - conjoint)$
+241 272 6  $Sur le dernier mois, combien avez-vous eu de rapports sexuels avec votre petit(e)-ami(e)?$
+242 273 6  $Pénétration vaginale$
+243 274 6  $Fellation$
+244 275 6  $Cunnilingus$
+245 276 6  $Pénétration anale$
+246 277 6  $Triolisme (2 hommes, 1 femme)$
+247 278 6  $Triolisme (2 femmes, 1 homme)$
+248 279 6  $Echangisme$
+249 280 4  $Sur les douze derniers mois, vous est-il arrivé de vous masturber?$
+250 281 2  $Si vous êtes en couple, votre partenaire est-il au courant de vos pratiques?$
+251 282 5  $Ces douze derniers mois, combien de fois avez-vous regardé de la pornographie?$
+252 283 4  $En regardez-vous...?$
+253 284 3  $Durant votre adolescence, y avait-il un filtre parental sur l'accès internet chez vos parents?$
+254 285 4 3-4=3$Pensez-vous que la fidélité est essentielle au sein du couple?$
+255 286 5  $D’après vous, quand peut-on dire qu’il y a  infidélité ?  (Nb réponses - détails : voir variables suivantes)$
+256 287 2  $Quand l'autre a des sentiments pour quelqu'un d'autre$
+257 288 2  $Quand l'autre échange à distance des messages, des contenus à caractère sentimental ou sexuel$
+258 289 2  $Lorsqu'il y a baiser$
+259 290 2  $Lorsqu'il y a un acte sexuel sans pénétration$
+260 291 2  $Lorsqu'il y a un acte sexuel avec pénétration$
+261 292 4  $Avez-vous déjà fait l’objet d’une infidélité?$
+262 293 4  $Faites-vous confiance à votre partenaire?$
+263 294 6  $Avez-vous déjà trompé l'un(e) de vos partenaires?$
+264 295 2  $Après avoir été infidèle, l’avez-vous annoncé à votre partenaire?$
+265 296 4  $Si vous n’avez jamais été infidèle, quelle est la raison première qui vous retient?$
+266 297 4  $Savez-vous si l'un de vos parents a déjà été infidèle?$
+267 29825  $Quel AGE avez-vous?$
+268 30010  $Dans quelle UFR suivez-vous actuellement vos études?$
+269 30211  $A quel niveau d'étude êtes-vous inscrit(e) cette année ?$
+270 304 7  $Quel baccalauréat ou équivalence avez-vous obtenu ?$
+271 305 4  $Quelle mention avez-vous obtenue?$
+272 306 5  $Depuis la rentrée universitaire (septembre 2016), occupez-vous un emploi rémunéré?$
+273 30759  $Quel est votre taille (en centimètres) ?$
+274 30985  $Quel est votre poids (en kilogrammes) ?$
+275 31148 $IMC$
+276 313 8 7-8=0$Quelle est/était la profession de votre père ?$
+277 314 8  $Quel est le niveau d'études de votre père ?$
+278 315 8 7-8=0$Quelle est/était la profession de votre mère ?$
+279 316 8 $Quel est le niveau d'études de votre mère ?$
+280 317 6  $Pendant l'année universitaire (semaines d'études), vivez-vous?$
+281 318 5 5=0/3-4=3$Religion - Père$
+282 319 5 3-4=3/5=0$Religion - Mère$
+283 320 4 3-4=3$Religion - Répondant(e)$
