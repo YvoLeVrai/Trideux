@@ -588,7 +588,16 @@ select:invalid { color: gray; }
     border-radius: 4px;
     padding: 12px 20px 12px;
     font-size: 1.05em;
+}
 
+.TxtModif{
+    display:none;
+    float:left;
+    width:98%;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 2px 2px 2px;
+    font-size: 1.05em;
 }
 
 .pcttot{

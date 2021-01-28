@@ -69,7 +69,7 @@
                 <br>
             </div>
             <br>
-
+    Poney
         </div>
     </div>
 
@@ -144,7 +144,7 @@
     <div id="cadreboutons" style="display: none;position: relative;">
 
 
-        <div class="btnfonction" onclick="B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
+        <div class="btnfonction" onclick="Vidage('TabBDD'); B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
         <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
         <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
         <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
@@ -432,6 +432,8 @@
 <!-- Barre de progression -->
 <div   id="progress_bar"><div class="percent">0%</div></div>
 
+<input type="text" class="TxtModif" id="txtModifCase" style= "position:relative;display:none" onkeydown=MàJCase(event)>
+
 <div id='contenu' style="position:relative">
 
 
@@ -464,7 +466,10 @@
     var lignesCSV=[]; // lignes du fichier CSV
 
     var BDD=[]; // Tableau contenant les cases de la base de données
-
+    var sensTriBDD ='a'; // définition du sens de tri de la base
+    var varTriBDD = 0; //variable sur laquelle s'est effectué le dernier tri dans la base (permet d'alterner les sens de tri)
+    var lCur=0 // mémorisation des coordonnées de la case en cours de modification
+    var cCur=0
 
     var TabRec=[]; // enregistrement des recodages
 
@@ -1981,15 +1986,17 @@
         }
 
 
-        CaleSsHead()
+        CaleSsHead() // positionnement sous le header
         PopTot = BDD.length-1;
 
+
+ 
 
         //Création du tableau de résultats
         var body = document.body,
 
             // Titre
-            titre  = document.createElement('label');
+        titre  = document.createElement('label');
         titre.id='Titre';
         titre.innerHTML = `<div class=titretab style="margin-left:20px;"> Base : ` + nomBase  + ` <br> Nombre de lignes : `+ PopTot + ` <br> Nombre de variables : ` + Nom.length + `</div>`
         document.getElementById('contenu').appendChild(titre);
@@ -2013,11 +2020,12 @@
         tr.appendChild(HCell);
 
 
+
         // défilement des variables pour l'entête
         for (x = 1; x < Number(Nom.length); x++) {
 
 
-            Case = Nom[x] + " <br> " + Libellé[x];
+            Case = `<label style = "cursor:pointer;"  onclick="TriBDD(` + x + `)"> ` + Nom[x] + ` <br> ` + Libellé[x] + `</label>`;
             var HCell = document.createElement("th");
             HCell.innerHTML = Case;
             tr.appendChild(HCell);
@@ -2049,7 +2057,7 @@
             HCell.innerHTML = Case;
             tr.appendChild(HCell);
 
-            Case = "";
+
 
 
             // défilement des variables
@@ -2060,14 +2068,22 @@
                 // application du recodage
                 if (Reco[x].trim() != "") { valmoddat = TabRec[x][valmoddat];}
 
-                Case = valmoddat ; //lignesDAT[l].substr(Posi[x]-1,CdMax[x].length);
+
+                var idC = "casel" + l + "c" + x; 
+                Case = `<label id ="` + idC +  `" style = "cursor:pointer;" onclick="modifCase('`+ idC + `',` + l +  `,` + x + `)">`;
+                 
+                 
 
                 if (Moda.length > 1 && TypVar[x] == "a") {
 
-                    Case = Moda[x][valmoddat];
+                    Case += Moda[x][valmoddat];
 
+                } else {
+                    Case += valmoddat ;
                 }
 
+
+                Case += `</label>`
 
                 var HCell = document.createElement("td");
                 HCell.innerHTML = Case;
@@ -2108,7 +2124,116 @@
         B_A_S_E();
     }
 
+    function modifCase(nomCase,l,c) {
 
+
+        //mémorsation des coordonnées de la case à modifier
+        lCur=l
+        cCur=c 
+
+        //'détermination de la position de la case à modifier
+        var hCase = document.getElementById(nomCase);
+        hCase.style.whiteSpace='pre';
+
+        var Pos = hCase.getBoundingClientRect();
+        var PosY = Number(Pos.top)-5   
+        var PosX = Number(Pos.left)   
+        var PosH = Number(Pos.height)  + 10  
+        var PosW = Number(Pos.width)    
+        if (PosW<100){PosW=100}
+        
+         
+        var scrlX = window.scrollX; 
+        var scrlY = window.scrollY;
+       
+
+        var txtmdf = document.getElementById("txtModifCase")
+        txtmdf.style.top = PosY + scrlY;
+        txtmdf.style.left = PosX + scrlX;
+        txtmdf.style.height = PosH;
+        txtmdf.style.width = PosW;
+        txtmdf.style.fontSize='1rem';
+        txtmdf.style.padding= '2px';
+        txtmdf.style.position= 'absolute';
+        txtmdf.style.zIndex = '100';
+
+        
+        var fnt = hCase.style.fontSize;
+        txtmdf.style.font.size  = fnt;
+        
+        txtmdf.value = hCase.innerText
+
+        txtmdf.style.display = 'block';
+        txtmdf.focus()
+        txtmdf.select()
+
+    }
+
+    /*Rhabillage d'une modalité*/
+    function MàJCase(event) {
+        var key = event.keyCode;
+        
+ 
+
+        if (key===13) {
+             
+             
+                 
+                var nomCase = "casel"+ lCur + "c" + cCur;
+
+                var nvCase = document.getElementById("txtModifCase").value;
+                document.getElementById(nomCase).innerText = nvCase
+                
+                if (TypVar[cCur]!='a') {
+
+                    if (isNaN(nvCase)){
+                        alert("La valeur saisie ne correspond pas au type de variable (quantitative)")
+                        return 0
+                    } else {
+                        BDD[lCur][cCur] = nvCase;
+                    }
+                     
+                } else {
+
+                    // la modalité existe-t-elle 
+                    
+                        // fonction nécessaire pour déclencher la recherche d'index (findIndex plus bas)
+                        function ValeurCase(valcase) {
+                            return valcase == nvCase;
+                        }
+
+                        var idx=Moda[cCur].findIndex(ValeurCase);
+
+                        // la modalité a-t-elle déjà été trouvée?
+                        if (idx<0) {
+                             
+                            Moda[cCur].push(nvCase); // si non,
+                            CdMax[cCur]++;
+                            BDD[lCur][cCur] = CdMax[cCur]; 
+
+                        } else {
+                             
+                            BDD[lCur][cCur] = idx
+                        }
+
+
+                }
+
+            
+             
+            document.getElementById("txtModifCase").style.display='none';
+        }
+
+        if (key===27) {
+            document.getElementById("txtModifCase").style.display='none'; 
+        }
+
+
+        
+
+    }
+
+   
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // TRI A PLAT //////////////////////////////////////////////////////////////////////////////////
@@ -5469,6 +5594,8 @@
 
     function Vidage() { // Effacement des tris précédents
 
+        // masque de la zone de texte d'édition
+        document.getElementById("txtModifCase").style.display='none';
 
         for (i = 0; i < arguments.length; i++) {
 
@@ -8273,6 +8400,93 @@ function EstDansMulti(Tab, Txt,spl){
 
 
     }
+
+
+    /////////////////////////////////////////////////////////////////////////////////////////
+    // Tris des lignes de la base  
+    /////////////////////////////////////////////////////////////////////////////////////////
+    function TriBDD(vT) {
+       
+
+
+ 
+        TriParTasBDD (vT)
+ 
+        var sens='a';
+
+        if (vT == varTriBDD) {
+            if (sensTriBDD=='a') {sens='d'} else {sens='a'}
+        }
+
+        sensTriBDD= sens
+        varTriBDD = vT;
+
+        // Inversion du tri en cas de sens décroissant
+        if(sens=='d') {
+
+            for (t=0;t<BDD.length/2;t++) {
+                var t2 = BDD.length - t -1
+                var temp = BDD[t]
+                BDD[t] = BDD[t2]
+                BDD[t2] =temp;
+
+            }
+
+        }
+
+
+
+        Vidage('TabBDD');
+        B_A_S_E();
+        
+
+
+}
+
+
+function tamiserBDD (c, noeud, n) {
+
+
+        var k = noeud;
+        var j = 2 * k;
+ 
+
+        while (j <= n) {
+
+
+            if ((j < n) && (BDD[j][c] < BDD[j+1][c]))
+                j++;
+
+
+        
+            if (BDD[k][c] < BDD[j][c]) {
+
+                echanger(BDD, k, j);
+                k = j;
+                j = 2 * k;
+            } else
+                break;
+        }
+
+
+}
+
+function TriParTasBDD (c) {
+
+
+    var nbm = BDD.length-1
+    for (var i = nbm; i >= 0; i--)
+
+        tamiserBDD(c, i, nbm);
+
+        for (var i = nbm; i >= 1; i--) {
+            echanger(BDD, i, 0);
+            tamiserBDD(c, 0, i - 1);
+        }
+
+
+    }
+
 
 
 
