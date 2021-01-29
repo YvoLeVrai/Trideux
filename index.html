@@ -126,7 +126,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.3</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.4</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 100;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -702,14 +702,41 @@
 
     function ChargerListVar(){
 
-        var htmlvariables = `<li style="height:50px"><a href=\"#\" id='vx' </a>VARIABLES </li>` // LIGNE DE VARIABLES VIDE (Cachée derrière la zone de recherche)
+        var htmlvariables = `<li style="height:50px;"><a href=\"#\" id='vx' </a>VARIABLES </li>` // LIGNE DE VARIABLES VIDE (Cachée derrière la zone de recherche)
 
         // défilement des variables
         for (v = 1; v < Nom.length; v++) {
 
+            // définition du type d'image à afficher en fonction du type de variable
+            var htmlimg = `<img src='Images/\Abc.png'   alt="Abc">`
+            if (TypVar[v]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123">` }
+
+            var htmlmods = ""
+            for (m=0;m<4;m++){
+                if (TypVar[v]!='a') {
+                    
+                    if (m<=BDD.length && m>0) {htmlmods+=BDD[v][m] + `, `}
+
+                } else {
+                
+                    if (m<=CdMax[v]) {htmlmods+=Moda[v][m] + `, `}
+
+                }
+            }
+            htmlmods += " ... (" + CdMax[v] + ")"
+
             // Ajout de la variable au menu de sélection
             var num = Nom.length-1;
-            htmlvariables = String(htmlvariables) + `<li><a href="#" id='v` + v + `' onclick="SelVar(` + v + `)">` + Nom[v] + ` | `   + Libellé[v] + `'</a></li>`
+            htmlvariables = String(htmlvariables) + `<li id='v` + v + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
+                <table>
+                    <tr >
+                        <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
+                        <td style="width:30px" > `+ htmlimg + `</td>
+                        <td style="font-weight:bold;"> ` + Nom[v] + ` </td>
+                        <td >  | ` + Libellé[v] + ` </td> 
+                        <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
+                </table>
+                </li>`
         }
 
         document.getElementById("ListVars").innerHTML = htmlvariables;
@@ -1958,13 +1985,13 @@
         QuelTri()
     }
 
-    ////////////   ///////////     ///      ///////////
-    ///        ///       //    ///     ///
-    ///        ///       //    ///     ///
-    ///        ///////////     ///      ///////////
-    ///        ///  ///        ///              ///
-    ///        ///   ///       ///              ///
-    ///        ///    ///      ///      //////////
+    //////////   ///////////     ///      ///////////
+      ///        ///       //    ///     ///
+      ///        ///       //    ///     ///
+      ///        ///////////     ///      ///////////
+      ///        ///  ///        ///              ///
+      ///        ///   ///       ///              ///
+      ///        ///    ///      ///      //////////
 
 
 
@@ -2205,8 +2232,9 @@
 
                         // la modalité a-t-elle déjà été trouvée?
                         if (idx<0) {
-                             
-                            Moda[cCur].push(nvCase); // si non,
+                             // si non,
+                            Moda[cCur].push(nvCase);
+                            ModaO[cCur].push(nvCase); 
                             CdMax[cCur]++;
                             BDD[lCur][cCur] = CdMax[cCur]; 
 
@@ -2622,12 +2650,12 @@
                     </div>`;
 
         // ajout des fonctions de regroupement
-        strpied += `<div id="regroup" style="display:none; width:800px;">
+        strpied += `<div id="regroup" style="display:none; width:1000px;">
                       <div class="btn btn-primary" onclick="regrouper()"> Regrouper </div>
                         <label class= "lblrgl" for="TxtssRgl">Règle:</label>
                         <input type="text" id="TxtssRgl" name="TxtssRgl" class ="txtrgl" onkeydown="LancerRgl(event)">
                         <label class= "lblrgl" for="TxtMod">Libellé:</label>
-                        <input type="text" id="TxtMod" name="TxtMod" class ="txtrgl" style="width:390px" onkeydown="LancerRgl(event)">
+                        <input type="text" id="TxtMod" name="TxtMod" class ="txtrgl" style="width:500px" onkeydown="LancerRgl(event)">
                       </div> `;
 
         // ajout du bouton dégrouper
@@ -3836,7 +3864,7 @@
 
         // variables pour l'affichage
         var margG= 50
-        var margD= 30
+        var margD= 50
         var margH= 50
         var margB= 50
 
@@ -3915,7 +3943,7 @@
 
         var reste = effmax%ech;
         var echymax = effmax + ech - reste;
-        var hautech = haudisp/(echymax-echmin);
+        var hautech = haudisp/echymax;
         //hautech=Math.round(hautech);
 
 
@@ -3924,16 +3952,33 @@
         cnv.fillStyle = 'rgb(90 90 90)';
         cnv.fillRect(margG, margH, 1, haudisp);
         cnv.font = "12px Arial";
-
+        var lastpct
         for (b=echymax;b>-1;b--) {
 
             if (b%ech==0) {
 
+                // effectifs (à gauche)
                 var posleg = margH + (echymax-b)*hautech;
                 cnv.fillStyle = 'rgb(220 220 250)';
                 cnv.fillRect(margG-5, posleg, lardisp+5, 1);
                 cnv.fillStyle = 'rgb(90 90 90)';
-                cnv.fillText(b, margG-30, posleg);
+                cnv.fillText(b, margG-30, posleg+5);
+
+                // % à (droite)
+                pct= b/PopTot *100
+                pct=pct.toFixed(2)
+                //pct=Math.round(pct)
+
+                if (lastpct != pct) {
+                    lastpct = pct;
+                    if (isNaN(pct)==false) {
+                    pct = pct+"%"
+                    cnv.fillText(pct, margG + lardisp + 5, posleg+5);
+                    }
+                    
+                }
+
+                
             }
 
         }
@@ -3974,7 +4019,7 @@
             sel = false;
 
             if (m==vsel) {sel =true}
-            dessinbarre(cadre,x1,y1,x2,y2,TapQ[m][1],TapQ[m][2],sel)
+            dessinbarre(cadre,x1,y1,x2,y2,TapQ[m][1],TapQ[m][2],sel,effmax)
 
 
         }
@@ -3992,7 +4037,7 @@
 
     }
 
-    function dessinbarre(cadre,x1,y1,x2,y2,valeur,eff,sel) {
+    function dessinbarre(cadre,x1,y1,x2,y2,valeur,eff,sel,effmax) {
 
         const canvas = document.getElementById(cadre);
 
@@ -4006,8 +4051,10 @@
 
         if (sel == false) {
             cnv.fillStyle = 'rgb(103 148 189)';
+            if (eff == effmax) {cnv.fillStyle = 'rgb(53 98 139)'} // couleur spécifique pour le mode
         } else {
 
+            
             cnv.fillStyle = 'rgba(255 255 255 0.25)';
             cnv.fillRect(x1, 451, 40, 40);
             cnv.fillStyle = 'rgb(255 103 103)';
@@ -4024,7 +4071,7 @@
         }
 
 
-        // affichage de la barre de la valeur précédente
+         
 
         //fond
         cnv.fillRect(x1, y1, x2, y2);
