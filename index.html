@@ -13,8 +13,10 @@
 
 
 
-    <!-- images boutons -->
+    <!-- images boutons 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    -->
+
     <LINK href="CSS\Styles.css" rel="stylesheet" type="text/css">
 
     <style type="text/css">
@@ -77,12 +79,12 @@
         <a href="javascript:void(0)" class="closebtn" onclick="closeInfos()">&times;</a>
         <div class="overlay-content" style="font-size: 24px;text-align: left; margin-left: 120px;">
 
-            <p>Trideux.cloud est une version en ligne du logiciel <a href="https://cibois.pagesperso-orange.fr/Trideux.html"> Trideux </a> développé par Philippe Cibois. <br></p>
+            <p>Trideux.cloud est une version en ligne du logiciel <a href="https://cibois.pagesperso-orange.fr/Trideux.html"> Trideux </a> (développé par Philippe Cibois). <br> La présente version a été developpée par Alex Alber (Université de Tours), avec l'aide d'Yvo Toso.</p>
 
-            <p> Cette version en ligne permet de lire des bases au format trideux (Dat/Pos/dic) mais aussi d'importer des bases en CSV/TXT <br>
+            <p> Cette version en ligne permet de lire des bases au format trideux (Dat/Pos/dic) mais aussi d'importer des bases EXCEL ou CSV/TXT <br>
                 pouvant contenir des variables numériques discètes ou continues. </p><br>
 
-            <p> Un format de base spécifique à Trideux.cloud (*.TR2) permet de sauvegarder les traitements réalisés dans la base. </p>
+            <p> Un format de base spécifique à Trideux.cloud (*.TR2) permet de sauvegarder les traitements réalisés dans la base. <br> </p>
 
             <h3 style="color:white"> Comment ça fonctionne? <br></h3>
 
@@ -91,25 +93,35 @@
                 Aucun autre fichier n'est chargé sur le site ni depuis le site. Le serveur ne joue aucun rôle dans les calculs. <br>
                 Toutes les opérations sont réalisées sur votre machine.</p><br>
 
-            <p style="color:white"> Trideux ne dépose aucun cookie sur votre ordinateur, ne réalise aucune analyse d'audience et ne contient aucun lien publicitaire.</p>
+            <p style="color:white"> Trideux ne réalise aucune analyse d'audience et ne contient aucun lien publicitaire. </p> <br> 
 
+
+            <p style="color:rgb(238, 178, 178);font-size: 20px"> NB: Les modifications apportées à la base s'appliquent instantanément mais les bases doivent être téléchargées au format TR2 (menu Export) pour que ces recodages et habillages de modalités soient pérennes. <br> </p>
+            
+          
+
+                 
+
+            <br>
+            <br>
+            <hr>
+
+            <h2 style="color:white"> Historique des modifications </h2>
+            <h4 style="color:white"> Nouveautés de la version 1.6 </h4>
+
+            <p style="font-size: 1rem"> - Tri et modification des données via l'interface de la base de données  <br>
+             - Enrichissement de l'interface de sélection des variables </p><br>
 
 
             <h3 style="color:white"> Nouveautés de la version 1.2 </h3>
 
-            <p> - Importation directe des classeurs EXCEL</p><br>
+            <p style="font-size: 1rem"> - Importation directe des classeurs EXCEL</p><br>
 
             <h3 style="color:white"> Nouveautés de la version 1.1 </h3>
 
-            <p> - prise en compte des variables numériques (histogrammes, recodages, croisements)</p>
-            <p> - gestion des variables à réponses multiples dans les croisements</p>
-            <p> - ajout d'une fonction de pondération (voir dans les options de la variable en ligne</p><br>
-
-
-
-            <p style="color:rgb(238, 178, 178);font-size: 20px"> NB: Les modifications apportées à la base s'appliquent instantanément mais les fichiers POS et DIC doivent être re-téléchargés pour que ces recodages et habillages de modalités soient pérennes. <br> <br> A la différence du logiciel Trideux classique, ce site fonctionne en UTF-8. Pour un affichage normal, convertissez vos fichiers .POS et .DIC en utf-8 (dans notepad++ par exemple). </p>
-
-            <p style="font-size: 20px"> Vous pouvez télécharger une base de démonstration <a href="Data\HVR.zip"> ici </a>  </p>
+            <p style="font-size: 1rem" > - prise en compte des variables numériques (histogrammes, recodages, croisements)<br>
+             - gestion des variables à réponses multiples dans les croisements<br>
+            - ajout d'une fonction de pondération (voir dans les options de la variable en ligne</p><br>
 
 
         </div>
@@ -126,7 +138,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.4</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.6</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 100;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -135,6 +147,7 @@
             <a> <label for="filezip" style="cursor: pointer;width:100%;height:100%" >  Base DAT/POS/DIC format ZIP </label> <br> <input type="file" id="filezip" accept='.ZIP' name="file" onchange='LireZip(event)' multiple /> </a>
             <a> <label for="filexls" style="cursor: pointer;width:100%;height:100%">  Classeur EXCEL (*.xlsx) </label> <br> <input type="file" id="filexls"   name="file" onchange='LireXLSX(event)'  accept='.XLSX, .XLS'  /> </a>
             <a> <label for="filecsv" style="cursor: pointer;width:100%;height:100%">  Fichier *.CSV/*.TXT </label> <br> <input type="file" id="filecsv"   name="file" onchange='LireCSV(event)'  accept='.CSV, .TXT'  /> </a>
+            
         </div>
     </div>
 
@@ -191,7 +204,7 @@
             <input onclick="openVars('F')" id= "TxtF" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
 
-            <button class="btn btn-outline-secondary fa fa-close"  onclick= "CacheBloc('BlocFiltre');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocFiltre');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
 
 
 
@@ -205,7 +218,7 @@
                 <option value="" disabled selected>Choisissez une ou plusieurs modalités</option>
             </select> <!-- onFocus='expand(Combo1)'-->
 
-            <!-- <button  class="btn btn-outline-secondary fa fa-close type="button" onclick= "CacheBloc('OptFiltre')"></button> !-->
+            <!-- <button  class="btn btn-outline-secondary imgbtn imgclose type="button" onclick= "CacheBloc('OptFiltre')"></button> !-->
 
 
 
@@ -222,7 +235,7 @@
 
 
 
-    <!-- ==========================================================================================
+             <!-- ==========================================================================================
             =============================================================================================
             VARIABLE EN LIGNE
             =============================================================================================
@@ -239,10 +252,10 @@
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="lignes" onclick="openVars('L')"></span>
 
             <input onclick="openVars('L')" id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
-            <!-- <button  class="btn btn-outline-secondary fa fa-arrow-left" onclick="vL--;QuelTri()" type="button"></button>
-              <button  class="btn btn-outline-secondary fa fa-arrow-right" onclick="vL++;QuelTri()" type="button"></button> !-->
-            <button id="BtnOptL" class="btn btn-outline-secondary fa fa-cog" onclick="VoirOpt('OptVar1')"  type="button"></button>
-            <button class="btn btn-outline-secondary fa fa-close"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
+            <!-- <button  class="btn btn-outline-secondary imgbtn imgleft" onclick="vL--;QuelTri()" type="button"></button>
+              <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button> !-->
+            <button id="BtnOptL" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar1')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
 
         </div>
 
@@ -267,7 +280,7 @@
 
             <button  class="btn btn-outline-secondary btn-sm" onclick="openVars('P')" type="button" style="float:left;margin-left:20px;margin-top:0px;font-size: 0.75em;">Pond.</button>
             <input onclick="openVars('P')" id= "TxtP" type="text" class="form-control" placeholder="Pas de pondération" onkeydown="GetClav(event,'P')" style="display:inline;font-size: 0.66rem;width:150px;height:27px;background-color: rgb(240,240,240);">
-            <button  class="btn btn-outline-secondary btn-sm fa fa-close" onclick="EffacePnd()" type="button" style="display:inline;margin-left:-5px;font-size: 0.75em;"></button>
+            <button  class="btn btn-outline-secondary btn-sm imgbtn imgclose" onclick="EffacePnd()" type="button" style="display:inline;margin-left:-5px;font-size: 0.75em;height:27px;width:27px;"></button>
 
 
             <label class="ChkNR" style="display:none;"><input type="checkbox"  id="ChkHis" value="1"  >Conserver historique</label>
@@ -281,7 +294,7 @@
     <div style="clear:both;"></div>
 
 
-    <!--
+            <!--
             =============================================================================================
             =============================================================================================
             VARIABLE EN COLONNE
@@ -301,8 +314,8 @@
 
             <input onclick="openVars('C')" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
 
-            <button id="BtnOptC" class="btn btn-outline-secondary fa fa-cog"  onclick="VoirOpt('OptVar2')"  type="button"></button>
-            <button class="btn btn-outline-secondary fa fa-close"  onclick= "prepTAP()" type="button"></button>
+            <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog"  onclick="VoirOpt('OptVar2')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "prepTAP()" type="button"></button>
 
 
 
@@ -348,7 +361,7 @@
     </div>
 
 
-    <!-- ==========================================================================================
+            <!-- ==========================================================================================
             =============================================================================================
             VARIABLE RACINE (Explorateur)
             =============================================================================================
@@ -365,8 +378,8 @@
 
             <input onclick="openVars('X')" id= "TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
-            <button id="BtnOptX" class="btn btn-outline-secondary fa fa-cog" onclick="VoirOpt('OptVar3')"  type="button"></button>
-            <button class="btn btn-outline-secondary fa fa-close"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
+            <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar3')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
 
         </div>
 
@@ -388,7 +401,7 @@
     <!--   <button class= "bouton" onclick="T_C_R()">Tri croisé</button> <label></label><input type="option" id="OptVal"> Valeurs</label> !-->
 
 
-    <!-- ========================================================================================
+             <!-- ========================================================================================
             =============================================================================================
             MENU DE SELECTION DES VARIABLES
             =============================================================================================
@@ -404,7 +417,7 @@
         <div id = "headervar" class="input-group-prepend" style="position:fixed;width:100% ; display:none;">
 
             <input type="text" id="TxtChercher" onkeyup="FiltrerVars(event)" placeholder="Chercher une variable..." title="Chercher variable" >
-            <button class="btn btn-outline-secondary fa fa-close" style="background-color: white; height:44px" onclick= 'closeVars()' type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose" style="background-color: white; height:44px" onclick= 'closeVars()' type="button"></button>
 
 
         </div>
@@ -433,8 +446,29 @@
 
 <input type="text" class="TxtModif" id="txtModifCase" style= "position:relative;display:none" onkeydown=MàJCase(event)>
 
-<div id='contenu' style="position:relative">
 
+<div id='accueil' style="position:relative;padding-left: 40px;">
+    <H1 style="font-size:1.5rem;padding-top: 70px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
+    
+    <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br><br><br>
+    
+
+    <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
+                
+    <a href="#" onclick="openFich('/Data/Hvr_0.TR2');closeInfos()" > <label style="cursor: pointer;">  . HVR </label> </a> <a>(Enquête "Hygiène de vie des Rabelaisiens" portant sur la santé et l'alimentation, réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2014)</a> <br>
+    
+    <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie confinée - Extraits )</a> </p>  
+
+
+    <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
+    <table id="tabfichs">
+
+    </table>
+         
+</div>
+
+<div id='contenu' style="position:relative">
+  
 
 </div>
 
@@ -712,14 +746,15 @@
             if (TypVar[v]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123">` }
 
             var htmlmods = ""
+
             for (m=0;m<4;m++){
                 if (TypVar[v]!='a') {
                     
-                    if (m<=BDD.length && m>0) {htmlmods+=BDD[v][m] + `, `}
+                    if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v] + `, `}
 
                 } else {
                 
-                    if (m<=CdMax[v]) {htmlmods+=Moda[v][m] + `, `}
+                    if (m<=CdMax[v] && Moda.length >=v) {htmlmods+=Moda[v][m] + `, `}
 
                 }
             }
@@ -742,6 +777,47 @@
         document.getElementById("ListVars").innerHTML = htmlvariables;
 
     }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Chargement des lignes d'un fichier TR2 depuis le serveur////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    function openFich(fich) {
+
+        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+        reinit();
+        lignesTR2=[];  // vidage du tableau
+
+        // définition du nom de la base 
+        var posslsh = fich.lastIndexOf('/')
+        nomBase= fich.substr(posslsh+1,fich.length - posslsh);
+        document.title= nomBase;
+ 
+
+        var request = new XMLHttpRequest();
+        request.open('GET', fich, true);
+        request.responseType = 'blob';
+        request.onload = function() {
+        
+        var reader = new FileReader();
+        reader.readAsText(request.response);
+        
+        reader.onload =  function(e){
+            var text = reader.result;
+            text = text.replace(/\r?\n|\r/,'\n') // retrait des sauts de ligne
+            // split du texte par lignes \n
+            lignesTR2 = text.split("\n");
+            TR2versBDD(lignesTR2)
+
+        };
+    };
+    request.send();
+
+
+    };
+
+
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // MISE EN Cases du DAT/////////////////////////////////////////////////////////////////////
@@ -1090,18 +1166,33 @@
     // lecture d'un fichier TR2 /////////////////////////////////////////////////////////////////////
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    var LireTR2 = function(event) {
+    var LireTR2 = function(event,obj) {
 
         Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
         reinit();
 
 
+        var lignesTR2=[];
+        var ficheàlire = ""
+        var nomBase1 = ""
 
+        if (obj ==undefined && event!= undefined) {
         var input = event.target;
         fichBase = event.target.files;
 
-        var ficheàlire = input.files[0];
-        var nomBase1= fichBase[0].name;
+        ficheàlire = input.files[0];
+        nomBase1= fichBase[0].name;
+        } else {
+        ficheàlire = obj.files[0];
+        nomBase1= obj[0].name;
+
+        }
+
+        
+        ajoutCookie(nomBase1,input.files[0]) // permettrait d'ajouter en mémoire les infos
+        
+        
+
         nomBase= nomBase1.substr(0,nomBase1.length-4);
         document.title= nomBase;
 
@@ -1124,12 +1215,102 @@
 
         Lirefichier(ficheàlire).then(function (content) {
 
-
-            var libdd = 0;
+          
 
 
             //splitage en lignes
             lignesTR2 = content.split("\n")
+
+
+            //construction de la base TR2
+            TR2versBDD(lignesTR2)
+
+
+
+
+
+        }).catch(function (err) {
+            alert("problème lors de l'importation ")
+            alert('Erreur lors du chargement du TR2!' + err );
+
+        });
+
+
+
+    };
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // lecture d'un fichier TR2 depuis l'historique ////////////////////////////////////////////////
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+
+    var LireTR2H = function(obj) {
+
+        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+        reinit();
+
+
+        var lignesTR2=[];
+        var ficheàlire = ""
+        var nomBase1 = ""
+
+ 
+        ficheàlire = obj.files[0];
+        nomBase1= obj[0].name;
+
+   
+
+        nomBase= nomBase1.substr(0,nomBase1.length-4);
+        document.title= nomBase;
+
+
+        function Lirefichier (fichier) {
+            return new Promise(function (resolve, reject) {
+                var reader = new FileReader();
+
+                reader.onload = () => {
+                    resolve(reader.result);
+                };
+
+
+
+                reader.readAsText(fichier);
+
+            });
+        }
+
+
+        Lirefichier(ficheàlire).then(function (content) {
+
+        
+
+
+            //splitage en lignes
+            lignesTR2 = content.split("\n")
+
+
+            //construction de la base TR2
+            TR2versBDD(lignesTR2)
+
+
+
+
+
+        }).catch(function (err) {
+            alert("problème lors de l'importation ")
+            alert('Erreur lors du chargement du TR2!' + err );
+
+        });
+
+
+
+};
+
+
+    function TR2versBDD(lignesTR2) {
+         
+            var libdd = 0;
+            var lg = 0;
             var nbl= lignesTR2.length-1;
 
             var sep = String.fromCharCode(9);
@@ -1139,176 +1320,174 @@
             for (l=0;l<lignesTR2.length;l++) {
 
 
-                if (lignesTR2[l].trim() =="") {continue}
+        if (lignesTR2[l].trim() =="") {continue}
 
 
-                var col = lignesTR2[l].split(sep)
+        var col = lignesTR2[l].split(sep)
 
 
-                if (l==0) {//ligne des en-têtes
+        if (l==0) {//ligne des en-têtes
 
-                    NbVar = col.length;
+            NbVar = col.length;
 
-                    // tableau des modalités (un par variable)
-                    Moda= new Array (NbVar);
-                    ModaO= new Array (NbVar);
+            // tableau des modalités (un par variable)
+            Moda= new Array (NbVar);
+            ModaO= new Array (NbVar);
 
-                    for (c=1;c<col.length;c++) {
+            for (c=1;c<col.length;c++) {
 
-                        Nom.push(col[c]);
-                        Posi.push(0)
+                Nom.push(col[c]);
+                Posi.push(0)
+
+            }
+
+        }
+
+        if (l==1) {//ligne des en-têtes
+
+
+            for (c=1;c<col.length;c++) {
+
+                Libellé.push(col[c]);
+
+            }
+
+        }
+
+
+
+        if (l==2) { // ligne des types de variable
+
+
+            for (c=1;c<col.length;c++) {
+
+                TypVar.push(col[c]);
+
+
+            }
+
+        }
+
+        if (l==3) { // ligne des recodages
+
+
+            for (c=1;c<col.length;c++) {
+
+                Reco.push(col[c]);
+
+
+            }
+
+        }
+
+
+
+
+        if (l==4) { // ligne des codes max
+
+
+            for (c=1;c<col.length;c++) {
+                var valmax = Number(col[c]);
+                CdMax.push(valmax);
+
+                Moda[c]= new Array(valmax);
+                ModaO[c]= new Array(valmax);
+
+                if (valmax > maxmax && TypVar[c]=='a') {
+                    maxmax=valmax; // mémorisation de la valeur max
+                } else {
+
+                    // remplissage des modalités numériques
+                    if (TypVar[c]=='e' || TypVar[c]=='r') {
+
+                        for (m=0; m<valmax+1;m++){
+                            Moda[c][m] = m;
+                            ModaO[c][m] = m;
+                        }
 
                     }
-
-                }
-
-                if (l==1) {//ligne des en-têtes
-
-
-                    for (c=1;c<col.length;c++) {
-
-                        Libellé.push(col[c]);
-
-                    }
-
                 }
 
 
+            }
 
-                if (l==2) { // ligne des types de variable
+        }
+        lg = l;
 
+        if (l > 4 && l <=(maxmax+5)){ // chargement des lignes de modalités
 
-                    for (c=1;c<col.length;c++) {
+            var grm = l-5;
 
-                        TypVar.push(col[c]);
+            for (c=1;c<col.length;c++) {
 
+                if (TypVar[c]=='a') {
+                    var lib = String(col[c]);
 
-                    }
+                    if (grm <= CdMax[c]) {
 
-                }
+                        var posbar = lib.indexOf("||")
 
-                if (l==3) { // ligne des recodages
-
-
-                    for (c=1;c<col.length;c++) {
-
-                        Reco.push(col[c]);
-
-
-                    }
-
-                }
-
-
-
-
-                if (l==4) { // ligne des codes max
-
-
-                    for (c=1;c<col.length;c++) {
-                        var valmax = Number(col[c]);
-                        CdMax.push(valmax);
-
-                        Moda[c]= new Array(valmax);
-                        ModaO[c]= new Array(valmax);
-
-                        if (valmax > maxmax && TypVar[c]=='a') {
-                            maxmax=valmax; // mémorisation de la valeur max
+                        if ( posbar > -1) {
+                            Moda[c][grm] = lib.substr(0,posbar);
+                            ModaO[c][grm] = lib.substr(posbar+2);
                         } else {
-
-                            // remplissage des modalités numériques
-                            if (TypVar[c]=='e' || TypVar[c]=='r') {
-
-                                for (m=0; m<valmax+1;m++){
-                                    Moda[c][m] = m;
-                                    ModaO[c][m] = m;
-                                }
-
-                            }
+                            Moda[c][grm] = lib
+                            ModaO[c][grm] = lib
                         }
 
-
                     }
+                }
+            }
+
+        }
+
+
+        var debDAT ;
+
+        if  (col[0] =='DAT') {debDAT=l+1}
+
+        Number(debDAT);
+
+
+        if (l>= debDAT && maxmax > 0){// chargement de la base de données
+
+
+            if (l==debDAT) {
+
+                var nbldat = nbl - debDAT
+                BDD = new Array(nbldat);
+
+
+            }
+
+            BDD[libdd] = new Array(NbVar)
+
+            for (c=1;c<col.length;c++) {
+
+                var valcase = col[c];
+
+                // en cas de valeur décimale
+                valcase=valcase.replace( /,/g,".")
+
+                if (valcase.trim() !='') {
+                    BDD[libdd][c]=Number(valcase);
+                } else {
+                    BDD[libdd][c]= ' ' ;
 
                 }
-                var lg = l;
-
-                if (l > 4 && l <=(maxmax+5)){ // chargement des lignes de modalités
-
-                    var grm = l-5;
-
-                    for (c=1;c<col.length;c++) {
-
-                        if (TypVar[c]=='a') {
-                            var lib = String(col[c]);
-
-                            if (grm <= CdMax[c]) {
-
-                                var posbar = lib.indexOf("||")
-
-                                if ( posbar > -1) {
-                                    Moda[c][grm] = lib.substr(0,posbar);
-                                    ModaO[c][grm] = lib.substr(posbar+2);
-                                } else {
-                                    Moda[c][grm] = lib
-                                    ModaO[c][grm] = lib
-                                }
-
-                            }
-                        }
-                    }
-
-                }
-
-
-                var debDAT ;
-
-                if  (col[0] =='DAT') {debDAT=l+1}
-
-                Number(debDAT);
-
-
-                if (l>= debDAT && maxmax > 0){// chargement de la base de données
-
-
-                    if (l==debDAT) {
-
-                        var nbldat = nbl - debDAT
-                        BDD = new Array(nbldat);
-
-
-                    }
-
-                    BDD[libdd] = new Array(NbVar)
-
-                    for (c=1;c<col.length;c++) {
-
-                        var valcase = col[c];
-
-                        // en cas de valeur décimale
-                        valcase=valcase.replace( /,/g,".")
-
-                        if (valcase.trim() !='') {
-                            BDD[libdd][c]=Number(valcase);
-                        } else {
-                            BDD[libdd][c]= ' ' ;
-
-                        }
-
-
-
-                    }
-
-                    libdd++;
-                }
-
-
 
 
 
             }
 
+            libdd++;
+        }
 
+
+
+
+
+        }
 
             //ChargerPOS();
             ChargerListVar();
@@ -1319,17 +1498,8 @@
 
             B_A_S_E();
 
+    }
 
-
-        }).catch(function (err) {
-            alert("problème au niveau de la ligne " + lg)
-            alert('Erreur lors du chargement du TR2!' + err );
-
-        });
-
-
-
-    };
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     // lecture d'un fichier CSV /////////////////////////////////////////////////////////////////////
@@ -1417,7 +1587,12 @@
 
                 } else {
 
-                    alert("La ligne " + l + " ne contient pas le même nombre de colonnes que la ligne d'en-têtes. \n Elle ne peut pas être ajoutée.")
+                    var abort = window.confirm ('Erreur lors du chargement du CSV! (problème ligne ' + l + ')\n\n POURSUIVRE le chargement?\n\n')
+                    if (abort) {
+
+                    } else {return 0}
+
+                     
                     lignesCSV.splice(l,1)
                     l--
                 }
@@ -1429,8 +1604,10 @@
             TABversBDD(lignesCSV);
 
         }).catch(function (err) {
-            alert('Erreur lors du chargement du CSV! : ' + err + "\n Problème au niveau de la ligne :" + l);
+            var abort = window.confirm ('Erreur lors du chargement du CSV! : ' + err + "\n Problème au niveau de la ligne :" + l + "\n Voulez-vous tout de même poursuivre le chargement?");
+            if (abort) {
 
+            } else {return 0}
         });
 
 
@@ -1699,6 +1876,7 @@
         nomBase= nomBase1.substr(0,nomBase1.length-5);
         document.title= nomBase;
 
+        ajoutCookie(fichBase[0].name)
 
 
         var reader = new FileReader();
@@ -1758,7 +1936,7 @@
         NbVar = TabXLS[0].length ;
 
 
-        alert("Le tableau à importer a " + nblig + " lignes et " + NbVar + " colonnes")
+        //alert("Le tableau à importer a " + nblig + " lignes et " + NbVar + " colonnes")
 
 
         var colDAT= new Array(nblig); // pour stocker les valeurs de la colonnes
@@ -1955,6 +2133,9 @@
     }
 
 
+     
+    
+
     function reinit(){
 
         //vidage de la base
@@ -2013,18 +2194,20 @@
 
 
         CaleSsHead() // positionnement sous le header
-        PopTot = BDD.length-1;
+        PopTot = BDD.length;
+        
 
 
  
 
         //Création du tableau de résultats
-        var body = document.body,
+        var body = document.body;
+        var nbcols = NbVar-1;
 
             // Titre
         titre  = document.createElement('label');
         titre.id='Titre';
-        titre.innerHTML = `<div class=titretab style="margin-left:20px;"> Base : ` + nomBase  + ` <br> Nombre de lignes : `+ PopTot + ` <br> Nombre de variables : ` + Nom.length + `</div>`
+        titre.innerHTML = `<div class=titretab style="margin-left:20px;"> Base : ` + nomBase  + ` <br> Nombre de lignes : `+ PopTot + ` <br> Nombre de variables : ` + nbcols + `</div>`
         document.getElementById('contenu').appendChild(titre);
 
 
@@ -2127,7 +2310,11 @@
         Pied  = document.createElement('p');
         Pied.id='Pied';
         var champ = "Population totale";
-        Pied.innerHTML = `<div class = 'cadrepied'>  <div class="btn btn-secondary btn-sm" id="validbase" style = "float:left; display:block" onclick="Lprec()"><<</div><div style = "float:left;">`+ (DebAff+1) + ` - ` + (FinAff +1) + `</div><div class="btn btn-secondary btn-sm" id="validbase" style = "float:left ; display:block;" onclick="Lsuiv()"> >> </div></div>`;
+        Pied.innerHTML = `<div class = 'cadrepied'>  
+            <div class="btn btn-primary imgbtn imgleft" id="validbase" style = "float:left; display:block;margin-right:10px" onclick="Lprec()"></div>
+            <div style = "float:left;">`+ (DebAff+1) + ` - ` + (FinAff +1) + `</div>
+            <div class="btn btn-primary imgbtn imgright" id="validbase" style = "float:left ; display:block;margin-left:10px" onclick="Lsuiv()"></div>
+            </div>`;
         //document.body.appendChild(Pied);
 
         document.getElementById('contenu').appendChild(Pied);
@@ -2645,8 +2832,8 @@
 
         // ajout des flèches d'interverstion
         strpied += `<div id="swap" style="display:none;">
-                    <div class="btn btn-primary fa fa-arrow-up" onclick="PrepInterv('h')"></div>
-                    <div class="btn btn-primary fa fa-arrow-down" onclick="PrepInterv('b')"></div>
+                    <div class="btn btn-outline-primary imgbtn imgup" onclick="PrepInterv('h')"></div>
+                    <div class="btn btn-outline-primary imgbtn imgdown" onclick="PrepInterv('b')"></div>
                     </div>`;
 
         // ajout des fonctions de regroupement
@@ -2693,16 +2880,17 @@
         HCell.colSpan=2;
         var Case = `<div id= 'ligneNom' class='titretab'>` + Nom[x] + ` | ` + Libellé[x]
 
-        //Case += `<button  class="btn btn-outline-primary btn-sm fa fa-arrow-right" onclick="vL++;QuelTri()" type="button" style="float:right";></button>`
+        //Case += `<button  class="btn btn-outline-primary btn-sm imgbtn imgright" onclick="vL++;QuelTri()" type="button" style="float:right";></button>`
         // ajout du bouton copier
 
-        Case += `<button id = "BtnPlusVar" class="btn btn-outline-primary btn-sm fa fa-plus"  onclick= "DetailsVar()" type="button" style="float:right";  ></button>`
-        Case += `<button id = "BtnMoinsVar" class="btn btn-outline-primary btn-sm fa fa-minus"  onclick= "CacheDetails()" type="button" style="float:right;display:none";  ></button>`
+        Case += `<button id = "BtnPlusVar" class="btn btn-outline-primary btn-sm imgbtn imgplus"  onclick= "DetailsVar()" type="button" style="float:right";  ></button>`
+        Case += `<button id = "BtnMoinsVar" class="btn btn-outline-primary btn-sm imgbtn imgminus"  onclick= "CacheDetails()" type="button" style="float:right;display:none";  ></button>`
 
-        Case +=  ` <div class="btn btn-outline-primary btn-sm fa fa-copy" onclick="CopieTAP()" style="float:right;margin-right:3px;" ></div>`;
+        Case +=  ` <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTAP()" style="float:right;margin-right:3px;" ></div>`;
+         
 
-        Case +=` <button  class="btn btn-outline-primary btn-sm fa fa-arrow-right" onclick="vL++;QuelTri()" type="button" style="float:right;margin-right:3px;"></button> `
-        Case +=` <button  class="btn btn-outline-primary btn-sm fa fa-arrow-left" onclick="vL--;QuelTri()" type="button" style="float:right;"></button> `
+        Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgright" onclick="vL++;QuelTri()" type="button" style="float:right;margin-right:3px;"></button> `
+        Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgleft" onclick="vL--;QuelTri()" type="button" style="float:right;"></button> `
 
         Case += ` </div>`
 
@@ -2806,13 +2994,13 @@
 
 
             if (Reco[x].trim() != ''){
-                Case += `<button class="btn btn-warning fa fa-trash"  style = "float:left;" onclick= "SuppRecod(`+ vL + `)" type="button"></button></div>`
+                Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:38px;width:38px" onclick= "SuppRecod(`+ vL + `)" type="button"></button></div>`
             } else {Case += `</div>`}
 
 
         } else {
 
-            if (Reco[x].trim() != ''){Case += `<button class="btn btn-warning fa fa-trash"  style = "float:left;" onclick= "SuppRecod(`+ vL + `)" type="button"></button>`
+            if (Reco[x].trim() != ''){Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:38px;width:38px" onclick= "SuppRecod(`+ vL + `)" type="button"></button>`
             }
 
         }
@@ -2899,10 +3087,10 @@
                 <a class="dropdown-item" href="#" onclick="TriGnrModas(2,'d')">effectifs    + -</a>
                 </div>
 
-                <button type="button" class="btn btn-outline-secondary fa fa-copy" style = "margin-top:9px; "  style="float:left;"  onclick="PrepCopie(` + vL + `)">
+                <button type="button" class="btn btn-outline-primary imgbtn imgcopy" style = "margin-top:9px; height:40px"  style="float:left;background-repeat: no-repeat;"  onclick="PrepCopie(` + vL + `)">
                 </button>
 
-                <button type="button" class="btn btn-outline-secondary fa fa-paste" style = "margin-top:9px; "  style="float:left;" onclick="CollMods(` + vL + `)">
+                <button type="button" class="btn btn-outline-primary imgbtn  imgpaste" style = "margin-top:9px; height:40px"; "  style="float:left;background-repeat: no-repeat;" onclick="CollMods(` + vL + `)">
                 </button>
 
 
@@ -3133,6 +3321,7 @@
     function CopieTAP(){
 
 
+        var tabPlain = "Rien";
         var tabhtml =`<h3> ` + Libellé[vL] + `</h3>
               <table>
               <tr style="background-color: #3b8dbd;color:'white'; ">
@@ -3182,21 +3371,27 @@
         tabhtml+=strpied;
 
 
-        CopiePressePapier(tabhtml);
+        CopiePressePapier(tabhtml, tabPlain);
 
-        alert("Le tri à plat a été copié (en html). \n\nIl peut être collé dans un tableur.")
+        alert("Le tri à plat a été copié. ")
     }
 
-    function CopiePressePapier (str) {
-
+    function CopiePressePapier (tabRich, tabPlain) {
         var el = document.createElement('textarea');
-        el.value = str;
+        el.value = tabRich;
         el.setAttribute('readonly', '');
 
         el.style = {position: 'absolute', left: '-9999px'};
         document.body.appendChild(el);
         el.select();
 
+        function listener(e) {
+            e.clipboardData.setData("text/html", tabRich);
+            e.clipboardData.setData("text/plain", tabPlain);
+            e.preventDefault();
+        }
+
+        document.addEventListener("copy", listener);
         document.execCommand('copy');
         document.body.removeChild(el);
 
@@ -4562,7 +4757,7 @@
         titre.className= 'TabTitre';
         //if (document.getElementById('ChkHis').checked ==true ) {
         titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > Tableau croisé
-            <div class="btn btn-outline-primary btn-sm fa fa-copy" onclick="CopieTCR()" style="float:right" ></div> `
+            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> `
         /*
             <a>` + Nom[y] + ` | ` + Libellé[y] + `</a> <br>
             <a style="font-size:0.75rem;color: gray">en fonction de</a> <br>
@@ -4607,16 +4802,14 @@
 
         <div style="float:left">
 
-               <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-up " onclick="vL--;QuelTri()" type="button"></button><br>
-               <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-down  " onclick="vL++;QuelTri()" type="button" style="margin-top:2px"></button>
+               <button  class="btn btn-outline-primary imgbtn imgup" onclick="vL--;QuelTri()" type="button"></button><br>
+               <button  class="btn btn-outline-primary imgbtn imgdown " onclick="vL++;QuelTri()" type="button" style="margin-top:2px"></button>
                </div>
 
              <div style="float:left;margin-left:2px;margin-top:0px;">
-             <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-left " onclick="vC--;QuelTri()" type="button" ></button>
-             <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-right  " onclick="vC++;QuelTri()" type="button" style="margin-left:-2px"></button>
-            </div>
-
-`
+             <button  class="btn btn-outline-primary imgbtn imgleft " onclick="vC--;QuelTri()" type="button" ></button>
+             <button  class="btn btn-outline-primary imgbtn imgright  " onclick="vC++;QuelTri()" type="button" style="margin-left:-2px"></button>
+            </div> `
 
         tr.appendChild(HCell);
 
@@ -4628,7 +4821,7 @@
                 var HCell = document.createElement("th");
                 HCell.innerHTML =ModaY[j];
 
-                if (j==0){ HCell.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm fa fa-close" style="font-size: 0.45em;float: right;margin-right: 3px;margin-top:-15px;"  onclick="SsNr('Y')"></button>`}
+                if (j==0){ HCell.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.45em;float: right;margin-right: 3px;margin-top:-15px;"  onclick="SsNr('Y')"></button>`}
 
 
                 tr.appendChild(HCell);
@@ -4655,7 +4848,7 @@
 
                 var td = tr.insertCell();
                 td.innerHTML =  ModaX[i]
-                if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm fa fa-close" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
+                if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
 
                 //td.appendChild(document.createTextNode(Moda[x][i]));
 
@@ -5075,7 +5268,7 @@
         titre.className= 'TabTitre';
         //if (document.getElementById('ChkHis').checked ==true ) {
         titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > Tableau croisé
-            <div class="btn btn-outline-primary btn-sm fa fa-copy" onclick="CopieTCR()" style="float:right" ></div> `
+            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> `
         /*
             <a>` + Nom[y] + ` | ` + Libellé[y] + `</a> <br>
             <a style="font-size:0.75rem;color: gray">en fonction de</a> <br>
@@ -5118,13 +5311,13 @@
 
         <div style="float:left">
 
-              <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-up " onclick="vL--;QuelTri()" type="button"></button><br>
-              <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-down  " onclick="vL++;QuelTri()" type="button" style="margin-top:2px"></button>
+              <button  class="btn btn-outline-primary imgbtn imgup" onclick="vL--;QuelTri()" type="button"></button><br>
+              <button  class="btn btn-outline-primary imgbtn imgdown " onclick="vL++;QuelTri()" type="button" style="margin-top:2px"></button>
               </div>
 
             <div style="float:left;margin-left:2px;margin-top:0px;">
-            <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-left " onclick="vC--;QuelTri()" type="button" ></button>
-            <button  class="btn btn-outline-secondary btn-sm fa fa-arrow-right  " onclick="vC++;QuelTri()" type="button" style="margin-left:-2px"></button>
+            <button  class="btn btn-outline-primary imgbtn imgleft " onclick="vC--;QuelTri()" type="button" ></button>
+            <button  class="btn btn-outline-primary imgbtn imgright  " onclick="vC++;QuelTri()" type="button" style="margin-left:-2px"></button>
             </div>
 
         `
@@ -5307,19 +5500,18 @@
     function CopieTCR(){
 
         // les non réponses sont-elles incluses?
-        NRX = document.getElementById('ChkNRX').checked
-        NRY = document.getElementById('ChkNRY').checked
+        NRX = document.getElementById('ChkNRX').checked;
+        NRY = document.getElementById('ChkNRY').checked;
 
-        var rgstartx =0
-        var rgstarty = 0
+        var rgstartx =0;
+        var rgstarty = 0;
 
         if (NRX == false ) {rgstartx=1}
         if (NRY == false ) {rgstarty=1}
 
 
-
-        var tabhtml =`<h4> ` + Libellé[vC] + ` en fonction de ` + Libellé[vL] +` </h4>
-              `
+        var tabPlain = Libellé[vC] + ` en fonction de ` + Libellé[vL] + '\r\n';
+        var tabhtml =`<h4> ` + Libellé[vC] + ` en fonction de ` + Libellé[vL] +` </h4>`;
 
         // export des effectifs
 
@@ -5328,7 +5520,7 @@
 
             tabhtml += `<table>
                       <tr style="background-color: #3b8dbd;color:'white'; ">
-                    <th style="background-color: white;color:'#3b8dbd'">eff.</th> `
+                    <th style="background-color: white;color:'#3b8dbd'">eff.</th> `;
 
             if (NRY == false ) {rgstarty=1}
 
@@ -5336,15 +5528,17 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
-                    tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th> `
+                    tabPlain += ModaY[m] + '\t';
+                    tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th>`;
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
                     <th >Total</th>
 
-                  </tr> `
+                  </tr> `;
 
 
 
@@ -5352,32 +5546,36 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
-                    tabhtml += `<tr>`
-                    tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + ModaX[l] + `</td> `
+                    tabhtml += `<tr>`;
+                    tabPlain +=  ModaX[l] + '\t';
+                    tabhtml += `<td style="background-color:#3b8dbd;color:'white';">` + ModaX[l] + `</td>`;
 
                     for (c=rgstarty ; c<MrgY.length;c++){
 
                         if (MrgY[c]>0) {
-                            tabhtml += `<td> ` + Tcr[l][c] + `</td>`
+                            tabPlain +=  Tcr[l][c] + '\t';
+                            tabhtml += `<td>` + Tcr[l][c] + `</td>`
                         }
 
                     }
 
-                    tabhtml +=  `
-                        <td> `+ MrgX[l] + ` </td>
-                        </tr>  `
+                    tabPlain +=  MrgX[l] + '\r\n';
+                    tabhtml +=  `<td>` + MrgX[l] + '</td></tr>';
                 }
             }
-            tabhtml += `<tr>
-                      <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
+
+            tabPlain +=  'Total' + '\t';
+            tabhtml += `<tr> <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
             for (c=rgstarty ; c<MrgY.length;c++){
 
                 if (MrgY[c]>0) {
+                    tabPlain +=  MrgY[c] + '\t';
                     tabhtml += `<td> ` + MrgY[c] + `</td>`
                 }
 
             }
+            tabPlain +=  PopTot + '\r\n';
             tabhtml += `<td> `+ PopTot + ` </td>
                                 </tr>`
 
@@ -5631,7 +5829,7 @@
 
 
 
-        CopiePressePapier(tabhtml);
+        CopiePressePapier(tabhtml, tabPlain);
 
         alert("Le tableau a bien été copié")
     }
@@ -8002,7 +8200,9 @@
 
 
     function openInfos() {
+        document.getElementById("infostrideux").style.zIndex = "101";
         document.getElementById("infostrideux").style.height = "100%";
+
     }
 
     function closeInfos() {
@@ -8094,6 +8294,8 @@ function EstDansMulti(Tab, Txt,spl){
 
 
     function Traitements() {
+        document.getElementById("accueil").style.display = "none";
+
         document.getElementById("cadreboutons").style.display = "block";
         document.getElementById("lblbase").innerText = nomBase;
         document.getElementById("lblbase").style.display = "block";
@@ -8643,6 +8845,47 @@ function TriParTasBDD (c) {
 
     }
 
+
+    function ajoutCookie(fich, obj){
+        return 0
+        var d = new Date();
+        d.setTime(d.getTime() + (31*24*60*60*1000)); // ajout de 31 jours
+        var expires = "expires="+ d.toUTCString();
+        document.cookie = fich + "=" + obj + ";" + expires + ";path=/";
+
+    }
+
+    function lireCookies(){
+         
+               var allcookies = document.cookie;
+               var listebases=[]             
+               // Get all the cookies pairs in an array
+               cookiearray = allcookies.split(';');
+               
+               // Now take key value pair out of this array
+               for(var i=0; i<cookiearray.length; i++) {
+                  name = cookiearray[i].split('=')[0];
+                  value = cookiearray[i].split('=')[1];
+
+                  
+                  // ajout de la base ouverte dans le tableau des bases récentes
+                  listebases.push(value)
+                  
+                  var tbl=document.getElementById("tabfichs")
+                  
+                    var tr = tbl.insertRow();
+
+                    // numéro de ligne
+                    Case = `<a href="#" onclick="LireTR2H('` + value + `');" > <label style="cursor: pointer;">` + name + ` </p></label> </a> <br>`
+                    var HCell = document.createElement("th");
+                    HCell.innerHTML = Case;
+                    tr.appendChild(HCell);
+
+               }
+            
+               return listebases;
+
+    }
 
 </script>
 
