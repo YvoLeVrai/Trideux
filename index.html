@@ -555,7 +555,8 @@
     var proba=0;
     var signif="";
     var vcram=0;
-    var strpied // pied des tableaux
+    var strpied; // pied des tableaux
+    var strPiedPlain; // pied des tableaux pour la copie plainText
 
     var DebAff=0; // affichage des données à partir de...
     var FinAff=49; // affichage des données jusque...
@@ -2829,8 +2830,10 @@
         }
 
         var Rgl = RglRec()
-        strpied = `<div style="margin-left:37px;margin-top:10px;float:left'">Source : `+ nomBase + ` <br> Champ: `+ champ + ` <br> `
+        strPiedPlain = 'Source : ' + nomBase + '\r\n\vChamp : ' + champ + '\r\n';
+        strpied = `<div style="margin-left:37px;margin-top:10px;float:left'">Source : `+ nomBase + ` <br> Champ : `+ champ + ` <br> `
         if (vP!=0){
+            strPiedPlain = ' Var. Pond. : ' + Libellé[vP] + '\r\n';
             strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
         }
         strpied+=`</div>`
@@ -3379,8 +3382,8 @@
         // ajout du pied
 
 
-        tabPlain += strpied;
-        tabhtml+=strpied;
+        tabPlain += strPiedPlain;
+        tabhtml += strPiedPlain;
 
 
         CopiePressePapier(tabhtml, tabPlain);
@@ -3389,14 +3392,6 @@
     }
 
     function CopiePressePapier (tabRich, tabPlain) {
-        var el = document.createElement('textarea');
-        el.value = tabRich;
-        el.setAttribute('readonly', '');
-
-        el.style = {position: 'absolute', left: '-9999px'};
-        document.body.appendChild(el);
-        el.select();
-
         function listener(e) {
             e.clipboardData.setData("text/html", tabRich);
             e.clipboardData.setData("text/plain", tabPlain);
@@ -3405,9 +3400,6 @@
 
         document.addEventListener("copy", listener);
         document.execCommand('copy');
-        document.body.removeChild(el);
-
-
     }
 
     function ImgCopie(){
@@ -5171,19 +5163,23 @@
             champ = ChampFiltre() + " (n=" + PopTot + ")";
         }
 
+        strPiedPlain = 'Source : ' + nomBase + '\r\n\v' + 'Champ : ' + champ + '\r\n';
         strpied=`<div class = "piedtab">
             Source : ` + nomBase + `<br>
             Champ : ` + champ + `<br>`
 
 
         if (vP!=0){
+            strPiedPlain += 'Var. Pond. : ' + Libellé[vP] + '\r\n';
             strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
         }
 
         if (multi==false) {
+            strPiedPlain += 'Khi² : ' +  Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `proba : ` + proba + " " + signif + '\r\nV de Cramér :' + vcram;
             strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `
               proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
         } else {
+            strPiedPlain += 'Variable(s) multiple(s)! Les marges dépassent 100%';
             strpied+=`<p style="color:rgb(255,100,100);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
         }
 
@@ -5488,12 +5484,14 @@
             champ = ChampFiltre() + " (n=" + PopTot + ")";
         }
 
+        strPiedPlain = "Sources : " + nomBase + '\r\n\v' + 'Champ : ' + champ + '\r\n';
         strpied=`<div class = "piedtab">
             Source : ` + nomBase + `<br>
             Champ : ` + champ + `<br>`
 
 
         if (vP!=0){
+            strPiedPlain = "Var. Pond. : " + Libellé[vP] + '\r\n';
             strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
         }
 
@@ -5507,6 +5505,7 @@
         var result= t_test(Col1,Col2)
         var tstud = result[1].toFixed(3);
         var pval = result[2].toFixed(3);
+        strPiedPlain = "T Student : " + tstud + ' p-value : ' + pval + '\r\n';
         strpied+=`T Student : ` +  tstud + ` p-value : `+ pval +`<br>`
         
         } else {
@@ -5890,8 +5889,8 @@
             proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
           */
 
-        tabPlain += strpied;
-        tabhtml += strpied;
+        tabPlain += strPiedPlain;
+        tabhtml += strPiedPlain;
 
         CopiePressePapier(tabhtml, tabPlain);
 
