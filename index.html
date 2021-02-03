@@ -3133,7 +3133,8 @@
     function CopieTAP(){
 
 
-        var tabPlain = "Rien";
+        var tabPlain = Libellé[vL] + '\r\n';
+        tabPlain += 'Libellé\tEffectif\t%\r\n';
         var tabhtml =`<h3> ` + Libellé[vL] + `</h3>
               <table>
               <tr style="background-color: #3b8dbd;color:'white'; ">
@@ -3158,6 +3159,7 @@
                 Prct=Prct.toFixed(NbDec);
                 Prct=Prct.replace( ".",",")
 
+                tabPlain += ModaM[m] + '\t' + TapX[m] +'\t' + Prct + '\r\n';
                 tabhtml += `<tr>
                 <td > ` + ModaM[m] + `</th>
                 <td > ` + TapX[m] + `</th>
@@ -3166,6 +3168,7 @@
             }
         }
 
+        tabPlain += 'Total\t' + PopTot +'\t100\r\n\r\n';
         tabhtml += `<tr>
                 <td > Total</th>
                 <td > ` + PopTot + `</th>
@@ -3179,7 +3182,7 @@
         // ajout du pied
 
 
-
+        tabPlain += strpied;
         tabhtml+=strpied;
 
 
