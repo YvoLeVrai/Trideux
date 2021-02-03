@@ -11,6 +11,9 @@
     <script type="text/javascript" src="encoding.js"></script>
     <script type="text/javascript" src="xlsx.full.min.js"></script>
 
+    <!-- Tests statistiques-->
+    <script type="text/javascript" src="jstat.min.js"></script>
+
 
 
     <!-- images boutons 
@@ -97,6 +100,8 @@
 
 
             <p style="color:rgb(238, 178, 178);font-size: 20px"> NB: Les modifications apportées à la base s'appliquent instantanément mais les bases doivent être téléchargées au format TR2 (menu Export) pour que ces recodages et habillages de modalités soient pérennes. <br> </p>
+
+            
             
           
 
@@ -138,7 +143,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.6</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.8</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 100;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -163,10 +168,10 @@
         <div  class="btnfonction" onclick="VoirBloc('BlocFiltre')"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
         <div class="btnfonction" id="btnexport"><img src="Images\DAT2.png"   alt="Outils"><label class='txtbtn'>Exporter</label>
             <div class="dropdown-content" id = "menu">
-                <a id="btnexport3" onclick="ExportTR2()" style="cursor: pointer;">  format Trideux.cloud (*.TR2)</a>
-                <a id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Base actuelle</a>
-                <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a>
-                <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Base au format CSV</a>
+                <a id="btnexport3" onclick="ExportTR2()" style="cursor: pointer;">  Format Tri2.cloud (*.TR2)</a>
+                <a id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Format (DAT/POS/DIC)</a>
+                <!-- <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a> !-->
+                <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Format CSV</a>
                 <a id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Dictionnaire des variables</a>
 
 
@@ -457,7 +462,9 @@
                 
     <a href="#" onclick="openFich('/Data/Hvr_0.TR2');closeInfos()" > <label style="cursor: pointer;">  . HVR </label> </a> <a>(Enquête "Hygiène de vie des Rabelaisiens" portant sur la santé et l'alimentation, réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2014)</a> <br>
     
-    <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie confinée - Extraits )</a> </p>  
+    <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
+    
+    <a href="#" onclick="openFich('/Data/Base_POF_0.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
@@ -555,6 +562,8 @@
     var NbDec=1; //Nombre de décimales (pour l'affichage)
 
     var Colonne=[] // colonne extraite pour les besoins des analyses des variables numériques
+    
+    
     var Quants = [] //mémorisation des quantiles calculés sur la colonne
     var Moy = 0 //mémorisation de la moyenne
 
@@ -5169,7 +5178,7 @@
         }
 
         if (multi==false) {
-            strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + `
+            strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `
               proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
         } else {
             strpied+=`<p style="color:rgb(255,100,100);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
@@ -5214,6 +5223,7 @@
 
 
         var règle = Reco[x] // règle de recodage
+        var nbc = 0 // nombres de valeurs/lignes différentes 
 
         // calcul des valeurs
         for (i = 0; i < Number(CdMax[x])+1; i++) {
@@ -5223,39 +5233,36 @@
 
             // extraction de la colonne pour la variable
             ExtractCol(y,x,i)
+
             TriParTas (Colonne);
 
             var nblig = Colonne.length
 
             if (nblig<=0) {continue}
+            
+            nbc++ 
 
             var nbmiss = BDD.length - Colonne.length
             Tcr[i][0] = nblig
             MrgX[i]=nblig
 
             Moy=Moyenne(Colonne);
-            Tcr[i][1] = Moy
+            Tcr[i][1] = Moy // moyenne
             var Quants=Quantiles(Colonne)
             var ect = EcartType(Colonne, Moy)
-            Tcr[i][2]=ect;
-            Tcr[i][3]=Colonne[0]
+            Tcr[i][2]=ect; //écart-type
+            Tcr[i][3]=Colonne[0] //min
 
-
-
-            for (q=0;q<Quants.length+1;q++){
+            for (q=0;q<Quants.length+1;q++){ // défilement des quantiles p1 p10 Q1 Q2 Q3 p90 p99
                 Tcr[i][Number(q)+4]=Quants[q];
             }
 
-            Tcr[i][11]=Colonne[nblig-1]
+            Tcr[i][11]=Colonne[nblig-1] // max
         }
 
         // Recopiage du tableau des modalités
         ModaX = Moda[x].slice()
         ModaY = ["n","moyenne","écart-type","min","p1","d1","q2","Médiane","q3","d9","p99","max"]
-
-
-
-
 
 
 
@@ -5415,7 +5422,7 @@
             };
         }
 
-        // extraction de la colonne pour la variable
+        // extraction de la colonne pour le TOTAL
         ExtractCol(y,0,0)
         TriParTas (Colonne);
 
@@ -5488,6 +5495,25 @@
         }
 
 
+                // test de significativité 
+
+        if (nbc==2) {
+        var Col1 = ExtractCol(y,x,1)
+        var Col2 = ExtractCol(y,x,2)
+
+        var result= t_test(Col1,Col2)
+        var tstud = result[1].toFixed(3);
+        var pval = result[2].toFixed(3);
+        strpied+=`T Student : ` +  tstud + ` p-value : `+ pval +`<br>`
+        
+        } else {
+         
+            
+            var argmt = new Array("un truc","un machin")
+            essaiargvar(argmt)
+        }
+
+
         Pied.innerHTML = strpied
 
 
@@ -5495,6 +5521,12 @@
 
 
 
+
+        
+    }
+
+    function essaiargvar(){
+        alert(arguments[0])
     }
 
     function CopieTCR(){
@@ -8099,6 +8131,20 @@
 
     }
 
+    function t_test(x1, x2) { // test de Student (Welsh) non apparié Trouvé ici : https://rasmusab.github.io/bayes-null-ttest-app/
+    var n1 = x1.length;
+    var n2 = x2.length;
+    mean1 = jStat.mean(x1);
+    mean2 = jStat.mean(x2);
+    var var1 = Math.pow(jStat.stdev(x1, true), 2);
+    var var2 = Math.pow(jStat.stdev(x2, true), 2);
+    var sd = Math.sqrt( ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2));
+    var t = (mean1 - mean2) / (sd * Math.sqrt(1 / n1 + 1 / n2));
+    var p = jStat.ttest(t, n1 + n2 - 2 +1,1);
+    return [mean1 - mean2, t, p];
+    }
+
+
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -8319,7 +8365,7 @@ function EstDansMulti(Tab, Txt,spl){
         var l=0
         var règle=Reco[c]
 
-// les non réponses sont-elles incluses?
+    // les non réponses sont-elles incluses?
         NRC = document.getElementById('ChkNRX').checked
 
         // défilement des lignes
@@ -8363,6 +8409,8 @@ function EstDansMulti(Tab, Txt,spl){
         return Colonne;
 
     };
+
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////////////
