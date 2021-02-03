@@ -3133,6 +3133,8 @@
     function CopieTAP(){
 
 
+        var tabPlain = Libellé[vL] + '\r\n';
+        tabPlain += 'Libellé\tEffectif\t%\r\n';
         var tabhtml =`<h3> ` + Libellé[vL] + `</h3>
               <table>
               <tr style="background-color: #3b8dbd;color:'white'; ">
@@ -3157,6 +3159,7 @@
                 Prct=Prct.toFixed(NbDec);
                 Prct=Prct.replace( ".",",")
 
+                tabPlain += ModaM[m] + '\t' + TapX[m] +'\t' + Prct + '\r\n';
                 tabhtml += `<tr>
                 <td > ` + ModaM[m] + `</th>
                 <td > ` + TapX[m] + `</th>
@@ -3165,6 +3168,7 @@
             }
         }
 
+        tabPlain += 'Total\t' + PopTot +'\t100\r\n\r\n';
         tabhtml += `<tr>
                 <td > Total</th>
                 <td > ` + PopTot + `</th>
@@ -3178,25 +3182,31 @@
         // ajout du pied
 
 
-
+        tabPlain += strpied;
         tabhtml+=strpied;
 
 
-        CopiePressePapier(tabhtml);
+        CopiePressePapier(tabhtml, tabPlain);
 
         alert("Le tri à plat a été copié (en html). \n\nIl peut être collé dans un tableur.")
     }
 
-    function CopiePressePapier (str) {
-
+    function CopiePressePapier (tabRich, tabPlain) {
         var el = document.createElement('textarea');
-        el.value = str;
+        el.value = tabRich;
         el.setAttribute('readonly', '');
 
         el.style = {position: 'absolute', left: '-9999px'};
         document.body.appendChild(el);
         el.select();
 
+        function listener(e) {
+            e.clipboardData.setData("text/html", tabRich);
+            e.clipboardData.setData("text/plain", tabPlain);
+            e.preventDefault();
+        }
+
+        document.addEventListener("copy", listener);
         document.execCommand('copy');
         document.body.removeChild(el);
 
@@ -5307,28 +5317,28 @@
     function CopieTCR(){
 
         // les non réponses sont-elles incluses?
-        NRX = document.getElementById('ChkNRX').checked
-        NRY = document.getElementById('ChkNRY').checked
+        NRX = document.getElementById('ChkNRX').checked;
+        NRY = document.getElementById('ChkNRY').checked;
 
-        var rgstartx =0
-        var rgstarty = 0
+        var rgstartx =0;
+        var rgstarty = 0;
 
         if (NRX == false ) {rgstartx=1}
         if (NRY == false ) {rgstarty=1}
 
 
-
-        var tabhtml =`<h4> ` + Libellé[vC] + ` en fonction de ` + Libellé[vL] +` </h4>
-              `
+        var tabPlain = Libellé[vC] + ` en fonction de ` + Libellé[vL] + '\r\n';
+        var tabhtml =`<h4> ` + Libellé[vC] + ` en fonction de ` + Libellé[vL] +` </h4>`;
 
         // export des effectifs
 
         // effectifs
         if (document.getElementById('ChkEff').checked ==true ) {
 
+            tabPlain += 'eff.\t';
             tabhtml += `<table>
                       <tr style="background-color: #3b8dbd;color:'white'; ">
-                    <th style="background-color: white;color:'#3b8dbd'">eff.</th> `
+                    <th style="background-color: white;color:'#3b8dbd'">eff.</th> `;
 
             if (NRY == false ) {rgstarty=1}
 
@@ -5336,15 +5346,17 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
-                    tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th> `
+                    tabPlain += ModaY[m] + '\t';
+                    tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th>`;
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
                     <th >Total</th>
 
-                  </tr> `
+                  </tr> `;
 
 
 
@@ -5352,32 +5364,36 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
-                    tabhtml += `<tr>`
-                    tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + ModaX[l] + `</td> `
+                    tabPlain +=  ModaX[l] + '\t';
+                    tabhtml += `<tr>`;
+                    tabhtml += `<td style="background-color:#3b8dbd;color:'white';">` + ModaX[l] + `</td>`;
 
                     for (c=rgstarty ; c<MrgY.length;c++){
 
                         if (MrgY[c]>0) {
-                            tabhtml += `<td> ` + Tcr[l][c] + `</td>`
+                            tabPlain +=  Tcr[l][c] + '\t';
+                            tabhtml += `<td>` + Tcr[l][c] + `</td>`
                         }
 
                     }
 
-                    tabhtml +=  `
-                        <td> `+ MrgX[l] + ` </td>
-                        </tr>  `
+                    tabPlain +=  MrgX[l] + '\r\n';
+                    tabhtml +=  `<td>` + MrgX[l] + '</td></tr>';
                 }
             }
-            tabhtml += `<tr>
-                      <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
+
+            tabPlain +=  'Total\t';
+            tabhtml += `<tr> <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
             for (c=rgstarty ; c<MrgY.length;c++){
 
                 if (MrgY[c]>0) {
+                    tabPlain +=  MrgY[c] + '\t';
                     tabhtml += `<td> ` + MrgY[c] + `</td>`
                 }
 
             }
+            tabPlain +=  PopTot + '\r\n\r\n';
             tabhtml += `<td> `+ PopTot + ` </td>
                                 </tr>`
 
@@ -5388,6 +5404,7 @@
         // Pourcentages en lignes
         if (document.getElementById('ChkPL').checked ==true ) {
 
+            tabPlain += '% l.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% l.</th> `
@@ -5398,11 +5415,13 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5414,6 +5433,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5424,16 +5444,20 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
                     }
 
+                    tabPlain +=  '100\r\n';
                     tabhtml +=  `
               <td> 100 </td>
               </tr>  `
                 }
             }
+
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5443,10 +5467,12 @@
                     var PrctM = MrgY[c] /PopTot*100;
                     PrctM=PrctM.toFixed(NbDec);
                     PrctM=PrctM.replace( ".",",")
+                    tabPlain +=  PrctM + '\t';
                     tabhtml += `<td> ` + PrctM + `</td>`
                 }
 
             }
+            tabPlain +=  '100\r\n\r\n';
             tabhtml += `<td> 100 </td>
                       </tr>`
 
@@ -5457,6 +5483,7 @@
         // Pourcentages en colonnes
         if (document.getElementById('ChkPC').checked ==true ) {
 
+            tabPlain += '% c.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% c.</th> `
@@ -5467,11 +5494,13 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5481,6 +5510,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5491,6 +5521,7 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
@@ -5500,11 +5531,14 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  PrctX + '\r\n';
                     tabhtml +=  `
               <td>`+ PrctX + `</td>
               </tr>  `
                 }
             }
+
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5512,10 +5546,12 @@
 
                 if (MrgY[c]>0) {
 
+                    tabPlain += '100\t';
                     tabhtml += `<td> 100 </td>`
                 }
 
             }
+            tabPlain +=  '100\r\n\r\n';
             tabhtml += `<td> 100 </td>
                       </tr>`
 
@@ -5527,6 +5563,7 @@
         // Pourcentages du total
         if (document.getElementById('ChkPT').checked ==true ) {
 
+            tabPlain += '% tot.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% tot.</th> `
@@ -5537,11 +5574,14 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5551,6 +5591,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5561,6 +5602,7 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
@@ -5570,11 +5612,13 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  PrctX + '\r\n';
                     tabhtml +=  `
               <td>`+ PrctX + `</td>
               </tr>  `
                 }
             }
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5586,6 +5630,7 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  '100\t';
                     tabhtml +=  `
               <td> 100 </td>
                `
@@ -5595,6 +5640,7 @@
             }
 
 
+            tabPlain +=  'PopTot\r\n\r\n';
             tabhtml += `
               <td>`+ PopTot + `</td>
               </tr>  `
@@ -5626,12 +5672,10 @@
             proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
           */
 
+        tabPlain += strpied;
         tabhtml += strpied;
 
-
-
-
-        CopiePressePapier(tabhtml);
+        CopiePressePapier(tabhtml, tabPlain);
 
         alert("Le tableau a bien été copié")
     }
