@@ -5332,6 +5332,7 @@
         // effectifs
         if (document.getElementById('ChkEff').checked ==true ) {
 
+            tabPlain += 'eff.\t';
             tabhtml += `<table>
                       <tr style="background-color: #3b8dbd;color:'white'; ">
                     <th style="background-color: white;color:'#3b8dbd'">eff.</th> `;
@@ -5360,8 +5361,8 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
-                    tabhtml += `<tr>`;
                     tabPlain +=  ModaX[l] + '\t';
+                    tabhtml += `<tr>`;
                     tabhtml += `<td style="background-color:#3b8dbd;color:'white';">` + ModaX[l] + `</td>`;
 
                     for (c=rgstarty ; c<MrgY.length;c++){
@@ -5373,12 +5374,12 @@
 
                     }
 
-                    tabPlain +=  Tcr[l][c] + '\r\n';
+                    tabPlain +=  MrgX[l] + '\r\n';
                     tabhtml +=  `<td>` + MrgX[l] + '</td></tr>';
                 }
             }
 
-            tabPlain +=  Total + '\t';
+            tabPlain +=  'Total\t';
             tabhtml += `<tr> <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
             for (c=rgstarty ; c<MrgY.length;c++){
@@ -5389,7 +5390,7 @@
                 }
 
             }
-            tabPlain +=  PopTot + '\r\n';
+            tabPlain +=  PopTot + '\r\n\r\n';
             tabhtml += `<td> `+ PopTot + ` </td>
                                 </tr>`
 
@@ -5400,6 +5401,7 @@
         // Pourcentages en lignes
         if (document.getElementById('ChkPL').checked ==true ) {
 
+            tabPlain += '% l.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% l.</th> `
@@ -5410,11 +5412,13 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5426,6 +5430,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5436,16 +5441,20 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
                     }
 
+                    tabPlain +=  '100\r\n';
                     tabhtml +=  `
               <td> 100 </td>
               </tr>  `
                 }
             }
+
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5455,10 +5464,12 @@
                     var PrctM = MrgY[c] /PopTot*100;
                     PrctM=PrctM.toFixed(NbDec);
                     PrctM=PrctM.replace( ".",",")
+                    tabPlain +=  PrctM + '\t';
                     tabhtml += `<td> ` + PrctM + `</td>`
                 }
 
             }
+            tabPlain +=  '100\r\n\r\n';
             tabhtml += `<td> 100 </td>
                       </tr>`
 
@@ -5469,6 +5480,7 @@
         // Pourcentages en colonnes
         if (document.getElementById('ChkPC').checked ==true ) {
 
+            tabPlain += '% c.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% c.</th> `
@@ -5479,11 +5491,13 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5493,6 +5507,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5503,6 +5518,7 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
@@ -5512,11 +5528,14 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  PrctX + '\r\n';
                     tabhtml +=  `
               <td>`+ PrctX + `</td>
               </tr>  `
                 }
             }
+
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5524,10 +5543,12 @@
 
                 if (MrgY[c]>0) {
 
+                    tabPlain += '100\t';
                     tabhtml += `<td> 100 </td>`
                 }
 
             }
+            tabPlain +=  '100\r\n\r\n';
             tabhtml += `<td> 100 </td>
                       </tr>`
 
@@ -5539,6 +5560,7 @@
         // Pourcentages du total
         if (document.getElementById('ChkPT').checked ==true ) {
 
+            tabPlain += '% tot.\t';
             tabhtml += `<table> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% tot.</th> `
@@ -5549,11 +5571,14 @@
             for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
                 if (MrgY[m]>0) {
+                    tabPlain += Moda[vC][m] + '\t';
                     tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
                 }
 
             }
 
+
+            tabPlain += 'Total\r\n';
             tabhtml += `
           <th >Total</th>
 
@@ -5563,6 +5588,7 @@
             for (l=rgstartx ; l<MrgX.length;l++){
 
                 if (MrgX[l]>0) {
+                    tabPlain +=  Moda[vL][l] + '\t';
                     tabhtml += `<tr>`
                     tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
 
@@ -5573,6 +5599,7 @@
                             PrctX=PrctX.toFixed(NbDec);
                             PrctX=PrctX.replace( ".",",")
 
+                            tabPlain +=  PrctX + '\t';
                             tabhtml += `<td> ` + PrctX + `</td>`
                         }
 
@@ -5582,11 +5609,13 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  PrctX + '\r\n';
                     tabhtml +=  `
               <td>`+ PrctX + `</td>
               </tr>  `
                 }
             }
+            tabPlain +=  'Total\t';
             tabhtml += `<tr>
             <td style="background-color: #3b8dbd;color:'white';"> Total </td>`
 
@@ -5598,6 +5627,7 @@
                     PrctX=PrctX.toFixed(NbDec);
                     PrctX=PrctX.replace( ".",",")
 
+                    tabPlain +=  '100\t';
                     tabhtml +=  `
               <td> 100 </td>
                `
@@ -5607,6 +5637,7 @@
             }
 
 
+            tabPlain +=  'PopTot\r\n\r\n';
             tabhtml += `
               <td>`+ PopTot + `</td>
               </tr>  `
@@ -5638,10 +5669,8 @@
             proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
           */
 
+        tabPlain += strpied;
         tabhtml += strpied;
-
-
-
 
         CopiePressePapier(tabhtml, tabPlain);
 
