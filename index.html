@@ -55,7 +55,7 @@
             <p>Chargez les fichiers composant la  base Trideux </p>
             <!-- // choix du fichier POS!-->
             <div class="ChoixBase1" id="BlocBase1">
-                <br> 1- Choisissez le fichier contenant les données brutes (*.DAT:) <br>  <br> <input type='file' accept='.DAT' id= 'DAT' onchange='openDAT(event)'> <br>
+                <br> 1- Choisissez le fichier contenant les données brutes (*.DAT:) <br>  <br> <input type='file' accept='.DAT' id= 'DAT' onchange='reinit(); openDAT(event)'> <br>
                 <br>
             </div>
             <br>
@@ -690,6 +690,8 @@
             if (lignesPOS[l]=="***") {break;}
             if (lignesPOS[l].length < 9) {continue;}
 
+            NbVar = l-1
+
             // nom court
             Nom.push(lignesPOS[l].substr(0,3));
 
@@ -795,7 +797,7 @@
 
     function openFich(fich) {
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+        
         reinit();
         lignesTR2=[];  // vidage du tableau
 
@@ -1027,7 +1029,7 @@
 
     var LireZip = function(event) {
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+         
         reinit()
 
 
@@ -1178,7 +1180,7 @@
 
     var LireTR2 = function(event,obj) {
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+         
         reinit();
 
 
@@ -1256,7 +1258,7 @@
 
     var LireTR2H = function(obj) {
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+         
         reinit();
 
 
@@ -1517,7 +1519,7 @@
 
     var LireCSV = function(event) {
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+         
         reinit()
 
 
@@ -1876,7 +1878,7 @@
 
     var LireXLSX = function(event){
 
-        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+         
         reinit()
 
         var input = event.target;
@@ -2165,6 +2167,9 @@
         vC=0
         vF=0
         vX=0
+
+        //cache des tableaux précédents
+        Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
 
     }
 
