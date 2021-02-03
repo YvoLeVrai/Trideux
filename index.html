@@ -143,7 +143,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.8</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.9</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 100;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -4748,6 +4748,7 @@
                 if (proba<0.1){signif="*";}
                 if (proba<=0.05){signif+="*";}
                 if (proba<=0.01){signif+="*";}
+                if (proba==0){proba ="< 0.001"}
             }
 
             var khi2max = Khi2/(PopTot*deglib);
@@ -4943,38 +4944,68 @@
 
 
 
-                        // % en colonnes (en haut à gauche)
-                        if (document.getElementById('ChkPC').checked ==true ) {
-                            var PrctY = eff/MrgY[j]*100;
-                            PrctY=PrctY.toFixed(NbDec);
-                            Case +=`<div class= 'pctcol'>` + PrctY + `%</div> `;
+                        var nbvalaff = 0 ;  // combien de valeurs différentes affichées dans la case? 
+                        var valaff = "" ; // dernière valeur affichée
+
+                        // calcul des ratios
+                        var PrctX = eff/MrgX[i]*100;
+                        PrctX=PrctX.toFixed(NbDec);
+                        
+                        var PrctY = eff/MrgY[j]*100;
+                        PrctY=PrctY.toFixed(NbDec);
+                        
+                        var PrctT = eff/PopTot*100;
+                        PrctT=PrctT.toFixed(NbDec);
+
+
+                        var listChk=['ChkEff', 'ChkPT','ChkPL','ChkPC']
+                        var valPct=[eff, PrctT,PrctX,PrctY]
+                        
+                        for (chk=0;chk<4;chk++){
+                            if (document.getElementById(listChk[chk]).checked ==true ) {
+                                nbvalaff++;
+                                valaff = valPct[chk]
+                            }
+
                         }
 
-
-
+                        // % en colonnes (en haut à gauche)
+                        if (document.getElementById('ChkPC').checked ==true && nbvalaff>1) {
+                            
+                            Case +=`<div class= 'pctcol'>` + PrctY + `%</div> `;
+                            valaff=PrctY
+                        }
+                      
                         // effectifs
                         if (document.getElementById('ChkEff').checked ==true ) {
 
-                            Case +=`<div class= 'effectifs'>  `+eff+ `</div>`;}
+                        Case +=`<div class= 'effectifs'>  `+eff+ `</div>`;}
 
                         else {
-                            Case +=`<div class= 'effectifs'> <label></label> </div>`;
+                        var txt = ""
+                        if (nbvalaff==1){txt=valaff}    
+                        Case +=`<div class= 'effectifs'> <label></label>`+txt+` </div>`;
+
                         }
 
-
                         //% total (en bas  à gauche)
-                        if (document.getElementById('ChkPT').checked ==true ) {
-                            var PrctT = eff/PopTot*100;
-                            PrctT=PrctT.toFixed(NbDec);
+                        if (document.getElementById('ChkPT').checked ==true && nbvalaff>1 ) {
+
                             Case +=`<div class= 'pcttot'>` + PrctT + `%</div> `;
+ 
                         }
 
                         // % en lignes (bas droite)
-                        if (document.getElementById('ChkPL').checked ==true ) {
-                            var PrctX = eff/MrgX[i]*100;
-                            PrctX=PrctX.toFixed(NbDec);
+                        if (document.getElementById('ChkPL').checked ==true && nbvalaff>1) {
+
                             Case +=`<div class= 'pctlig'>  `+ PrctX + `%</div> `;
+ 
                         }
+
+
+
+
+
 
 
                         if (document.getElementById('ChkPEM').checked ==true ) {
@@ -5017,10 +5048,7 @@
                     Case +=`<div class= 'pctcol'>` + PrctY + `%</div> `;
                 }
 
-                //% total (en haut à droite)
-                if (document.getElementById('ChkPT').checked ==true ) {
-                    Case +=`<div class= 'pcttot'>` + PrctT + `%</div> `;
-                }
+
 
                 // effectifs
                 //if (document.getElementById('ChkEff').checked ==true ) {
@@ -5031,6 +5059,10 @@
                 //  Case +=`<div class= 'effectifs'> <label></label> </div>`;
                 //}
 
+                //% total (en haut à droite)
+                if (document.getElementById('ChkPT').checked ==true ) {
+                    Case +=`<div class= 'pcttot'>` + PrctT + `%</div> `;
+                }
 
                 // % en lignes (bas droite)
                 if (document.getElementById('ChkPL').checked ==true ) {
@@ -5227,8 +5259,10 @@
 
 
         var règle = Reco[x] // règle de recodage
-        var nbc = 0 // nombres de valeurs/lignes différentes 
 
+        var nbc = 0 // nombres de valeurs/lignes différentes 
+        var Cols = new Array (Number(CdMax[x])) // tableau des colonnes (pour tests)
+        
         // calcul des valeurs
         for (i = 0; i < Number(CdMax[x])+1; i++) {
 
@@ -5244,7 +5278,8 @@
 
             if (nblig<=0) {continue}
             
-            nbc++ 
+            nbc++ // nombre de colonnes non vides +1 
+            Cols[nbc] = Colonne  // mémorisation de la colonne dans le tableau des colonnes
 
             var nbmiss = BDD.length - Colonne.length
             Tcr[i][0] = nblig
@@ -5476,7 +5511,10 @@
 
 
 
+
         }
+
+
 
 
         body.appendChild(tbl);
@@ -5501,25 +5539,81 @@
         }
 
 
-                // test de significativité 
+        // test de significativité 
+        
+        if (nbc==2) { // Test de student (welsh)
 
-        if (nbc==2) {
-        var Col1 = ExtractCol(y,x,1)
-        var Col2 = ExtractCol(y,x,2)
-
-        var result= t_test(Col1,Col2)
+         var result= t_test(Cols[1],Cols[2])
         var tstud = result[1].toFixed(3);
         var pval = result[2].toFixed(3);
+        if (pval == 0){pval = "<0.001"}
         strPiedPlain = "T Student : " + tstud + ' p-value : ' + pval + '\r\n';
         strpied+=`T Student : ` +  tstud + ` p-value : `+ pval +`<br>`
         
-        } else {
-         
+        } else { 
             
-            var argmt = new Array("un truc","un machin")
-            essaiargvar(argmt)
-        }
+            
+            // au-delà de 2 modalités : ANOVA
 
+            if (nbc==3) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3])         
+            }
+
+            if (nbc==4) {
+                 
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4])       
+
+            }
+            
+            if (nbc==5) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4,Cols[5]])          
+            }
+
+            if (nbc==6) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6])           
+            }
+
+            if (nbc==7) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7])           
+            }
+
+            if (nbc==8) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8])           
+            }
+
+            if (nbc==9) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8],Cols[9]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8],Cols[9])           
+            }
+
+            if (nbc==10) {
+                var fscore= jStat.anovafscore(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8],Cols[9],Cols[10]) 
+                var ftest= jStat.anovaftest(Cols[1],Cols[2],Cols[3],Cols[4],Cols[5],Cols[6],Cols[7],Cols[8],Cols[9],Cols[10])           
+            }
+            
+
+            if (nbc>10) {
+                var fscore= 0 
+                var ftest= 0           
+            }
+
+
+            fscore = fscore.toFixed(3);
+            ftest = ftest.toFixed(3);
+            if (ftest == 0){ftest = "<0.001"}
+            
+            if (fscore>0) { // pas d'affichage si l'anova n'est pas calculée (car trop de modas)
+            strPiedPlain = `Anova : f: ` + fscore + ` ddl: ( `+ nbc-1 + ` - ` + PopTot-nbc + ` ) p-value : ` + ftest+ '\r\n';
+            strpied+= `Anova : f: ` + fscore + ` ddl: ( `+ (nbc-1) + ` - ` + (PopTot-nbc) + ` ) p-value : ` + ftest + '<br>';
+            }
+
+        }
 
         Pied.innerHTML = strpied
 
@@ -5532,9 +5626,7 @@
         
     }
 
-    function essaiargvar(){
-        alert(arguments[0])
-    }
+ 
 
     function CopieTCR(){
 
