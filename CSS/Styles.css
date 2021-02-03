@@ -969,3 +969,70 @@ select:invalid { color: gray; }
 
     }
 }
+
+.imgbtn {
+    height:31px;
+    width:31px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    
+}
+
+.imgbtn-sm {
+    height:20px;
+    width:20px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    
+}
+
+.imgplus {
+     background-image: url("plus.png");
+}
+
+
+.imgminus {
+     background-image: url("minus.png");
+}
+
+.imgcopy {
+    background-image: url("copy.png");
+}
+
+.imgpaste {
+    background-image: url("paste.png");
+}
+
+.imgclose {
+    background-image: url("close.png");
+    height:38px;
+    width:38px;
+}
+
+.imgcog {
+    background-image: url("cog.png");
+    height:38px;
+    width:38px;
+}
+
+.imgtrash {
+    background-image: url("trash.png");
+}
+
+.imgleft {
+    background-image: url("left.png");
+}
+ 
+.imgright {
+    background-image: url("right.png");
+}
+
+.imgup {
+    background-image: url("up.png");
+}
+ 
+.imgdown {
+    background-image: url("down.png");
+}
