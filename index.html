@@ -562,8 +562,8 @@
     var FinAff=49; // affichage des données jusque...
     var NbDec=1; //Nombre de décimales (pour l'affichage)
 
-    var Colonne=[] // colonne extraite pour les besoins des analyses des variables numériques
-    
+    var Colonne=[] // 1 colonne extraite pour les besoins des analyses des variables numériques
+    var Cols=[] // Plusieurs colonnes extraites pour les analyses bivariées
     
     var Quants = [] //mémorisation des quantiles calculés sur la colonne
     var Moy = 0 //mémorisation de la moyenne
@@ -4316,6 +4316,210 @@
 
     }
 
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    // Boites à moustaches 
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+    function Moustaches(cadre, x, y,nbc) {
+
+
+            const canvas = document.getElementById(cadre);
+
+            if (!canvas.getContext) {
+                return;
+            }
+            const cnv = canvas.getContext('2d');
+
+
+            // extraction de la colonne des y (sans filtrage pour échelle)
+            var col = ExtractCol(y,0,0)
+            TriParTas (col);
+
+            var règle = Reco[y]
+ 
+        
+
+            var valmin = ValApRec(col[0],règle)
+            valmin = Math.floor(valmin);
+            var valmax = ValApRec(col[col.length-1],règle)
+            valmax= Math.floor(valmax)+1;
+
+        
+                      
+
+            // définition des bornes (pour la légende)
+
+            // variables pour l'affichage
+            var margG= 50
+            var margD= 50
+            var margH= 50
+            var margB= 50
+
+            var lartot= 1000
+            var hautot= 500
+            var lardisp = lartot - (margG+margD)
+            var haudisp = hautot - (margH+margB)
+
+            // dessin du fond
+            // fond blanc
+            cnv.fillStyle = "white";
+            cnv.fillRect(0, 0, lartot, hautot);
+
+            var my_gradient = cnv.createLinearGradient(margG, margH, margG, haudisp);
+            my_gradient.addColorStop(0, "white");
+            my_gradient.addColorStop(0.5,"rgb(250 250 255)");
+            my_gradient.addColorStop(1, "rgb(245 245 250)");
+            cnv.fillStyle = my_gradient;
+            cnv.fillRect(margG, margH, lardisp, haudisp);
+
+ 
+
+            // ordonnées
+            effmaxtxt = String(valmax);
+            pas = effmaxtxt.length;
+
+            var ech = 1;
+            if (pas>1) {
+                var ech = Math.pow(10,(pas-1))
+            } else {
+                ech=2;
+            }
+
+            ech=ech/2;
+
+            var reste = valmax%ech;
+            var echymax = valmax + ech - reste;
+            var reste = valmin%ech;
+            var echymin = valmin - ech - reste;
+            if (echymin<0){echymin=0}
+
+            
+            var hautech = haudisp/(echymax-echymin);
+            //hautech=Math.round(hautech);
+
+
+
+            // légende en Y
+            cnv.fillStyle = 'rgb(90 90 90)';
+            cnv.fillRect(margG, margH, 1, haudisp);
+            cnv.font = "12px Arial";
+            var lastpct
+            for (b=echymax;b>echymin-1;b--) {
+
+                if (b%ech==0) {
+
+                    // effectifs (à gauche)
+                    var posleg = margH + (echymax-b)*hautech;
+                    cnv.fillStyle = 'rgb(220 220 250)';
+                    cnv.fillRect(margG-5, posleg, lardisp+5, 1);
+
+                    cnv.fillStyle = 'rgb(90 90 90)';
+                    cnv.fillText(b, margG-30, posleg+5);
+
+                    
+                    pct= b/PopTot *100
+                    pct=pct.toFixed(2)
+                    //pct=Math.round(pct)
+
+     
+                    
+                }
+
+            }
+            // ajout de l'étiquette de légende
+            cnv.fillText("n", 10, 250);
+
+
+            // abcisses
+            posleg = margG // calage à gauche de l'affichage
+            
+
+            var larbar = lardisp/(nbc+2);
+            if (larbar > 200) {larbar = 200}
+            var hautech =  echymax-echymin;
+
+            for (c=0;c<CdMax[x]+1;c++) {
+            //larbar=Math.round(larbar) ;
+
+            // extraction de la colonne
+            Colonne = ExtractCol(y,x,c)
+            
+               // if (Colonne.length<1) {continue}             
+                
+                
+                // légende en X
+                cnv.fillStyle = 'rgb(90 90 90)';
+                cnv.fillRect(margG, hautot-margB, lardisp, 1);
+                cnv.font = "12px Arial";
+
+                //Etiquette de ligne
+
+                        cnv.fillStyle = 'rgb(250 250 250)';
+                        cnv.fillRect(posleg, 452, 1000, margB);
+                        
+                        cnv.fillStyle = 'rgb(90 90 90)';
+
+                        //var posleg = margG + (c+1) *larbar;
+                        cnv.fillRect(posleg, 450, 1, 5);
+                        
+                        // ajout de l'étiquette de légende
+                        var lft= (larbar/2) - (Moda[x][c].length / 2 * 6)
+                        if (lft<0){lft=5}
+
+                        cnv.fillText(Moda[x][c],posleg + lft, 470);
+
+                        // extremas
+                        var valmin = jStat.min(Colonne)
+                        var valmax = jStat.max(Colonne)
+                        
+                        var y1 = hautot-margB - ((valmax-echymin)/hautech) * haudisp;
+                        var y2 =  ((valmax-valmin)/hautech) * haudisp
+                        
+                        cnv.fillRect(posleg+larbar/2, y1, 1, y2);
+
+                        cnv.fillRect(posleg+larbar/2 - 4, y1, 9, 1);
+                        cnv.fillRect(posleg+larbar/2 - 4, y1+y2, 9, 1);
+
+
+                        // Quartiles
+                        var Qrts =jStat.quartiles(Colonne)
+                        
+                        var valQ2 = Qrts[0]
+                        var valMed = Qrts[1]
+                        var valQ3 = Qrts[2]
+                        
+
+                        var y1 = hautot-margB - ((valQ3-echymin)/hautech) * haudisp;
+                        var y2 =  ((valQ3-valQ2)/hautech) * haudisp
+
+                        cnv.fillStyle = 'rgb(103 148 189)';
+                        cnv.fillRect(posleg+ 20, y1, larbar-40, y2);
+
+                        cnv.fillStyle = 'rgb(9 9 9)';
+                        cnv.beginPath();
+                        cnv.rect(posleg+ 20, y1, larbar-40, y2);
+                        cnv.stroke();
+                        
+                         
+                        //médiane
+                        var y1 = hautot-margB - ((valMed-echymin)/hautech) * haudisp;
+                        cnv.fillRect(posleg+ 20, y1, larbar-40, 1);
+
+
+                        posleg += larbar;  
+
+            } 
+
+
+
+
+ 
+
+
+            }
+
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -4966,7 +5170,6 @@
                                 nbvalaff++;
                                 valaff = valPct[chk]
                             }
-
                         }
 
                         // % en colonnes (en haut à gauche)
@@ -5033,10 +5236,9 @@
 
                 // contenu de la case
                 var eff = Number(MrgX[i]);
-                var PrctX = "100";
-
+                var PrctX = 100;
+                PrctX=PrctX.toFixed(NbDec);
                 var PrctY = eff/PopTot*100;
-
                 PrctY=PrctY.toFixed(NbDec);
 
                 var PrctT = PrctY;
@@ -5089,7 +5291,8 @@
                 var PrctX =eff/PopTot*100;
                 PrctX=PrctX.toFixed(NbDec);
 
-                var PrctY = "100" ;
+                var PrctY = 100 ;
+                PrctY=PrctY.toFixed(NbDec);
 
                 var PrctT = PrctX;
 
@@ -5134,9 +5337,12 @@
 
 
         var eff = PopTot;
-        var PrctX ="100";
-        var PrctY ="100";
-        var PrctT ="100";
+        var PrctX =100;
+        PrctX=PrctX.toFixed(NbDec);
+        var PrctY =100;
+        PrctY=PrctY.toFixed(NbDec);
+        var PrctT =100;
+        PrctT=PrctT.toFixed(NbDec);
 
 
 
@@ -5261,7 +5467,7 @@
         var règle = Reco[x] // règle de recodage
 
         var nbc = 0 // nombres de valeurs/lignes différentes 
-        var Cols = new Array (Number(CdMax[x])) // tableau des colonnes (pour tests)
+        Cols = new Array (Number(CdMax[x])) // tableau des colonnes (pour tests)
         
         // calcul des valeurs
         for (i = 0; i < Number(CdMax[x])+1; i++) {
@@ -5301,7 +5507,7 @@
 
         // Recopiage du tableau des modalités
         ModaX = Moda[x].slice()
-        ModaY = ["n","moyenne","écart-type","min","p1","d1","q2","Médiane","q3","d9","p99","max"]
+        ModaY = ["n","moyenne","écart-type","min","p1","d1","q1","Médiane","q3","d9","p99","max"]
 
 
 
@@ -5313,8 +5519,12 @@
         titre.id='Titre';
         titre.className= 'TabTitre';
         //if (document.getElementById('ChkHis').checked ==true ) {
-        titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > Tableau croisé
-            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> `
+        titre.innerHTML = ` <div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[y] + ` en fonction de `+ Nom[x] +`
+            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> 
+                        
+  
+
+            `
         /*
             <a>` + Nom[y] + ` | ` + Libellé[y] + `</a> <br>
             <a style="font-size:0.75rem;color: gray">en fonction de</a> <br>
@@ -5323,7 +5533,13 @@
             `
           */
 
-        titre.innerHTML += `</div>`;
+        titre.innerHTML += `</div>
+  
+        <div>
+                 <canvas id="fondMoustaches" width="1000" height="500" style="border: 1px solid #333; margin-top: 30px ; margin-left: 100px; margin-right: auto"></canvas>
+            </div>  
+        
+        `;
 
 
         //  }
@@ -5515,9 +5731,12 @@
         }
 
 
+ 
 
+        document.body.appendChild(tbl);
 
-        body.appendChild(tbl);
+        // affichage de la boite à moustaches
+        Moustaches("fondMoustaches",  x , y , nbc)
 
         Pied  = document.createElement('p');
         Pied.id='Pied';
@@ -5543,7 +5762,7 @@
         
         if (nbc==2) { // Test de student (welsh)
 
-         var result= t_test(Cols[1],Cols[2])
+        var result= t_test(Cols[1],Cols[2])
         var tstud = result[1].toFixed(3);
         var pval = result[2].toFixed(3);
         if (pval == 0){pval = "<0.001"}
@@ -5552,7 +5771,9 @@
         
         } else { 
             
-            
+            var fscore= 0 
+                var ftest= 0   
+
             // au-delà de 2 modalités : ANOVA
 
             if (nbc==3) {
@@ -5606,6 +5827,7 @@
 
             fscore = fscore.toFixed(3);
             ftest = ftest.toFixed(3);
+
             if (ftest == 0){ftest = "<0.001"}
             
             if (fscore>0) { // pas d'affichage si l'anova n'est pas calculée (car trop de modas)
@@ -8195,6 +8417,7 @@
         var TC = MARGJ - THEO;
         var TA = MARGI - THEO;
         var tp = TOT - THEO - TC - TA;
+        var PEM=0
 
         if (THEO < 5 || TC < 5 || TA < 5 || tp < 5) {
             CONT$ = "OUI";} //correction de continuité
