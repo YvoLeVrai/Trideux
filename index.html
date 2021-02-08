@@ -78,6 +78,12 @@
     </div>
 
 
+    <div id="processing" class="process" style="display: none;" >
+        <div class="spin"></div>
+        <div class="lblspin">Chargement en cours. Merci de patienter </div>
+
+    </div>
+
     <div id="infostrideux" class="overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeInfos()">&times;</a>
         <div class="overlay-content" style="font-size: 24px;text-align: left; margin-left: 120px;">
@@ -143,9 +149,9 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.1.9</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.2.0</label>
 
-    <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 100;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
+    <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
             <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
             <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
@@ -335,27 +341,27 @@
                 <label class="custom-control-label" for="ChkNRY">Non réponses (0)</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkEff" checked onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkEff">Effectifs</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPL" checked onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPL">% en lignes</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPC" onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPC">% en colonnes</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPT" onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPT">% du total</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPEM" onclick='T_C_R()' checked="true">
                 <label class="custom-control-label" for="ChkPEM">% écart max (PEM)</label>
             </div>
@@ -446,14 +452,12 @@
 <div id='bashead'> </div>
 </div>
 
-<!-- Barre de progression -->
-<div   id="progress_bar"><div class="percent">0%</div></div>
-
+<!-- zone de texte vouée à la modification des cases du tableau--> 
 <input type="text" class="TxtModif" id="txtModifCase" style= "position:relative;display:none" onkeydown=MàJCase(event)>
 
 
 <div id='accueil' style="position:relative;padding-left: 40px;">
-    <H1 style="font-size:1.5rem;padding-top: 70px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
+    <H1 style="font-size:1.5rem;padding-top: 100px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
     
     <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br><br><br>
     
@@ -613,6 +617,8 @@
 
     var openDAT = function(event) {
 
+        wait() // affichage de l'indicateur de chargement
+
         lignesDAT=[];  // vidage du tableau
         var input = event.target;
         fichBase = event.target.files;
@@ -640,6 +646,8 @@
 
         document.getElementById("BlocBase1").style.backgroundColor = "rgb(210,250,210,0.5)"
         document.getElementById("BlocBase2").style.display = "block";
+
+        endWait()
 
     };
 
@@ -797,13 +805,16 @@
 
     function openFich(fich) {
 
+        wait() // affichage de l'indicateur de chargement
         
         reinit();
         lignesTR2=[];  // vidage du tableau
 
         // définition du nom de la base 
         var posslsh = fich.lastIndexOf('/')
-        nomBase= fich.substr(posslsh+1,fich.length - posslsh);
+        nomBase1= fich.substr(posslsh+1,fich.length - posslsh);
+        nomBase= nomBase1.substr(0,nomBase1.length-4);
+
         document.title= nomBase;
  
 
@@ -1029,7 +1040,7 @@
 
     var LireZip = function(event) {
 
-         
+        wait() // affichage de l'indicateur de chargement 
         reinit()
 
 
@@ -1153,6 +1164,7 @@
 
 
                     Traitements()
+                    endWait()
 
                     //B_A_S_E();
                 });
@@ -1180,7 +1192,7 @@
 
     var LireTR2 = function(event,obj) {
 
-         
+        wait() // affichage de l'indicateur de chargement 
         reinit();
 
 
@@ -1201,7 +1213,7 @@
         }
 
         
-        ajoutCookie(nomBase1,input.files[0]) // permettrait d'ajouter en mémoire les infos
+        ///ajoutCookie(nomBase1,input.files[0]) // permettrait d'ajouter en mémoire les infos
         
         
 
@@ -1252,73 +1264,7 @@
     };
 
 
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-    // lecture d'un fichier TR2 depuis l'historique ////////////////////////////////////////////////
-    ////////////////////////////////////////////////////////////////////////////////////////////////
-
-    var LireTR2H = function(obj) {
-
-         
-        reinit();
-
-
-        var lignesTR2=[];
-        var ficheàlire = ""
-        var nomBase1 = ""
-
  
-        ficheàlire = obj.files[0];
-        nomBase1= obj[0].name;
-
-   
-
-        nomBase= nomBase1.substr(0,nomBase1.length-4);
-        document.title= nomBase;
-
-
-        function Lirefichier (fichier) {
-            return new Promise(function (resolve, reject) {
-                var reader = new FileReader();
-
-                reader.onload = () => {
-                    resolve(reader.result);
-                };
-
-
-
-                reader.readAsText(fichier);
-
-            });
-        }
-
-
-        Lirefichier(ficheàlire).then(function (content) {
-
-        
-
-
-            //splitage en lignes
-            lignesTR2 = content.split("\n")
-
-
-            //construction de la base TR2
-            TR2versBDD(lignesTR2)
-
-
-
-
-
-        }).catch(function (err) {
-            alert("problème lors de l'importation ")
-            alert('Erreur lors du chargement du TR2!' + err );
-
-        });
-
-
-
-};
-
-
     function TR2versBDD(lignesTR2) {
          
             var libdd = 0;
@@ -1507,6 +1453,7 @@
 
 
             Traitements();
+            endWait()
 
             B_A_S_E();
 
@@ -1519,7 +1466,7 @@
 
     var LireCSV = function(event) {
 
-         
+        wait() // affichage de l'indicateur de chargement 
         reinit()
 
 
@@ -1619,7 +1566,7 @@
             var abort = window.confirm ('Erreur lors du chargement du CSV! : ' + err + "\n Problème au niveau de la ligne :" + l + "\n Voulez-vous tout de même poursuivre le chargement?");
             if (abort) {
 
-            } else {return 0}
+            } else {endWait();return 0}
         });
 
 
@@ -1653,224 +1600,6 @@
     }
 
 
-    function CSVversBDD() {
-
-        var nblig= lignesCSV.length-1;
-        lignesDAT=new Array(nblig);
-        var colDAT=new Array(nblig); // pour stocker les valeurs de la colonnes
-
-        BDD = new Array(nblig); // Remise à zéro de la base de données
-
-        for (l=0;l<nblig;l++) { //agrandissement du tableau - ajout des cases
-            BDD[l] = new Array(NbVar+1);
-        }
-
-
-        Moda = new Array(NbVar+1)
-
-
-        // préparation de la barre de progression
-        document.getElementById('progress_bar').className = 'loading';
-        setTimeout("document.getElementById('progress_bar').className='';", 2000);
-
-        // Première analyse des colonnes
-        for (c=0;c<NbVar;c++) {
-            var pct = (c/NbVar)*100 + "%"
-            document.getElementById('progress_bar').style.width = pct;
-
-            // analyse de la variable (alpha ou numérique)
-
-            var typv="e"; // par défaut, valeur entières
-            var maxval = 0
-            for (l=1;l<nblig+1;l++) {
-
-                var valcase=lignesCSV[l][c]
-
-
-                // en cas de valeur décimale
-                valcase=valcase.replace( /,/g,".")
-
-                if(isNaN(valcase)==true) {
-                    typv="a";//un valeur non numérique a été trouvée, la variable est alphanumérique
-                    break;
-                } else {
-
-                    if (Number(valcase) > Number(maxval)) {maxval=valcase} ; // mémorisation de la valeur max trouvée
-
-                    if (valcase.indexOf(".") > -1) {
-                        typv="r";
-                        break;
-                    }
-
-                }
-            }
-
-
-
-
-
-            var modcol=[0]; // tableau des modalités différentes trouvées pour la variable (pour alphanum)
-
-            // analyse des lignes de la colonne (à partir du rang 1 pour sauter les en-têtes)
-            for (l=1;l<nblig+1;l++) {
-
-                // barre de progression
-                Prct = l/nblig;
-                Prct=Prct.toFixed(0)+ "%";
-                progress.style.display = "block";
-                progress.style.width = Prct;
-                progress.textContent = 'Chargement variable' + c + " (" + Prct + "%)" ;
-
-
-                var valcol=lignesCSV[l][c] //récupération de la valeur de la "case" du CSV
-
-                if (typv == "a") { // comportement en cas de variable alphanumérique (ou multiple)
-
-                    // fonction nécessaire pour déclencher la recherche d'index (findIndex plus bas)
-                    function ValeurCase(valcase) {
-                        return valcase == valcol;
-                    }
-
-                    var idx=modcol.findIndex(ValeurCase);
-
-                    // la modalité a-t-elle déjà été trouvée?
-                    if (idx<0) {
-                        modcol.push(valcol); // si non,
-                        colDAT[l-1] = modcol.length-1; //la valeur de la case équivaut au code le plus avancé
-
-                    } else {
-                        colDAT[l-1] = idx; //si oui, c'est la valeur d'index qui est ajoutée
-                    }
-
-                }
-
-                if (typv == "e" || typv == "r" ) { // comportement en cas de variable numérique (entier ou réel)
-                    var valcase=lignesCSV[l][c]
-                    // en cas de valeur décimale
-                    valcase=valcase.replace( /,/g,".")
-
-                    if (valcase!='') {
-                        colDAT[l-1] = Number(valcase);
-                    } else {
-                        colDAT[l-1] = ' ' ; //toString('---');
-
-                    }
-
-                }
-
-
-
-
-            }
-
-
-
-            // création de la variable
-            var nomvar= TxtMef(c+1,3,0);
-
-
-            if (typv=="a") {
-                var maxvar = modcol.length-1;
-            }
-
-
-            var libvar = lignesCSV[0][c]; // récupération de l'intitulé de la variable dans la première ligne de la colonne
-
-
-            if (typv == "e") {maxvar = Number(maxval);}
-            if (typv == "r") {
-                maxval= Number(maxval);
-                maxval = maxval.toFixed(0);
-                maxvar = maxval ;
-            }
-
-            'Remplissage du tableau des variables'
-            Nom.push(nomvar);
-            Posi.push(0);
-            CdMax.push(maxvar)
-            Reco.push('');
-            TypVar.push(typv);
-            Libellé.push(libvar.trim());
-
-
-            //ajout des modalités au dictionnaire
-            Moda[c+1]=new Array(maxvar)
-            ModaO[c+1]=new Array(maxvar)
-
-            if (typv=='a'){ // pour les variables alphanumériques, ajout du dictionnaire
-
-                for (m=0; m<modcol.length;m++) {
-                    Moda[c+1][m] = modcol[m]
-                    ModaO[c+1][m] = Moda[c+1][m]
-                }
-
-            } else {
-
-                for (m=0; m <= maxvar;m++) { // pour les variables quanti, simple reproduction du nombre
-                    Moda[c+1][m] = m
-                    ModaO[c+1][m] = Moda[c+1][m]
-                }
-
-            }
-
-
-
-            //ajout des valeurs aux lignes du DAT
-            var larval=1;
-            if (modcol.length>9) {larval=2;}
-            if (modcol.length>99) {larval=3;}
-
-
-
-            var nblig = lignesDAT.length;
-
-            for (l=0;l<nblig;l++) {
-                var valcase = colDAT[l];
-                if (typv=='n' && maxval > 999 ){valcase = "0";larval=1;} // seulement les variables alphanumériques ou numériques inférieures à 999 (compatibles avec trideux PC)
-
-                if (c==0) {
-                    lignesDAT[l]=TxtMef(valcase,larval," ");
-                }
-                else {
-                    lignesDAT[l]+= TxtMef(valcase,larval," ");
-                }
-
-            }
-
-
-
-            // ajout de la case à la base de données BDD
-
-            var nblig = lignesDAT.length;
-
-            for (l=0;l<nblig;l++) {
-
-                BDD[l][c+1] = colDAT[l];
-
-
-            }
-
-
-
-
-
-
-        }
-
-
-
-        // chargement de la base
-        //ChargerPOS();
-        ChargerListVar();
-        chargerREC();
-        //ChargerDIC();
-
-        Traitements();
-        B_A_S_E();
-
-    }
-
-
     ///////////////////////////////////////////////////////////////////////////////////////////////////
     // Importation d'un fichier XLS
     ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1878,7 +1607,8 @@
 
     var LireXLSX = function(event){
 
-         
+        wait() // affichage de l'indicateur de chargement
+
         reinit()
 
         var input = event.target;
@@ -1892,12 +1622,12 @@
 
 
         var reader = new FileReader();
-        reader.readAsArrayBuffer(event.target.files[0]);
+            reader.readAsArrayBuffer(event.target.files[0]);
 
 
 
 
-        reader.onload = function(event) {
+            reader.onload = function(event) {
 
 
             var data = new Uint8Array(reader.result);
@@ -1916,6 +1646,8 @@
             TABversBDD(tabXLS)
 
         }
+
+
     }
 
 
@@ -1962,9 +1694,7 @@
         Moda = new Array(NbVar+1)
 
 
-        // préparation de la barre de progression
-        document.getElementById('progress_bar').className = 'loading';
-        setTimeout("document.getElementById('progress_bar').className='';", 2000);
+
 
         // Première analyse des colonnes
         for (c=0;c<NbVar;c++) {
@@ -2010,16 +1740,7 @@
             // analyse des lignes de la colonne (à partir du rang 1 pour sauter les en-têtes)
             for (l=1;l<nblig+1;l++) {
 
-
-                /*
-                    // barre de progression
-                    Prct = l/nblig;
-                    Prct=Prct.toFixed(0)+ "%";
-                    progress.style.display = "block";
-                    progress.style.width = Prct;
-                    progress.textContent = 'Chargement variable' + c + " (" + Prct + "%)" ;
-          */
-
+ 
 
                 var valcol=TabXLS[l][c] //récupération de la valeur de la "case" du tableau
 
@@ -2140,7 +1861,8 @@
 
         Traitements();
         B_A_S_E();
-
+        
+        endWait() 
 
     }
 
@@ -2196,8 +1918,11 @@
     ////////////////////////////////////////////////////////////////////////////////////////////////
     function B_A_S_E() {
 
-        // effacement des tableaux précédents
+        
+        wait() // affichage de l'indicateur de chargement
 
+        // effacement des tableaux précédents
+        
 
         if (document.getElementById('ChkHis').checked ==false ) {
             if (EstVu('BlocVar')!=0) {CacheBloc('BlocVar');}
@@ -2256,9 +1981,7 @@
 
             //var valmodlig = Number(item.substr(Posi[x]-1,CdMax[x].length));
         }
-
-        document.getElementById('progress_bar').className = 'loading';
-        setTimeout("document.getElementById('progress_bar').className='';", 2000);
+ 
 
         // Récupération des valeurs dans la base
         if (FinAff > BDD.length-1) {FinAff = BDD.length-1;}
@@ -2267,11 +1990,7 @@
         for (l = DebAff; l < FinAff+1; l++) {
 
 
-            var Prct= Number(l / (FinAff-DebAff)) * 100;
-
-            Prct=Prct.toFixed(0);
-            progress.style.width = Prct+"%";
-            progress.textContent = 'Chargement...' + Prct + "%" ;
+ 
 
             var tr = tbl.insertRow();
 
@@ -2334,6 +2053,7 @@
 
         document.getElementById('contenu').appendChild(Pied);
 
+        endWait()
 
     }
 
@@ -2499,6 +2219,8 @@
 
     function T_A_P() { // Calcule et affiche le tri à plat
 
+        
+        
         var x = vL
 
         if (x<=0) {vL=1; return 0;}
@@ -2528,7 +2250,8 @@
 
         var typv = TypVar[x];
 
-
+        
+        
         EnteteVar(x) ;
 
 
@@ -2877,6 +2600,7 @@
 
 
         if (vuDetails==true) {DetailsVar()}
+        
 
     };
 
@@ -7835,10 +7559,6 @@
 
     function SauvCSV() { //écriture de la base au format CSV
 
-        document.getElementById('progress_bar').className = 'loading';
-        setTimeout("document.getElementById('progress_bar').className='';", 2000);
-
-
 
         var sep = prompt("Quel séparateur de colonnes voulez-vous utiliser? (par exemple :  ; / ) ?", ",");
 
@@ -7905,11 +7625,9 @@
             TxtFile = TxtFile + Ligne
             if (l<nl) {TxtFile = TxtFile + "\n";} // ajout d'un saut de ligne (sauf à la fin)
 
-            var Prct= Number(l/ BDD.length) * 100;
+            
 
-            Prct=Prct.toFixed(0);
-            progress.style.width = Prct+"%";
-            progress.textContent = 'Ecriture...' + Prct + "%" ;
+ 
 
         }
 
@@ -7925,9 +7643,7 @@
 
     function SauvTR2() { //écriture de la base au format CSV
 
-        document.getElementById('progress_bar').className = 'loading';
-        setTimeout("document.getElementById('progress_bar').className='';", 2000);
-
+ 
 // séparateur = tabulation (chr9)
         var sep= String.fromCharCode(9)
 
@@ -8089,12 +7805,7 @@
 
             TxtFile = TxtFile + Ligne
             if (l<nl) {TxtFile = TxtFile + "\n";} // ajout d'un saut de ligne (sauf à la fin)
-
-            var Prct= Number(l/ BDD.length) * 100;
-
-            Prct=Prct.toFixed(0);
-            progress.style.width = Prct+"%";
-            progress.textContent = 'Ecriture...' + Prct + "%" ;
+ 
 
         }
 
@@ -8509,71 +8220,7 @@
 
 
 
-    //////////////////////////////////////////////////
-    // Barre de progression
-    /////////////////////////////////////////////////
-
-
-    var reader;
-    var progress = document.querySelector('.percent');
-
-    function abortRead() {
-        reader.abort();
-    }
-
-    function errorHandler(evt) {
-        switch(evt.target.error.code) {
-            case evt.target.error.NOT_FOUND_ERR:
-                alert('File Not Found!');
-                break;
-            case evt.target.error.NOT_READABLE_ERR:
-                alert('File is not readable');
-                break;
-            case evt.target.error.ABORT_ERR:
-                break; // noop
-            default:
-                alert('An error occurred reading this file.');
-        };
-    }
-
-    function updateProgress(evt) {
-        // evt is an ProgressEvent.
-        if (evt.lengthComputable) {
-            var percentLoaded = Math.round((evt.loaded / evt.total) * 100);
-            // Increase the progress bar length.
-            if (percentLoaded < 100) {
-                progress.style.width = percentLoaded + '%';
-                progress.textContent = percentLoaded + '%';
-            }
-        }
-    }
-
-    function handleFileSelect(evt) {
-        // Reset progress indicator on new file selection.
-        progress.style.width = '0%';
-        progress.textContent = '0%';
-
-        reader = new FileReader();
-        reader.onerror = errorHandler;
-        reader.onprogress = updateProgress;
-        reader.onabort = function(e) {
-            alert('File read cancelled');
-        };
-        reader.onloadstart = function(e) {
-            document.getElementById('progress_bar').className = 'loading';
-        };
-        reader.onload = function(e) {
-            // Ensure that the progress bar displays 100% at the end.
-            progress.style.width = '100%';
-            progress.textContent = '100%';
-            setTimeout("document.getElementById('progress_bar').className='';", 2000);
-        }
-
-        // Read in the image file as a binary string.
-        reader.readAsBinaryString(evt.target.files[0]);
-    }
-
-    document.getElementById('DAT').addEventListener('change', handleFileSelect, false);
+ 
 
     function openNav() {
         document.getElementById("myNav").style.height = "100%";
@@ -9285,6 +8932,10 @@ function TriParTasBDD (c) {
                return listebases;
 
     }
+
+
+function wait() {document.getElementById("processing").style.display="block"}
+function endWait() { document.getElementById("processing").style.display="none"}
 
 </script>
 

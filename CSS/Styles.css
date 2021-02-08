@@ -104,6 +104,11 @@ select:invalid { color: gray; }
     font-size: 60px;
 }
 
+
+
+
+
+
 @media screen and (max-height: 450px) {
     .overlay a {font-size: 20px}
     .overlay .closebtn {
@@ -607,7 +612,7 @@ select:invalid { color: gray; }
     width:49%;
 
     position: relative;
-    font-size: 0.75em;
+    font-size: 0.85em;
     text-align:left;
 
 }
@@ -617,7 +622,7 @@ select:invalid { color: gray; }
     position: relative;
     float:right;
     width:49%;
-    font-size: 0.75em;
+    font-size: 0.85em;
     text-align:right;
 
 
@@ -630,7 +635,7 @@ select:invalid { color: gray; }
     top:0%;
     width:49%;
     position: relative;
-    font-size: 0.75em;
+    font-size: 0.85em;
     text-align:left;
 
 }
@@ -641,7 +646,7 @@ select:invalid { color: gray; }
     float:right;
     width:49%;
     position: relative;
-    font-size: 0.75em;
+    font-size: 0.85em;
     text-align:right;
 
 
@@ -1036,3 +1041,55 @@ select:invalid { color: gray; }
 .imgdown {
     background-image: url("down.png");
 }
+
+
+
+.process {
+    float:left;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    
+    background-color: rgba(255, 255, 255, 0.7);
+    overflow-x: hidden;
+    transition: 0.25s;
+
+}
+
+.lblspin {
+    float:left;
+    Top: 55%;
+    Left: 43%;
+    position: fixed;
+    color:#444
+    
+
+}
+
+@keyframes spinner {
+    0% {
+      transform: translate3d(-50%, -50%, 0) rotate(0deg);
+    }
+    100% {
+      transform: translate3d(-50%, -50%, 0) rotate(360deg);
+    }
+  }
+  .spin::before {
+    animation: 0.5s linear infinite spinner;
+    animation-play-state: inherit;
+    border: solid 5px #cfd0d1;
+    border-bottom-color: #1c87c9;
+    border-radius: 50%;
+    content: "";
+    height: 60px;
+    width: 60px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate3d(-50%, -50%, 0);
+    will-change: transform;
+    
+  }
