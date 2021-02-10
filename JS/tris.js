@@ -1161,7 +1161,7 @@ function CopieTAP(){
     var tabPlain = Libellé[vL] + '\r\n';
     tabPlain += 'Libellé\tEffectif\t%\r\n';
     var tabhtml =`<h3> ` + Libellé[vL] + `</h3>
-              <table>
+              <table style="width:100%;">
               <tr style="background-color: #3b8dbd;color:'white'; ">
                 <th >Libellé</th>
                 <th>Effectif</th>
@@ -1185,7 +1185,8 @@ function CopieTAP(){
             Prct=Prct.replace( ".",",")
 
             tabPlain += ModaM[m] + '\t' + TapX[m] +'\t' + Prct + '\r\n';
-            tabhtml += `<tr>
+            tabhtml += (m%2)? '<tr style="background-color: #f2f2f2;">':'<tr>'
+            tabhtml += `
                 <td > ` + ModaM[m] + `</th>
                 <td > ` + TapX[m] + `</th>
                 <td > ` + Prct  + `</th>
@@ -3679,8 +3680,8 @@ function CopieTCR(){
     var rgstartx =0;
     var rgstarty = 0;
 
-    if (NRX == false ) {rgstartx=1}
-    if (NRY == false ) {rgstarty=1}
+    if (NRX === false ) {rgstartx=1}
+    if (NRY === false ) {rgstarty=1}
 
 
     var tabPlain = Libellé[vC] + ` en fonction de ` + Libellé[vL] + '\r\n';
@@ -3689,10 +3690,10 @@ function CopieTCR(){
     // export des effectifs
 
     // effectifs
-    if (document.getElementById('ChkEff').checked ==true ) {
+    if (document.getElementById('ChkEff').checked === true ) {
 
         tabPlain += 'eff.\t';
-        tabhtml += `<table>
+        tabhtml += `<table style="width:100%">
                       <tr style="background-color: #3b8dbd;color:'white'; ">
                     <th style="background-color: white;color:'#3b8dbd'">eff.</th> `;
 
@@ -3721,7 +3722,7 @@ function CopieTCR(){
 
             if (MrgX[l]>0) {
                 tabPlain +=  ModaX[l] + '\t';
-                tabhtml += `<tr>`;
+                tabhtml += '<tr>'
                 tabhtml += `<td style="background-color:#3b8dbd;color:'white';">` + ModaX[l] + `</td>`;
 
                 for (c=rgstarty ; c<MrgY.length;c++){
@@ -3761,7 +3762,7 @@ function CopieTCR(){
     if (document.getElementById('ChkPL').checked ==true ) {
 
         tabPlain += '% l.\t';
-        tabhtml += `<table> <br>
+        tabhtml += `<table style="width:100%"> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% l.</th> `
 
@@ -3840,7 +3841,7 @@ function CopieTCR(){
     if (document.getElementById('ChkPC').checked ==true ) {
 
         tabPlain += '% c.\t';
-        tabhtml += `<table> <br>
+        tabhtml += `<table style="width:100%"> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% c.</th> `
 
@@ -3920,7 +3921,7 @@ function CopieTCR(){
     if (document.getElementById('ChkPT').checked ==true ) {
 
         tabPlain += '% tot.\t';
-        tabhtml += `<table> <br>
+        tabhtml += `<table style="width:100%"> <br>
             <tr style="background-color: #3b8dbd;color:'white'; ">
               <th style="background-color: white;color:'#3b8dbd'">% tot.</th> `
 
