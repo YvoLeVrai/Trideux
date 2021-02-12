@@ -28,7 +28,7 @@
     <link rel="stylesheet" href="CSS\Bootstrap\bootstrap.css">
     <script type="text/javascript" src="jquery.min.js"></script>
     <script type="text/javascript"  src="popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="JS/bootstrap.bundle.min.js"></script>
 
 
 
@@ -174,8 +174,6 @@
                 <!-- <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a> !-->
                 <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Format CSV</a>
                 <a id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Dictionnaire des variables</a>
-
-
             </div>
 
         </div>
@@ -418,21 +416,21 @@
     <div style="clear:both;"></div>
 
 
-    <div id="ListeVariables" class="bloclistevars">
+    <div id="ListeVariables" class="overflow-auto collapse" style="max-height: calc(100vh - 150px);">
 
-        <div id = "headervar" class="input-group-prepend" style="position:fixed;width:100% ; display:none;">
+        <!--<div id = "headervar" class="input-group-prepend" style="position:fixed;width:100% ; display:none;">-->
 
-            <input type="text" id="TxtChercher" onkeyup="FiltrerVars(event)" placeholder="Chercher une variable..." title="Chercher variable" >
-            <button class="btn btn-outline-secondary imgbtn imgclose" style="background-color: white; height:44px" onclick= 'closeVars()' type="button"></button>
-
-
-        </div>
+            <!--<input type="text" id="TxtChercher" onkeyup="FiltrerVars(event)" placeholder="Chercher une variable..." title="Chercher variable" >-->
+            <!--<button class="btn btn-outline-secondary imgbtn imgclose" style="background-color: white; height:44px" onclick= 'closeVars()' type="button"></button>-->
 
 
-        <ul id="ListVars">
-            <li><a href="#" id="v1" onclick="SelVar('1')">Variables</a></li>
+        <!--</div>-->
 
+        <ul id="ListVars" class="list-group">
+            <a class="list-group-item list-group-item-action" href="#" id="v1" onclick="SelVar('1')">Variables</a>
         </ul>
+
+
     </div>
 
 

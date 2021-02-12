@@ -659,22 +659,6 @@ select:invalid { color: gray; }
     transition: visibility 0s 2s, opacity 2s linear;
 }
 
-.bloclistevars {
-    float:left;
-    height:0%;
-    width: 100%;
-    position: fixed;
-    z-index: 100;
-    left: 0;
-    background-color: rgba(255, 255, 255, 0.97);
-    overflow-x: hidden;
-    transition: 0.25s;
-    font-size:16px;
-    color:rgb(68, 68, 68);
-    /*column-count: 4;
-    column-fill: balance; */
-}
-
 
 .btnclosecase{
     font-size: 0.5em;
@@ -822,7 +806,7 @@ select:invalid { color: gray; }
 }
 
 .PrctExp{
-    background-color: rgb(103, 148, 189, 0.5);
+    background-color: rgb(103, 148, 189);
     box-shadow: 2px 2px 2px 1px rgb(241, 241, 241);
     border: 1px solid rgb(255, 255, 255);
     padding-left: 3px;
@@ -835,7 +819,7 @@ select:invalid { color: gray; }
 }
 
 .PrctExp.rg0{
-    background-color: rgb(103, 148, 189, 0.5) ;
+    background-color: rgb(103, 148, 189);
 }
 .PrctExp.rg1{
     background-color: rgba(103, 189, 124, 0.829);
@@ -848,50 +832,6 @@ select:invalid { color: gray; }
 .PrctExp.rg3{
     background-color:rgba(148, 67, 111, 0.685)
 }
-.bloclistevars-content {
-    z-index: 1;
-    position: relative;
-    top: 17%;
-    width: 100%;
-    text-align: center;
-    margin-top: 30px;
-}
-
-
-.bloclistevars a {
-
-    border: 1px solid #ddd;
-    margin-top: -1px; /* Prevent double borders */
-    background-color: #f6f6f6;
-    padding: 12px;
-    text-decoration: none;
-    font-size: 18px;
-    color: black;
-    display: block
-}
-
-
-.bloclistevars a:hover, .bloclistevars a:focus {
-    color: #f1f1f1;
-}
-
-.bloclistevars .closebtn {
-    position: absolute;
-    top: 15px;
-    right: 45px;
-    font-size: 60px;
-}
-
-
-
-@media screen and (max-height: 450px) {
-    .bloclistevars a {font-size: 20px}
-    .bloclistevars .closebtn {
-        font-size: 40px;
-        top: 15px;
-        right: 35px;
-    }
-}
 
 #TxtChercher {
     background-image: url('https://www.w3schools.com/css/searchicon.png');
@@ -902,29 +842,6 @@ select:invalid { color: gray; }
     padding: 12px 20px 12px 40px;
     border: 1px solid #ddd;
     margin-bottom: 12px;
-}
-
-#ListVars {
-    top:250px;
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-}
-
-#ListVars li a {
-    list-style: none;
-    border: 1px solid #ddd;
-    margin-top: -1px; /* Prevent double borders */
-    background-color: #f6f6f68e;
-    padding: 5px;
-    text-decoration: none;
-    font-size: 16px;
-    color: black;
-    display: block
-}
-
-#ListVars li a:hover:not(.header) {
-    background-color: #eee;
 }
 
 .Prct{
@@ -1041,8 +958,6 @@ select:invalid { color: gray; }
 .imgdown {
     background-image: url("down.png");
 }
-
-
 
 .process {
     float:left;

@@ -164,7 +164,7 @@ function ChargerPOS() {
 
 function ChargerListVar(){
 
-    var htmlvariables = `<li style="height:50px;"><a href=\"#\" id='vx' </a>VARIABLES </li>` // LIGNE DE VARIABLES VIDE (Cachée derrière la zone de recherche)
+    var htmlvariables = ``;
 
     // défilement des variables
     for (v = 1; v < Nom.length; v++) {
@@ -190,16 +190,17 @@ function ChargerListVar(){
 
         // Ajout de la variable au menu de sélection
         var num = Nom.length-1;
-        htmlvariables = String(htmlvariables) + `<li id='v` + v + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
-                <table>
-                    <tr >
-                        <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
-                        <td style="width:30px" > `+ htmlimg + `</td>
-                        <td style="font-weight:bold;"> ` + Nom[v] + ` </td>
-                        <td >  | ` + Libellé[v] + ` </td> 
-                        <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
-                </table>
-                </li>`
+        // htmlvariables = String(htmlvariables) + `<li id='v` + v + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
+        //         <table>
+        //             <tr >
+        //                 <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
+        //                 <td style="width:30px" > `+ htmlimg + `</td>
+        //                 <td style="font-weight:bold;"> ` + Nom[v] + ` </td>
+        //                 <td >  | ` + Libellé[v] + ` </td>
+        //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
+        //         </table>
+        //         </li>`
+        htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')">' + v + ' ' + htmlimg + ' ' + Nom[v] + ' | ' + Libellé[v] + htmlmods + '</a>';
     }
 
     document.getElementById("ListVars").innerHTML = htmlvariables;

@@ -1270,20 +1270,21 @@ function openVars(typevar) {
     var ht = window.innerHeight;
     var lt = window.innerWidth - 35;
     lt+="px";
-    document.getElementById("headervar").style.width = lt;
+    //document.getElementById("headervar").style.width = lt;
 
     var h = ht-PosY ;
     String(h);
     h +="px";
-    document.getElementById('ListeVariables').style.top=PosY;
-    document.getElementById('ListeVariables').style.height=h;
+    //document.getElementById('ListeVariables').style.top=PosY;
+    //document.getElementById('ListeVariables').style.height=h;
 
 
-    document.getElementById("ListeVariables").style.display = "";
+    //document.getElementById("ListeVariables").style.display = "";
 //document.getElementById("ListeVariables").style.height = "100%";
-    document.getElementById("headervar").style.display = "";
-    document.getElementById("TxtChercher").value = "";
-    document.getElementById("TxtChercher").focus();
+    //document.getElementById("headervar").style.display = "";
+    //document.getElementById("TxtChercher").value = "";
+    //document.getElementById("TxtChercher").focus();
+    $("#ListeVariables").collapse('toggle');
     FiltrerVars()
 
 
@@ -1291,9 +1292,10 @@ function openVars(typevar) {
 
 function closeVars() {
 
-    document.getElementById("ListeVariables").style.display = "none";
-    document.getElementById("ListeVariables").style.height = "0%";
-    document.getElementById("headervar").style.display = "none";
+    //document.getElementById("ListeVariables").style.display = "none";
+    //document.getElementById("ListeVariables").style.height = "0%";
+    //document.getElementById("headervar").style.display = "none";
+    $("#ListeVariables").collapse('toggle');
 
 };
 
@@ -1313,7 +1315,7 @@ return 0;
 */
 
     var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("TxtChercher");
+    input = document.getElementById("TxtL");
     filter = input.value.toUpperCase();
     ul = document.getElementById("ListVars");
     li = ul.getElementsByTagName("li");
