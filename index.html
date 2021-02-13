@@ -255,9 +255,11 @@
 
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="lignes" onclick="openVars('L')"></span>
 
-            <input onclick="openVars('L')" id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
+            <input onclick="openVars('L')" onkeyup="FiltrerVars(event)" id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
             <!-- <button  class="btn btn-outline-secondary imgbtn imgleft" onclick="vL--;QuelTri()" type="button"></button>
               <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button> !-->
+
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptL" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar1')"  type="button"></button>
             <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
 
@@ -316,8 +318,9 @@
 
             <span class="input-group-text"><img src="Images\Col.PNG"  alt="lignes" onclick="openVars('C')"></span>
 
-            <input onclick="openVars('C')" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
+            <input onclick="openVars('C')" onkeyup="FiltrerVars(event)" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
 
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog"  onclick="VoirOpt('OptVar2')"  type="button"></button>
             <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "prepTAP()" type="button"></button>
 
@@ -380,8 +383,9 @@
 
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="racine" onclick=" ExpRgDp=0; openVars('X')"></span>
 
-            <input onclick="openVars('X')" id= "TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
+            <input onclick="openVars('X')" onkeyup="FiltrerVars(event)" id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar3')"  type="button"></button>
             <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
 
@@ -399,8 +403,6 @@
 
     </div>
 
-    <div style="clear:both;"></div>
-
 
     <!--   <button class= "bouton" onclick="T_C_R()">Tri croisé</button> <label></label><input type="option" id="OptVal"> Valeurs</label> !-->
 
@@ -412,11 +414,7 @@
             ========================================================================================= -->
 
 
-
-    <div style="clear:both;"></div>
-
-
-    <div id="ListeVariables" class="overflow-auto collapse" style="max-height: calc(100vh - 150px);">
+    <div id="ListeVariables" class="overflow-auto collapse" style="max-height: calc(100vh - 150px); width: 100vw;">
 
         <!--<div id = "headervar" class="input-group-prepend" style="position:fixed;width:100% ; display:none;">-->
 
@@ -427,7 +425,6 @@
         <!--</div>-->
 
         <ul id="ListVars" class="list-group">
-            <a class="list-group-item list-group-item-action" href="#" id="v1" onclick="SelVar('1')">Variables</a>
         </ul>
 
 

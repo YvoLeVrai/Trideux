@@ -939,6 +939,12 @@ select:invalid { color: gray; }
     width:38px;
 }
 
+.bi-caret-up-fill {
+    background-image: url("caret-up-fill.svg");
+    height:38px;
+    width:38px;
+}
+
 .imgtrash {
     background-image: url("trash.png");
 }
@@ -992,7 +998,7 @@ select:invalid { color: gray; }
       transform: translate3d(-50%, -50%, 0) rotate(360deg);
     }
   }
-  .spin::before {
+.spin::before {
     animation: 0.5s linear infinite spinner;
     animation-play-state: inherit;
     border: solid 5px #cfd0d1;
@@ -1006,5 +1012,4 @@ select:invalid { color: gray; }
     left: 50%;
     transform: translate3d(-50%, -50%, 0);
     will-change: transform;
-    
-  }
+}

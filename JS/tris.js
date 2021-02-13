@@ -1260,21 +1260,20 @@ function openVars(typevar) {
     FLCXR=typevar; // mémorisation de l'origine de la demande
 
 
-
-    var nomctrl= "Txt" + FLCXR
+    //var nomctrl= "Txt" + FLCXR
 
 // placement de la barre de recherche
-    var Bout = document.getElementById(nomctrl);
+    /*var Bout = document.getElementById(nomctrl);
     var BoutPos = Bout.getBoundingClientRect();
     var PosY = BoutPos.top
     var ht = window.innerHeight;
     var lt = window.innerWidth - 35;
-    lt+="px";
+    lt+="px";*/
     //document.getElementById("headervar").style.width = lt;
 
-    var h = ht-PosY ;
+    /*var h = ht-PosY ;
     String(h);
-    h +="px";
+    h +="px";*/
     //document.getElementById('ListeVariables').style.top=PosY;
     //document.getElementById('ListeVariables').style.height=h;
 
@@ -1284,8 +1283,11 @@ function openVars(typevar) {
     //document.getElementById("headervar").style.display = "";
     //document.getElementById("TxtChercher").value = "";
     //document.getElementById("TxtChercher").focus();
-    $("#ListeVariables").collapse('toggle');
-    FiltrerVars()
+    $("#ListeVariables").collapse('show');
+    $(".imgcog").addClass("d-none");
+    $(".imgclose").addClass("d-none");
+    $(".bi-caret-up-fill").removeClass("d-none");
+    //FiltrerVars()
 
 
 };
@@ -1295,7 +1297,12 @@ function closeVars() {
     //document.getElementById("ListeVariables").style.display = "none";
     //document.getElementById("ListeVariables").style.height = "0%";
     //document.getElementById("headervar").style.display = "none";
-    $("#ListeVariables").collapse('toggle');
+    $(".picthb").val('');
+    $(".list-group-item").removeClass("d-none");
+    $("#ListeVariables").collapse('hide');
+    $(".imgcog").removeClass("d-none");
+    $(".imgclose").removeClass("d-none");
+    $(".bi-caret-up-fill").addClass("d-none");
 
 };
 
@@ -1314,20 +1321,20 @@ return 0;
 }
 */
 
-    var input, filter, ul, li, a, i, txtValue;
-    input = document.getElementById("TxtL");
-    filter = input.value.toUpperCase();
+    var filter, ul, a, i, txtValue;
+    //console.log(event.currentTarget.value);
+    filter = event.currentTarget.value.toUpperCase();
     ul = document.getElementById("ListVars");
-    li = ul.getElementsByTagName("li");
-    for (i = 1; i < li.length; i++) {
-        a = li[i].getElementsByTagName("a")[0];
-        txtValue = a.textContent || a.innerText;
+    a = ul.getElementsByTagName("a");
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
         if (txtValue.toUpperCase().indexOf(filter) > -1) {
-            li[i].style.display = "";
+            a[i].classList.remove("d-none");
             nbli++;
             lastli=i;
         } else {
-            li[i].style.display = "none";
+            //a[i].style.display = "none";
+            a[i].classList.add("d-none");
         }
     }
 
@@ -1335,11 +1342,11 @@ return 0;
 
 
     if (nbli==1) {
-        li[lastli].style.backgroundColor = "rgb(103, 148, 189)";
+        //a[lastli].style.backgroundColor = "rgb(103, 148, 189)";
+        a[lastli].classList.add("active");
         var key = event.keyCode;
         if (key==13){SelVar(lastli)};
     }
-
 }
 
 function FiltrerModas(event) {

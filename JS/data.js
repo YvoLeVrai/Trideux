@@ -200,7 +200,7 @@ function ChargerListVar(){
         //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
         //         </table>
         //         </li>`
-        htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')">' + v + ' ' + htmlimg + ' ' + Nom[v] + ' | ' + Libellé[v] + htmlmods + '</a>';
+        htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')">' + v + ' ' + htmlimg + ' ' + Nom[v] + ' | ' + Libellé[v] + ' ' + htmlmods + '</a>';
     }
 
     document.getElementById("ListVars").innerHTML = htmlvariables;
