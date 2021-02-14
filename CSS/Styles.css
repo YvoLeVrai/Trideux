@@ -247,16 +247,6 @@ select:invalid { color: gray; }
 
 }
 
-.collapse{
-
-    position: relative;
-    cursor: pointer;
-    float:right;
-    top :2px;
-    margin-right:10px;
-
-
-}
 .chkNR{
     border: 1px rgb(255, 255, 255);
     border-left: rgb(148, 91, 91);
