@@ -1003,3 +1003,9 @@ select:invalid { color: gray; }
     transform: translate3d(-50%, -50%, 0);
     will-change: transform;
 }
+
+.col-id {
+    -ms-flex: 0 0 8.333333%;
+    flex: 0 0 8.333333%;
+    max-width: 2rem;
+}

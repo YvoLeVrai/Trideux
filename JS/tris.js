@@ -1299,7 +1299,7 @@ function closeVars() {
     //document.getElementById("headervar").style.display = "none";
     $(".picthb").val('');
     $(".list-group-item").removeClass("d-none");
-    $("#ListeVariables").collapse('hide');
+    $("#ListeVariables").removeClass("show");
     $(".imgcog").removeClass("d-none");
     $(".imgclose").removeClass("d-none");
     $(".bi-caret-up-fill").addClass("d-none");
