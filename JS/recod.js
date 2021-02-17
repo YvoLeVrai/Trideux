@@ -1171,8 +1171,8 @@ function dupliCol(v,col,recod) {
         var valcase = BDD[l][v]
 
         if (recod==true) {
-            var règle = document.getElementById("TxtRglG").value;
-            valcase=ValApRec(valcase,règle)
+            var rgl = document.getElementById("TxtRglG").value;
+            valcase=ValApRec(valcase,rgl)
         }
 
         BDD[l].splice(col,0,valcase)
@@ -1868,10 +1868,10 @@ function Moyenne(col) { // comme son nom l'indique
     var somme=0
     var nbval =col.length;
 
-    var règle = "";
+    var rgl = "";
     if (document.getElementById("TxtRglG")) { // récupération de la règle de recodage
 
-        règle= document.getElementById("TxtRglG").value
+        rgl= document.getElementById("TxtRglG").value
 
     }
 
@@ -1882,7 +1882,7 @@ function Moyenne(col) { // comme son nom l'indique
         var valmod = Number(col[l])
 
 
-        if (règle != '') {valmod=ValApRec(valmod,règle)}
+        if (rgl != '') {valmod=ValApRec(valmod,rgl)}
 
 
         somme += valmod
@@ -1902,11 +1902,11 @@ function Quantiles(col) { // comme son nom l'indique
     var nbval=col.length-1;
     var quant=[100,10,4,2,1.3333333,1.111111,1.010101];
 
-    var règle='';
+    var rgl='';
 
     if (document.getElementById("TxtRglG")) { // récupération de la règle
 
-        règle= document.getElementById("TxtRglG").value
+        rgl= document.getElementById("TxtRglG").value
 
     }
 
@@ -1920,7 +1920,7 @@ function Quantiles(col) { // comme son nom l'indique
         var valmod=  Number(col[pctarr])
 
 
-        if (règle.trim() != '') {valmod=ValApRec(valmod,règle)}
+        if (rgl.trim() != '') {valmod=ValApRec(valmod,rgl)}
 
 
         var quantile= valmod;
@@ -1932,7 +1932,7 @@ function Quantiles(col) { // comme son nom l'indique
 
             var colsuiv= Number(col[pctarr+1]);
 
-            if (règle.trim() != '') {colsuiv=ValApRec(colsuiv,règle)}
+            if (rgl.trim() != '') {colsuiv=ValApRec(colsuiv,rgl)}
 
 
             var ajout =  (colsuiv-quantile)*reste;

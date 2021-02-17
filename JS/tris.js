@@ -337,9 +337,9 @@ function T_A_P() { // Calcule et affiche le tri à plat
         if ( document.getElementById("TabTAP")) {Vidage("TabTAP")};
     }
 
-    var règle = Reco[x] // règle de recodage
+    var rgl = Reco[x] // règle de recodage
     if (document.getElementById("TxtRglG")) {
-        règle = document.getElementById("TxtRglG").value;
+        rgl = document.getElementById("TxtRglG").value;
     }
 
 
@@ -382,7 +382,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
             // application du recodage
             //if (Reco[x].trim() != "") {valmod = TabRec[x][valmod];}
 
-            if (règle.trim() !='') {valmod=ValApRec(valmod,règle)}
+            if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
 
             // prise en compte de la pondération
             var coeffp=1;
@@ -396,7 +396,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
             if (EstVu('BlocFiltre')==0) {TapX[valmod]+= coeffp; }
             else
             {
-                if (Filtrer(index) == true) {TapX[valmod]+= coeffp; }
+            if (Filtrer(index) == true) {TapX[valmod]+= coeffp; }
             }
 
         }
@@ -1532,7 +1532,7 @@ function E_X_P(x,RgDp) {
         TapX[i]=0;
     }
 
-
+    var rgl = Reco[x] // règle de recodage
 
 // 1- Tri à plat de la variable
 
@@ -1548,7 +1548,7 @@ function E_X_P(x,RgDp) {
         ExpMum = []; // 'mère de la moda'
         ExpRng = [];
 
-// calcul de la population totale
+        // calcul de la population totale
         PopTot = BDD.length;
 
     };
@@ -1569,10 +1569,8 @@ function E_X_P(x,RgDp) {
         var valmod = Number(BDD[index][x]);
 
         // application du recodage
-        if (Reco[x].trim() != "") { valmod = TabRec[x][valmod];}
-
-
-
+        if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
+        
 
         var filtré = false
         nbmum = 0;
@@ -1596,7 +1594,9 @@ function E_X_P(x,RgDp) {
                 var valmodmum = Number(BDD[index][vm]);
 
                 // application du recodage
-                if (Reco[vm].trim() != "") { valmodmum = TabRec[vm][valmodmum];}
+                var rgl2 = Reco[vm] // règle de recodage
+                if (rgl2.trim() !='') {valmodmum=ValApRec(valmodmum,rgl)}
+                 
 
                 //alert("la valeur de la modalité trouvée dans la base pour la variable mère est " + valmodmum  + ". La variable de filtre est  " + ExpMod[Rgm] );
 
@@ -1619,11 +1619,28 @@ function E_X_P(x,RgDp) {
         // si valeurs pour les modalités des mères correspondent à celles de la ligne
 
         // Ajout au tableau de tri à plat
-        if (filtré==false) {TapX[valmod]++};
+                    
+                 // prise en compte de la pondération
+                var coeffp=1;
+
+                if (vP !=0) {
+                    coeffp = BDD[index][vP]
+                }
+
+
+
+        if (filtré==false) {TapX[valmod]+= coeffp};
 
     };
 
 
+        // arrondi des valeurs après pondération
+        if (vP!=0) {
+            for (m=0;m<TapX.length;m++){
+                var taparr= Math.round(TapX[m])
+                TapX[m]=taparr
+            }
+        }
 
 
 // Calcul du total de la sous population
@@ -1634,7 +1651,7 @@ function E_X_P(x,RgDp) {
         SousPop=SousPop + Number(TapX[j]);
     }
 
-
+    if (SousPop>PopTot) {PopTot=SousPop} // corrige la population totale en cas de pondération
 
 
     // défilement des modalités supérieures à zéro
@@ -1841,16 +1858,16 @@ function Histo(cadre, col, qnts, Moy, vsel) {
     const cnv = canvas.getContext('2d');
 
 
-    var règle = ""
+    var rgl = ""
     if (document.getElementById("TxtRglG")) {
-        règle = document.getElementById("TxtRglG").value;
+        rgl = document.getElementById("TxtRglG").value;
     }
 
 
 
-    var valmin = ValApRec(col[0],règle)
+    var valmin = ValApRec(col[0],rgl)
     valmin = Math.floor(valmin);
-    var valmax = ValApRec(col[col.length-1],règle)
+    var valmax = ValApRec(col[col.length-1],rgl)
     valmax= Math.floor(valmax)+1;
 
 
@@ -1864,7 +1881,7 @@ function Histo(cadre, col, qnts, Moy, vsel) {
 
     // initialisation sur la première modalité
     var vcur=col[0]; // valeur courante
-    var vRcur=ValApRec(col[0],règle) // valeur recodée courante
+    var vRcur=ValApRec(col[0],rgl) // valeur recodée courante
 
     var nb = 1; // nombre d'apparition de la valeur
 
@@ -1872,13 +1889,13 @@ function Histo(cadre, col, qnts, Moy, vsel) {
 
         if (Number(col[l])<0) {col[l]!=0};
 
-        if (col[l]!= vcur && ValApRec(col[l],règle) != vRcur || l == col.length-1 && ValApRec(col[l],règle) != vRcur) { // changement de valeur ou fin de la série
+        if (col[l]!= vcur && ValApRec(col[l],rgl) != vRcur || l == col.length-1 && ValApRec(col[l],rgl) != vRcur) { // changement de valeur ou fin de la série
 
 
 
             TapQ.push(vcur);
             TapQ[TapQ.length-1] = new Array(4)
-            TapQ[TapQ.length-1][1]= ValApRec(vcur,règle) //vcur; //valeur
+            TapQ[TapQ.length-1][1]= ValApRec(vcur,rgl) //vcur; //valeur
             TapQ[TapQ.length-1][2]= nb; // effectif
             TapQ[TapQ.length-1][3]= 0; // position sur le graph
             TapQ[TapQ.length-1][4]= 0; // largeur
@@ -1888,7 +1905,7 @@ function Histo(cadre, col, qnts, Moy, vsel) {
 
             // nouvelle valeur courante
             vcur = col[l];
-            vRcur = ValApRec(col[l],règle)
+            vRcur = ValApRec(col[l],rgl)
             nb=1
             nbval++;
         } else {
@@ -2177,13 +2194,13 @@ function Moustaches(cadre, x, y,nbc) {
     var col = ExtractCol(y,NRC, 0,0)
     TriParTas (col);
 
-    var règle = Reco[y]
+    var rgl = Reco[y]
 
 
 
-    var valmin = ValApRec(col[0],règle)
+    var valmin = ValApRec(col[0],rgl)
     valmin = Math.floor(valmin);
-    var valmax = ValApRec(col[col.length-1],règle)
+    var valmax = ValApRec(col[col.length-1],rgl)
     valmax= Math.floor(valmax)+1;
 
 
@@ -2461,7 +2478,7 @@ function T_C_R() {
     }
 
 
-    var règle = Reco[x] // règle de recodage
+    var rgl = Reco[x] // rgl de recodage
 
 
 
@@ -2477,8 +2494,8 @@ function T_C_R() {
         var valmodcol = Number(BDD[index][y]);
 
         // application du recodage
-        if (Reco[x].trim() != "") { valmodlig = ValApRec(valmodlig,règle);}
-        if (Reco[y].trim() != " ") { valmodcol = ValApRec(valmodcol,règle);}
+        if (Reco[x].trim() != "") { valmodlig = ValApRec(valmodlig,rgl);}
+        if (Reco[y].trim() != " ") { valmodcol = ValApRec(valmodcol,rgl);}
 
         // prise en compte de la pondération
         var coeffp=1;
@@ -3309,7 +3326,7 @@ function ComparVars(x,y) {
     }
 
 
-    var règle = Reco[x] // règle de recodage
+    var rgl = Reco[x] // règle de recodage
 
     var nbc = 0 // nombres de valeurs/lignes différentes
     Cols = new Array (Number(CdMax[x])) // tableau des colonnes (pour tests)
@@ -4085,7 +4102,7 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
     Colonne=[]
     var nblig = BDD.length
     var l=0
-    var règle=Reco[c]
+    var rgl=Reco[c]
 
     // les non réponses sont-elles incluses? <- dorénavant passé en paramètre
     //NRC = document.getElementById('ChkNRX').checked
@@ -4103,7 +4120,7 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
 
         var valmod = Number(BDD[l][c]); // récupération de la valeur dans la base
 
-        if (règle.trim() !='') {valmod=ValApRec(valmod,règle)}
+        if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
 
         // prise en compte de la pondération
         var coeffp=1;
