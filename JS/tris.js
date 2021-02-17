@@ -15,7 +15,7 @@
 function B_A_S_E() {
 
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Affichage en cours. Merci de patienter ") // affichage de l'indicateur de chargement
 
     // effacement des tableaux précédents
 
@@ -325,7 +325,10 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
     // ajout de la variable choisie dans la zone de sélection
     var nomtxt= "TxtL";
-    document.getElementById(nomtxt).placeholder = Nom[vL] + " | "+ Libellé[vL];
+    var prefix = ""
+
+    if (isNaN(Nom[vL])) {prefix = vL + " | "}
+    document.getElementById(nomtxt).placeholder = prefix + Nom[vL] + " | "+ Libellé[vL];
     document.getElementById(nomtxt).focus()
 
 
@@ -985,8 +988,11 @@ function EnteteVar(x) {
         tr.appendChild(HCell);
 
 
+        // les non réponses sont-elles incluses?
+        NRC = document.getElementById('ChkNRX').checked
+            
 
-        Colonne = ExtractCol(x,0,0);
+        Colonne = ExtractCol(x,NRC,0,0);
         TriParTas (Colonne);
 
 
@@ -2164,7 +2170,11 @@ function Moustaches(cadre, x, y,nbc) {
 
 
     // extraction de la colonne des y (sans filtrage pour échelle)
-    var col = ExtractCol(y,0,0)
+
+    // les non réponses sont-elles incluses?
+    var NRC = document.getElementById('ChkNRY').checked
+
+    var col = ExtractCol(y,NRC, 0,0)
     TriParTas (col);
 
     var règle = Reco[y]
@@ -2267,14 +2277,19 @@ function Moustaches(cadre, x, y,nbc) {
 
 
     var larbar = lardisp/(nbc+2);
-    if (larbar > 200) {larbar = 200}
+    if (larbar > 200) {larbar = 200};
     var hautech =  echymax-echymin;
 
-    for (c=0;c<CdMax[x]+1;c++) {
+    // les non réponses sont-elles incluses?
+    var NRX = document.getElementById('ChkNRX').checked;
+    var rgstart =0;
+    if (NRX == false ) {rgstart=1};
+
+    for (c=rgstart;c<CdMax[x]+1;c++) {
         //larbar=Math.round(larbar) ;
 
         // extraction de la colonne
-        Colonne = ExtractCol(y,x,c)
+        Colonne = ExtractCol(y,NRC, x,c)
 
         // if (Colonne.length<1) {continue}
 
@@ -3299,14 +3314,27 @@ function ComparVars(x,y) {
     var nbc = 0 // nombres de valeurs/lignes différentes
     Cols = new Array (Number(CdMax[x])) // tableau des colonnes (pour tests)
 
+        // les non réponses sont-elles incluses?
+        NRX = document.getElementById('ChkNRX').checked
+        NRY = document.getElementById('ChkNRY').checked
+        if (NRX == false ) {
+            RgDpX=1; }
+        else {
+            RgDpX = 0;
+        }
+    
+ 
+
+
+
     // calcul des valeurs
-    for (i = 0; i < Number(CdMax[x])+1; i++) {
+    for (i = RgDpX; i < Number(CdMax[x])+1; i++) {
 
         //agrandissement du tableau
-
+        
 
         // extraction de la colonne pour la variable
-        ExtractCol(y,x,i)
+        ExtractCol(y,NRY, x,i)
 
         TriParTas (Colonne);
 
@@ -4046,6 +4074,436 @@ function CopieTCR(){
     alert("Le tableau a bien été copié")
 }
 
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Extraction de colonne
+/////////////////////////////////////////////////////////////////////////////////////////
+
+function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2èvariable conditionnant l'affichage, m2 = modalité de la deuxième variable
+
+
+    Colonne=[]
+    var nblig = BDD.length
+    var l=0
+    var règle=Reco[c]
+
+    // les non réponses sont-elles incluses? <- dorénavant passé en paramètre
+    //NRC = document.getElementById('ChkNRX').checked
+
+    // défilement des lignes
+    for (l=0 ;l < nblig; l++) {
+
+        if (String(BDD[l][c]) ==' '){continue;}// évitement des valeurs nulles
+        if (Number(BDD[l][c])==0 && NRC==false ){continue;}// évitement des zéros (si choisi)
+
+        if (v2> 0) {
+
+            if (Number(BDD[l][v2]!=m2)){continue;}// prise en compte d'une seconde variable
+        }
+
+        var valmod = Number(BDD[l][c]); // récupération de la valeur dans la base
+
+        if (règle.trim() !='') {valmod=ValApRec(valmod,règle)}
+
+        // prise en compte de la pondération
+        var coeffp=1;
+
+        if (vP !=0) {
+            coeffp = BDD[l][vP]
+            valmod=valmod*coeffp
+        }
+
+
+        // application du recodage éventuel
+        //if (Reco[c].trim() != "") {valmod = TabRec[c][valmod];}
+
+        //filtrage
+        if (EstVu('BlocFiltre')!=0 && Filtrer(l) == false ) { continue}
+
+
+
+        Colonne.push(valmod)
+
+    }
+
+
+
+    return Colonne;
+
+};
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Analyse d'un colonne pour déterminer le type de variable
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+
+function QuelTypVar(c){
+
+
+
+
+    var m;
+    var typ = 'e';
+
+    // défilement des libellés
+    for (m=0;m < CdMax[c];m++) {
+
+
+        if (isNaN(Moda[c][m])==true) {typ= 'a';} // la colonne est alphanumérique
+
+    }
+
+
+
+    var nblig = BDD.length -1;
+    var l=0;
+
+    // défilement des lignes
+    for (l=0 ;l < nblig; l++) {
+
+
+        // la variable est-elle qualitative?
+
+        // si la variable est numérique, est-elle entière ou réelle
+        if (String(BDD[l][c]) ==' '){continue;}// évitement des valeurs nulles
+
+        var valmod = parseFloat(BDD[l][c]); // récupération de la valeur dans la base
+
+        // application du recodage éventuel
+        if (Reco[c].trim() != "") {valmod = TabRec[c][valmod];}
+
+        // recherche de valeur décimale
+        valmod=String(valmod);
+        var virg=valmod.indexOf(".");
+        if (virg != '-1') {typ = 'r';break;} // la colonne contient au moins un nombre réel
+
+    }
+
+
+    //le vecteur ne contient ni alpha, ni nombre réel, ce sont donc des nombres entiers
+    return typ;
+
+
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Tri tableau ( tri à bulle)
+////////////////////////////////////////////////////////////////////////////////////////
+
+function triTableau(Tableau, col, type, sens) {
+    var table, rows, switching, i, x, y, shouldSwitch;
+    table = document.getElementById(Tableau);
+    switching = true;
+    /*Make a loop that will continue until
+no switching has been done:*/
+
+
+
+    while (switching) {
+        //start by saying: no switching is done:
+        switching = false;
+        rows = table.rows;
+        /*Loop through all table rows (except the
+first, which contains table headers):*/
+        for (i = 1; i < (rows.length - 2); i++) {
+            //start by saying there should be no switching:
+            shouldSwitch = false;
+            /*Get the two elements you want to compare,
+  one from current row and one from the next:*/
+            x = rows[i].getElementsByTagName("TD")[col];
+            y = rows[i + 1].getElementsByTagName("TD")[col];
+
+
+
+
+            //check if the two rows should switch place:
+            if (type == 'txt') {
+
+                if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase() && sens=='asc' || x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase() && sens=='desc') {
+                    //if so, mark as a switch and break the loop:
+
+                    shouldSwitch = true;
+                    break;
+
+                }
+
+            }
+
+            if (type == 'val') {
+                var valx = x.innerText;
+                var valy = y.innerText;
+
+                if (Number(valx) > Number(valy) && sens=='asc' || Number(valx) < Number(valy) && sens=='desc' ) {
+                    //if so, mark as a switch and break the loop:
+                    shouldSwitch = true;
+                    break;
+                }
+            }
+
+        }
+        if (shouldSwitch) {
+            /*If a switch has been marked, make the switch
+  and mark that a switch has been done:*/
+            rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+            switching = true;
+        }
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////:
+// Tri par tas (source : https://fr.wikibooks.org/wiki/Impl%C3%A9mentation_d%27algorithmes_classiques/Algorithmes_de_tri/Tri_par_tas)
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function echanger (col, a, b) {
+    var temp = col[a];
+    col[a] = col[b];
+    col[b] = temp;
+
+
+}
+
+
+function tamiser (col, noeud, n) {
+    var k = noeud;
+    var j = 2 * k;
+    while (j <= n) {
+        if ((j < n) && (col[j] < col[j + 1]))
+            j++;
+        if (col[k] < col[j]) {
+            echanger(col, k, j);
+            k = j;
+            j = 2 * k;
+        } else
+            break;
+    }
+}
+
+function TriParTas (col) {
+
+    for (var i = col.length >> 1; i >= 0; i--)
+        tamiser(col, i, col.length - 1);
+    for (var i = col.length - 1; i >= 1; i--) {
+        echanger(col, i, 0);
+        tamiser(col, 0, i - 1);
+    }
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Tris des modalités
+/////////////////////////////////////////////////////////////////////////////////////////
+function TriGnrModas(type, sens) {
+
+    var nbm= CdMax[vL]
+
+    var TabTap = new Array(nbm)
+
+
+    for (m=0;m<nbm+1; m++){
+        TabTap[m]=new Array(2);
+        TabTap[m][0]=m;
+        TabTap[m][1]=Moda[vL][m];
+        TabTap[m][2]=TapX[m];
+    }
+
+
+
+
+    TriParTasMods (TabTap,type)
+
+
+
+    // Inversion du tri en cas de sens décroissant
+    if(sens=='d') {
+
+        for (t=0;t<TabTap.length/2;t++) {
+            var t2 = TabTap.length - t -1
+            var temp = TabTap[t]
+            TabTap[t] = TabTap[t2]
+            TabTap[t2] =temp;
+
+        }
+
+    }
+
+
+
+    var nbm= TapX.length
+
+    var matRec = new Array (TapX.length)
+
+    // réécriture des modalités
+    for (m=0;m<TabTap.length; m++){
+
+        // nouvel valeur au rang considéré
+        //var rg = TabTap[m][0]
+        //alert(rg + " -> " + ModaTemp[rg] )
+        Moda[vL][m] = TabTap[m][1]
+        matRec[TabTap[m][0]]  = m;
+    }
+
+    for (l=0;l< BDD.length; l++) {
+
+        var valmod=Number(BDD[l][vL]);
+        var valrec= matRec[valmod]
+
+        BDD[l][vL] = valrec
+
+    }
+
+
+
+    T_A_P()
+
+
+}
+
+
+function tamiserMods (TaP,c, noeud, n) {
+
+
+    var k = noeud;
+    var j = 2 * k;
+    var valj;
+    var valjp;
+    var valk;
+
+    while (j <= n) {
+
+
+
+        if ((j < n) && (TaP[j][c] < TaP[j+1][c]))
+            j++;
+
+
+        //if (c==1){
+
+        //valj = TaP[j][c];
+        //valjp = TaP[j+1][c];
+
+        //valk = TaP[k][c];
+
+        //}
+
+
+
+        if (TaP[k][c] < TaP[j][c]) {
+
+            echanger(TaP, k, j);
+            k = j;
+            j = 2 * k;
+        } else
+            break;
+    }
+
+
+}
+
+function TriParTasMods (TaP,c) {
+
+
+    var nbm = TaP.length-1
+    for (var i = nbm; i >= 0; i--)
+
+        tamiserMods(TaP,c, i, nbm);
+
+    for (var i = TaP.length - 1; i >= 1; i--) {
+        echanger(TaP, i, 0);
+        tamiserMods(TaP, c, 0, i - 1);
+    }
+
+
+}
+
+
+/////////////////////////////////////////////////////////////////////////////////////////
+// Tris des lignes de la base
+/////////////////////////////////////////////////////////////////////////////////////////
+function TriBDD(vT) {
+
+
+
+
+    TriParTasBDD (vT)
+
+    var sens='a';
+
+    if (vT == varTriBDD) {
+        if (sensTriBDD=='a') {sens='d'} else {sens='a'}
+    }
+
+    sensTriBDD= sens
+    varTriBDD = vT;
+
+    // Inversion du tri en cas de sens décroissant
+    if(sens=='d') {
+
+        for (t=0;t<BDD.length/2;t++) {
+            var t2 = BDD.length - t -1
+            var temp = BDD[t]
+            BDD[t] = BDD[t2]
+            BDD[t2] =temp;
+
+        }
+
+    }
+
+
+
+    Vidage('TabBDD');
+    B_A_S_E();
+
+
+
+}
+
+
+function tamiserBDD (c, noeud, n) {
+
+
+    var k = noeud;
+    var j = 2 * k;
+
+
+    while (j <= n) {
+
+
+        if ((j < n) && (BDD[j][c] < BDD[j+1][c]))
+            j++;
+
+
+
+        if (BDD[k][c] < BDD[j][c]) {
+
+            echanger(BDD, k, j);
+            k = j;
+            j = 2 * k;
+        } else
+            break;
+    }
+
+
+}
+
+function TriParTasBDD (c) {
+
+
+    var nbm = BDD.length-1
+    for (var i = nbm; i >= 0; i--)
+
+        tamiserBDD(c, i, nbm);
+
+    for (var i = nbm; i >= 1; i--) {
+        echanger(BDD, i, 0);
+        tamiserBDD(c, 0, i - 1);
+    }
+
+
+}
 
 
 function Vidage() { // Effacement des tris précédents
