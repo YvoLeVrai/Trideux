@@ -25,7 +25,7 @@ function okAPI(){
 
 var openDAT = function(event) {
 
-    wait(); // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter "); // affichage de l'indicateur de chargement
 
     lignesDAT=[];  // vidage du tableau
     var input = event.target;
@@ -214,7 +214,7 @@ function ChargerListVar(){
 
 function openFich(fich) {
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter" ) // affichage de l'indicateur de chargement
 
     reinit();
     lignesTR2=[];  // vidage du tableau
@@ -449,7 +449,7 @@ function ChargerDIC() {
 
 var LireZip = function(event) {
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter ") // affichage de l'indicateur de chargement
     reinit()
 
 
@@ -601,7 +601,7 @@ var LireZip = function(event) {
 
 var LireTR2 = function(event,obj) {
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter ") // affichage de l'indicateur de chargement
     reinit();
 
 
@@ -875,7 +875,7 @@ function TR2versBDD(lignesTR2) {
 
 var LireCSV = function(event) {
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter ") // affichage de l'indicateur de chargement
     reinit()
 
 
@@ -1016,7 +1016,7 @@ function QuelSplit() { // permet de déterminer le séparateur du fichier csv
 
 var LireXLSX = function(event){
 
-    wait() // affichage de l'indicateur de chargement
+    wait("Chargement en cours. Merci de patienter ") // affichage de l'indicateur de chargement
 
     reinit()
 
@@ -1301,6 +1301,9 @@ function reinit(){
 
     //cache des tableaux précédents
     Vidage('TabBDD','TabTAP','TabTCR','TabEXP');
+    document.getElementById("TxtC").placeholder = "Choisissez une variable"
+    document.getElementById("TxtL").placeholder = "Choisissez une variable"
+    document.getElementById("TxtF").placeholder = "Choisissez une variable"
 
 }
 

@@ -28,8 +28,8 @@ var vP=[0]; //variable de pondération
 var vCopy= 0; // variable servant aux copiers/collers
 
 var NR; // prise en compte des non réponses
-var NRX;
-var NRY;
+var NRX; // en lignes
+var NRY; // en colonnes
 var EFF;
 var PCL;
 var PCC;
