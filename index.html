@@ -260,12 +260,12 @@
               <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button> !-->
 
             <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
-            <button id="BtnOptL" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar1')"  type="button"></button>
-            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
+            <button id="BtnOptL" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar1')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
 
         </div>
 
-        <div   id='OptVar1' style='float: left; margin-left: 1rem;margin-top: 10px;margin-bottom: 2px;display: none;animation: voiropt 0.10s;width:100%'>
+        <div  class="selectHide" id='OptVar1' style='float: left; margin-left: 1rem;margin-top: 10px;margin-bottom: 2px;display: none;animation: voiropt 0.10s;width:100%'>
 
 
             <div class="custom-control custom-switch" style='float: left;margin-right: 25px;'>
@@ -320,14 +320,13 @@
 
             <input onclick="openVars('C')" onkeyup="FiltrerVars(event)" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
 
-            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
-            <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog"  onclick="VoirOpt('OptVar2')"  type="button"></button>
-            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "prepTAP()" type="button"></button>
+            <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog selectHide"  onclick="VoirOpt('OptVar2')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "prepTAP()" type="button"></button>
 
 
         </div>
 
-        <div id='OptVar2' style='float: left; margin-left: 1rem;margin-top: 10px;margin-bottom: 2px;display:none;animation: voiropt 0.10s;'>
+        <div class="selectHide" id='OptVar2' style='float: left; margin-left: 1rem;margin-top: 10px;margin-bottom: 2px;display:none;animation: voiropt 0.10s;'>
 
 
             <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
@@ -384,12 +383,12 @@
             <input onclick="openVars('X')" onkeyup="FiltrerVars(event)" id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
             <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
-            <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog" onclick="VoirOpt('OptVar3')"  type="button"></button>
-            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
+            <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar3')"  type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
 
         </div>
 
-        <div  id='OptVar3' style='float: left; margin-left: 1rem;margin-top: 5px;margin-bottom: 2px;display:none;animation: voiropt 0.10s;'>
+        <div class="selectHide" id='OptVar3' style='float: left; margin-left: 1rem;margin-top: 5px;margin-bottom: 2px;display:none;animation: voiropt 0.10s;'>
 
             <div class="custom-control custom-switch">
                 <input type="checkbox" class="custom-control-input" id="ChkNRE" checked="true">

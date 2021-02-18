@@ -291,8 +291,10 @@ function prepTAP() {
 
     VoirBloc('BlocVar');
 
-
-    if(vL==0){openVars("L");}
+    if(vL==0){
+        openVars("L");
+        $("#TxtL").focus();
+    }
 
 
 
@@ -1283,13 +1285,10 @@ function openVars(typevar) {
     //document.getElementById("headervar").style.display = "";
     //document.getElementById("TxtChercher").value = "";
     //document.getElementById("TxtChercher").focus();
+    $(".selectHide").addClass("d-none");
     $("#ListeVariables").collapse('show');
-    $(".imgcog").addClass("d-none");
-    $(".imgclose").addClass("d-none");
     $(".bi-caret-up-fill").removeClass("d-none");
     //FiltrerVars()
-
-
 };
 
 function closeVars() {
@@ -1298,10 +1297,9 @@ function closeVars() {
     //document.getElementById("ListeVariables").style.height = "0%";
     //document.getElementById("headervar").style.display = "none";
     $(".picthb").val('');
+    $(".selectHide").removeClass("d-none");
     $(".list-group-item").removeClass("d-none");
     $("#ListeVariables").removeClass("show");
-    $(".imgcog").removeClass("d-none");
-    $(".imgclose").removeClass("d-none");
     $(".bi-caret-up-fill").addClass("d-none");
 
 };
