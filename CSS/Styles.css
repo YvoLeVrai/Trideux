@@ -1009,3 +1009,57 @@ select:invalid { color: gray; }
     flex: 0 0 8.333333%;
     max-width: 2rem;
 }
+
+.tabrec{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+     
+    padding: 2px;
+    width:150px;
+    height:65px;
+    margin:2px;
+    cursor: pointer;
+ 
+}
+
+.tabrec:hover{
+    
+    border: 2px solid #80bdff;
+    box-shadow: 0 0 0.2rem 0.2rem rgba(0,123,255, 0.25);
+}
+
+
+.libre{
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.modcur{
+    background-color: rgba(71, 74, 236, 0.459);
+    border: 2px solid rgb(88, 111, 211);
+}
+
+
+.modrec1{
+    background-color: rgba(89, 131, 245, 0.3);
+}
+
+.modrec2{
+    background-color: rgba(89, 131, 245, 0.4);
+}
+
+.modrec3{
+    background-color: rgba(89, 131, 245, 0.5);
+}
+
+.modrec4{
+    background-color: rgba(89, 245, 224, 0.3);
+}
+
+.modrec5{
+    background-color: rgba(89, 245, 224, 0.4);
+}
+
+.modrec6{
+    background-color: rgba(89, 245, 224, 0.5);
+}

@@ -50,10 +50,18 @@ var TapQ=[]; // tri à plat des valeurs et effectifs pour les variables quanti
 var Tcr=[]; // tri croisé
 var MrgX=[]; // marges en lignes
 var MrgY=[]; // marges en colonnes
+
+// variables liées au calcul du khi2
+var lnonvide=0; //nombre de colonnes à afficher (peut être différent du nb modas)
+var cnonvide=0 //nombre de colonnes à afficher (peut être différent du nb modas)
 var Khi2=0;
 var proba=0;
+var deglib=0
 var signif="";
 var vcram=0;
+var theoinf5=0
+var theoinf1=0
+
 var strpied; // pied des tableaux
 var strPiedPlain; // pied des tableaux pour la copie plainText
 
@@ -84,3 +92,11 @@ var nbmum; // variable de calcul du nombre d'ascendants
 
 //
 var FLCXR; // contexte de sélection de la variable (filtre ligne colonne ou explorateur)
+
+// variables utilisées par la fonction de création de variables par croisement
+var vLd=0
+var vCd=0
+var TcrC=[] // tableau des combinaisons pour les recodages croisés
+var TapC=[] // tri à plat des modalités créées
+var ModCur=0 // modalité en cours de création 
+var ModaR=[] //tableau des modalités recodées

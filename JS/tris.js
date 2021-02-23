@@ -41,12 +41,57 @@ function B_A_S_E() {
     var nbcols = NbVar-1;
 
     // Titre
+
+    titre = document.createElement('table');
+    titre.id='Titre';
+    titre.className= 'TabTitre';
+    var lrg = window.innerWidth-80;
+    lrg +="px"
+    titre.style.width  = lrg; 
+    titre.style.marginTop = "15px"
+
+    /*
     titre  = document.createElement('label');
     titre.id='Titre';
-    titre.innerHTML = `<div class=titretab style="margin-left:20px;"> Base : ` + nomBase  + ` <br> Nombre de lignes : `+ PopTot + ` <br> Nombre de variables : ` + nbcols + `</div>`
+    titre.innerHTML = `<div class='titretab' style="margin-left:20px;"> Base : ` + nomBase  + `  ( Nombre de lignes : `+ PopTot + ` ; Nombre de variables : ` + nbcols + `)</div>`
     document.getElementById('contenu').appendChild(titre);
+    */
+
+    var tr = titre.insertRow();
+    var HCell = document.createElement("th");
+    HCell.colSpan=2;
+    var Case = `<div class='titretab' id="titrebdd" style="width:100%"> ` + nomBase  + `     
+ 
+    
+    <button class="btn btn-outline-primary"  style = "float:right;margin-top:-5px; margin-left:3px; margin-right:5px;display:none" onclick= "AjoutVarCrois()" type="button">Suppr. lignes</button>
+
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" style = "margin-top:-5px; width:175px;float:right">
+    Créer une variable... 
+    </button>
+
+      <div class="dropdown-menu">
+      <div class="dropdown-item" onclick= "AjoutVarCrois()" style="cursor:pointer;" > Par croisement </div>
+      <div class="dropdown-item"  onclick= "AjoutVarCalc()" style="cursor:pointer;display:none"> Calculée </div>
+       
+
+      
+      </div>`  
+
+      
 
 
+
+    Case += ` </div>
+    
+                <div id="sstitrebdd"> `+ PopTot + ` lignes /  ` + nbcols + ` variables </div>    `
+
+    HCell.innerHTML = Case;
+    tr.appendChild(HCell);
+    document.getElementById('contenu').appendChild(titre);
+    
+
+    // Cases du tableau
+    
     tbl  = document.createElement('table');
     tbl.id = 'TabBDD';
     tbl.className= 'TabTri';
@@ -103,9 +148,10 @@ function B_A_S_E() {
         for (x = 1; x < Number(Nom.length) ; x++) {
 
             var valmoddat = BDD[l][x];
+            var rgl = Reco[x]
 
             // application du recodage
-            if (Reco[x].trim() != "") { valmoddat = TabRec[x][valmoddat];}
+            if (rgl != "") {valmoddat=ValApRec(valmoddat,rgl)}
 
 
             var idC = "casel" + l + "c" + x;
@@ -382,7 +428,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
             valmod = Number(valmod) ;
 
             // application du recodage
-            //if (Reco[x].trim() != "") {valmod = TabRec[x][valmod];}
+             
 
             if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
 
@@ -1452,9 +1498,13 @@ function SelVar(rang) {
     closeVars();
 
     // ajout de la variable choisie dans la zone de sélection
+    var prefix = ""
+
+    if (isNaN(Nom[rang])) {prefix = rang + " | "}
+
     var nomtxt= "Txt"+FLCXR
-    if (FLCXR=='X' && ExpRgDp==0) {document.getElementById(nomtxt).placeholder = Nom[rang] + " | "+ Libellé[rang];}
-    if (FLCXR!='X') {document.getElementById(nomtxt).placeholder = Nom[rang] + " | "+ Libellé[rang];document.getElementById(nomtxt).focus()}
+    if (FLCXR=='X' && ExpRgDp==0) {document.getElementById(nomtxt).placeholder = prefix+ Nom[rang] + " | "+ Libellé[rang];}
+    if (FLCXR!='X') {document.getElementById(nomtxt).placeholder = prefix +  Nom[rang] + " | "+ Libellé[rang];document.getElementById(nomtxt).focus()}
 
 
     if (FLCXR=="X") { // en cas de variable pour l'explorateur
@@ -1500,6 +1550,23 @@ function SelVar(rang) {
 
     }
 
+
+    if (FLCXR=="LD") { // en cas de variable pour création de variable par croisement
+
+        vLd = rang; // variable courante du filtre
+         
+        if (vCd!=0) {TabRecCrois(vLd, vCd)}
+
+
+    }
+
+    if (FLCXR=="CD") { // en cas de variable pour création de variable par croisement
+        
+        vCd = rang; // variable courante du filtre
+         
+        if (vLd!=0) {TabRecCrois(vLd, vCd)}
+
+    }
 
 
 };
@@ -2388,22 +2455,27 @@ function Moustaches(cadre, x, y,nbc) {
 function prepTCR() {
 
     if (EstVu('BlocEXP')!=0) {CacheBloc('BlocEXP');}
-
+    closeVars(); // fermeture de la fenêtre des variables pour éviter les pb de décalage vers le base
+    
     VoirBloc('BlocVar2');
 
     Vidage("TabBDD","TabTAP","TabEXP");
+    
     CaleSsHead()
-    QuelTri();
+
+    if (vL>0 && vC>0) {QuelTri()};
+
+    
 
 }
 
 //insertion des non-réponses dans les tris croisés (Y)
 document.getElementById('ChkNRY').onclick = function() {
-    T_C_R();
+    T_C_R(vL,vC);
 };
 
 
-function T_C_R() {
+function T_C_R(x,y,complet) {
 
 
 
@@ -2414,10 +2486,10 @@ function T_C_R() {
     }
 
     // index de la variable en lignes
-    var x = vL
+    //var x = vL
 
     // index de la variable en colonnes
-    var y = vC
+    //var y = vC
 
 
     if (x<=0) {vL=1; return 0;}
@@ -2443,15 +2515,21 @@ function T_C_R() {
 
 
     // ajout de la variable choisie dans la zone de sélection (lignes)
+    var prefix = ""
+
+    
+
     if (x>0) {
-        document.getElementById('TxtL').placeholder = Nom[vL] + " | "+ Libellé[vL];
+        if (isNaN(Nom[x])) {prefix = x + " | "}
+        document.getElementById('TxtL').placeholder = prefix + Nom[vL] + " | "+ Libellé[vL];
     }
 
     // ajout de la variable choisie dans la zone de sélection (colonnes)
     if (y>0) {
-        document.getElementById('TxtC').placeholder = Nom[vC] + " | "+ Libellé[vC];
+        if (isNaN(Nom[y])) {prefix = y + " | "}
+        document.getElementById('TxtC').placeholder = prefix + Nom[vC] + " | "+ Libellé[vC];
     }
-
+    
 
 
     if (typvx='a' && typvy!='a') {
@@ -2476,7 +2554,8 @@ function T_C_R() {
     }
 
 
-    var rgl = Reco[x] // rgl de recodage
+    var rglx = Reco[x] // rgl de recodage
+    var rgly = Reco[y] // rgl de recodage
 
 
 
@@ -2492,8 +2571,9 @@ function T_C_R() {
         var valmodcol = Number(BDD[index][y]);
 
         // application du recodage
-        if (Reco[x].trim() != "") { valmodlig = ValApRec(valmodlig,rgl);}
-        if (Reco[y].trim() != " ") { valmodcol = ValApRec(valmodcol,rgl);}
+        if (Reco[x].trim() != "") { valmodlig = ValApRec(valmodlig,rglx);}
+
+        if (Reco[y].trim() != " ") { valmodcol = ValApRec(valmodcol,rgly);}
 
         // prise en compte de la pondération
         var coeffp=1;
@@ -2750,6 +2830,13 @@ function T_C_R() {
     }
 
 
+    if (complet == false) {
+    //return(TCR,ModaX,ModaY);
+    } else {
+        if (multi==false) {khi(x,RgDpX,y,RgDpY)}
+    Aff_T_C_R(x, RgDpX, y, RgDpY, multi)
+    }
+}
 
 
 
@@ -2757,17 +2844,17 @@ function T_C_R() {
 
 
 
-
-
-
-
+function khi(x,RgDpX,y,RgDpY){
     //Calcul du khi2
 
-    if (multi==false) {
+    
 
         Khi2=0;
-        var lnonvide=0;
-        var cnonvide=0;
+        lnonvide=0;
+        cnonvide=0;
+        theoinf5=0;
+        theoinf1=0;
+
 
         for (i = RgDpX; i < Number(CdMax[x])+1; i++) {
 
@@ -2799,7 +2886,7 @@ function T_C_R() {
         }
 
 
-        var deglib=(lnonvide-1)*(cnonvide-1);
+        deglib=(lnonvide-1)*(cnonvide-1);
 
 
         proba = loinorm(deglib,Khi2);
@@ -2819,8 +2906,12 @@ function T_C_R() {
         vcram = Math.sqrt(khi2max);
         vcram = vcram.toFixed(3);
 
-    }
+     
 
+}
+
+
+    function Aff_T_C_R(x, RgDpX, y, RgDpY, multi) {
 
     //Création du tableau de résultats
     var body = document.body,
@@ -3280,10 +3371,30 @@ function T_C_R() {
     if (multi==false) {
         strPiedPlain += 'Khi² : ' +  Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `proba : ` + proba + " " + signif + '\r\nV de Cramér :' + vcram;
         strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `
-              proba : ` + proba + "  " + signif + " <br> V de Cramér : " + vcram + " </p>";
+              proba : ` + proba + "  " + signif 
+
+              if (theoinf5>0) {
+
+                strPiedPlain += ' - Attention : ' + theoinf5 + ` cases ont des eff. théoriques < 5  `;
+                strpied+=`<label style="color:rgb(255,10,10);font-size:0.75rem"> - Attention : ` + theoinf5 + ` cases ont des eff. théoriques < 5  </label>`
+
+                if (theoinf1>0) {
+
+                    strPiedPlain += ' - (dont ' + theoinf1 + `  < 1)`;
+                    strpied+=`<label style="color:rgb(255,10,10);font-size:0.75rem">  ... (dont  ` + theoinf1 + `  < 1)</label>`
+    
+                  }
+
+
+              }
+
+              strPiedPlain +=  '\r\n V de Cramér :' + vcram;
+              strpied+=  "  <br> V de Cramér : " + vcram + " </p>";
+
+
     } else {
         strPiedPlain += 'Variable(s) multiple(s)! Les marges dépassent 100%';
-        strpied+=`<p style="color:rgb(255,100,100);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
+        strpied+=`<p style="color:rgb(255,10,10);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
     }
 
     Pied.innerHTML = strpied
@@ -3302,7 +3413,7 @@ function SsNr(sens) {
     String(idchk)
 
     document.getElementById(idchk).checked=false;
-    T_C_R()
+    T_C_R(vL,vC)
 
 }
 
@@ -4118,6 +4229,7 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
 
         var valmod = Number(BDD[l][c]); // récupération de la valeur dans la base
 
+        // application du recodage éventuel
         if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
 
         // prise en compte de la pondération
@@ -4129,8 +4241,8 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
         }
 
 
-        // application du recodage éventuel
-        //if (Reco[c].trim() != "") {valmod = TabRec[c][valmod];}
+        
+         
 
         //filtrage
         if (EstVu('BlocFiltre')!=0 && Filtrer(l) == false ) { continue}
@@ -4170,6 +4282,7 @@ function QuelTypVar(c){
 
     }
 
+    var rgl=Reco[c]
 
 
     var nblig = BDD.length -1;
@@ -4187,7 +4300,7 @@ function QuelTypVar(c){
         var valmod = parseFloat(BDD[l][c]); // récupération de la valeur dans la base
 
         // application du recodage éventuel
-        if (Reco[c].trim() != "") {valmod = TabRec[c][valmod];}
+        if (rgl != "") {valmod=ValApRec(valmod,rgl);}
 
         // recherche de valeur décimale
         valmod=String(valmod);
@@ -4603,7 +4716,7 @@ function ChampFiltre(){
 /* Détermination du type de tri en fonction des éléments affichés*/
 function QuelTri() {
 
-    if (EstVu('BlocVar2')==0) {T_A_P();} else {T_C_R();}
+    if (EstVu('BlocVar2')==0) {T_A_P();} else {T_C_R(vL,vC);}
 
 }
 

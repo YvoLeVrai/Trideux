@@ -409,7 +409,7 @@ function Eclater(v) {
     }
 
     ChargerListVar()
-    chargerREC()
+    //chargerREC()
 
     // 3 remplissage des colonnes crées
 
@@ -885,12 +885,13 @@ function LancerRgl(event) {
 
 function EstRec(v,mod) { // la modalité est-elle le fruit d'un recodage?
 
+    var rgl = Reco[v]
+    
     for (m=0;m<=CdMax[v];m++) {
 
         if (m != mod) {
 
-
-            if (TabRec[v][m] == mod) {return true;}
+            if (ValApRec(m,rgl) == mod) {return true;}
 
         }
 
@@ -1478,7 +1479,7 @@ function ExportCSV() {
 function SauvCSV() { //écriture de la base au format CSV
 
 
-    var sep = prompt("Quel séparateur de colonnes voulez-vous utiliser? (par exemple :  ; / ) ?", ",");
+    var sep = prompt("Quel séparateur de colonnes voulez-vous utiliser? (par exemple :  ; / ) ?", ";");
 
     if (sep == null || sep == ""){
         alert("Un séparateur est nécessaire");
@@ -1521,7 +1522,7 @@ function SauvCSV() { //écriture de la base au format CSV
             Number(val1);
             var val2=val1
 
-            if (Reco[v].trim() != "") {val2 = ValApRec(val1, Reco[v])}// TabRec[v][val1]}
+            if (Reco[v].trim() != "") {val2 = ValApRec(val1, Reco[v])}
 
             if (TypVar[v] == "a" ) {
 
@@ -1837,317 +1838,6 @@ function SauvegarderSurDisque(textToWrite,fileNameToSaveAs, format) {
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-//STATS
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-function SommeVal(col) { // somme des valeurs
-
-    var somme=0
-    var nbval =col.length;
-    // Récupération des valeurs dans la colonne extraite et filtrée
-    for (l=0 ;l < nbval; l++) {
-
-        var valmod = Number(col[l])
-        somme += valmod
-
-
-    };
-
-
-    return somme;
-
-}
-
-function Moyenne(col) { // comme son nom l'indique
-
-    var somme=0
-    var nbval =col.length;
-
-    var rgl = "";
-    if (document.getElementById("TxtRglG")) { // récupération de la règle de recodage
-
-        rgl= document.getElementById("TxtRglG").value
-
-    }
-
-    // Récupération des valeurs dans la colonne extraite et filtrée
-    for (l=0 ;l < nbval; l++) {
-
-        // adaptation spontanée au recodage saisi
-        var valmod = Number(col[l])
-
-
-        if (rgl != '') {valmod=ValApRec(valmod,rgl)}
-
-
-        somme += valmod
-
-
-    };
-
-    res=somme/nbval;
-    res=res.toFixed(NbDec)
-    return res;
-
-}
-
-function Quantiles(col) { // comme son nom l'indique
-
-
-    var nbval=col.length-1;
-    var quant=[100,10,4,2,1.3333333,1.111111,1.010101];
-
-    var rgl='';
-
-    if (document.getElementById("TxtRglG")) { // récupération de la règle
-
-        rgl= document.getElementById("TxtRglG").value
-
-    }
-
-    for (q=0;q<quant.length;q++){
-        var coeff = Number(quant[q]);
-
-        var pct= nbval/coeff;
-        var pctarr= Math.floor(pct)
-
-        // prise en compte spontanée du recodage
-        var valmod=  Number(col[pctarr])
-
-
-        if (rgl.trim() != '') {valmod=ValApRec(valmod,rgl)}
-
-
-        var quantile= valmod;
-
-        var reste = pct%1;
-
-
-        if (reste>0){ // correction en cas de reste
-
-            var colsuiv= Number(col[pctarr+1]);
-
-            if (rgl.trim() != '') {colsuiv=ValApRec(colsuiv,rgl)}
-
-
-            var ajout =  (colsuiv-quantile)*reste;
-
-            quantile +=ajout;
-
-        }
-
-        var res= quantile.toFixed(NbDec)
-
-        quant[q] = res
-
-    }
-
-
-
-    return quant;
-
-
-}
-
-function EcartType(col, moy) {// comme son nom l'indique
-
-    var somme=0
-    var nbval =col.length;
-    // Récupération des valeurs dans la colonne extraite et filtrée
-    for (l=0 ;l < nbval; l++) {
-
-        var valmod = Number(col[l]) //Number(item.substr(Posi[x]-1,CdMax[x].length));
-        var ec=Number(valmod-moy);
-        somme += Math.pow(ec,2);
-
-
-
-
-    };
-
-    res=somme/nbval;
-    res=Math.sqrt(res);
-    res=res.toFixed(NbDec)
-    return res;
-
-}
-
-
-// calcul de la contribution locale au Khi²
-function Contrib(eff, margl, margc ,popu) {
-
-    var theo = (margl*margc/popu);
-    var ec = eff-theo;
-    var ec=ec*ec;
-    var resultat = ec/theo;
-
-    return resultat;
-
-}
-
-// calcul de la probabilité associée au Khi2 (fonction originaire de Trideux - auteur : Philippe Cibois)
-function loinorm(ddl,khi) {
-
-    //if (khi < 3) {return 0.001;}
-
-    var co = new Array(5);
-    co[1] = 0.3194;
-    co[2] = -0.3566;
-    co[3] = 1.7815;
-    co[4] = -1.8213;
-    co[5] = 1.3303;
-
-    var f1=ddl;
-    var fis = khi/f1;
-    var f2=10000000000;
-    var f=fis;
-
-    if(fis < 1) {
-        f = 1 / fis;
-        var f3 = f1;// interversion
-        f1=f2;
-        f2=f3;
-    }
-
-    var a1 = 2 / (9 * f1);
-    var a2 = 2 / (9 * f2);
-    var w = (1 - a2) * Math.pow(f,0.33333333) - (1 - a1);
-
-    w = w / Math.sqrt(a1 + a2 * Math.pow(f, 0.666667));
-
-    if(f2 <= 3) {
-        w = w * (1 + 0.08 * Math.pow(w,4) / Math.pow(f2,3));
-    }
-
-    var y = Math.exp(-w * w / 2) * 0.39894228;
-
-    var t = 1 / (1 + 0.2316419 * Math.abs(w))
-    t=parseFloat(t);
-
-    var som=0;
-
-    for (s = 1; s < 6; s++) {
-        som += co[s]*Math.pow(t,s);
-
-    }
-
-
-    var prob = 0.5 + Math.sign(w)*(0.5 - y * som);
-
-
-    return prob.toFixed(5);
-
-
-
-};
-
-
-
-function TxtMef(nombre, largeur,caractère) {
-    var output = nombre + '';
-    while (output.length < largeur) {
-        output = caractère + output;
-    }
-    return output;
-}
-
-
-/// Calcul du PEM LOCAL
-function PEMLOC(TOT, MARGI, MARGJ, OBS) {
-    THEO = MARGI * MARGJ / TOT;
-    ECAR = OBS - THEO;
-
-
-    var EC = MARGJ - OBS;
-    var EA = MARGI - OBS;
-    var Mc = TOT - MARGJ;
-    var MA = TOT - MARGI;
-    var OP = TOT - OBS - EC - EA;
-    var TC = MARGJ - THEO;
-    var TA = MARGI - THEO;
-    var tp = TOT - THEO - TC - TA;
-    var PEM=0
-
-    if (THEO < 5 || TC < 5 || TA < 5 || tp < 5) {
-        CONT$ = "OUI";} //correction de continuité
-    else {
-        CONT$ = "NON";
-    }
-
-
-
-    var de = (MARGJ * MARGI * Mc * MA);
-
-    if (de == 0) {
-        k2 = 0;
-    }
-    else {
-        if (CONT$ == "NON") {
-            k2 = TOT * Math.pow(OBS * OP - EA * EC,2) / de;
-        }
-
-        else {
-            if (Math.abs(OBS * OP - EA * EC) > TOT / 2) {k2 = TOT * Math.pow((Math.abs(OBS * OP - EA * EC) - TOT / 2),2) / de;}  //cf. Rouanet, Analyse Inf.Donn‚es:155
-
-            else {k2 = 0;}
-        }
-
-    }
-
-    //if (k2<SeuilK2) {k2=0;}
-
-    //if (ECAR <= 0 && SignEcart$ == "POSI") {k2 = -2;}
-
-
-    if (ECAR > 0) {
-        if (MARGJ > MARGI) {
-            EMAX = MARGI - THEO;
-        }
-        else {
-            EMAX = MARGJ - THEO;
-        }
-        PEM = ECAR * 100 / EMAX;
-    }
-
-    if (ECAR < 0) {
-        CMARGJ = TOT - MARGJ;
-        if (CMARGJ > MARGI) {
-            EMAX = -THEO}
-        else {
-            EMAX = MARGI - CMARGJ - THEO;
-        }
-        PEM = ECAR * 100 / EMAX
-        PEM = -PEM
-    }
-
-
-
-    return [PEM,k2];
-
-
-
-
-
-
-}
-
-function t_test(x1, x2) { // test de Student (Welsh) non apparié Trouvé ici : https://rasmusab.github.io/bayes-null-ttest-app/
-    var n1 = x1.length;
-    var n2 = x2.length;
-    mean1 = jStat.mean(x1);
-    mean2 = jStat.mean(x2);
-    var var1 = Math.pow(jStat.stdev(x1, true), 2);
-    var var2 = Math.pow(jStat.stdev(x2, true), 2);
-    var sd = Math.sqrt( ((n1 - 1) * var1 + (n2 - 1) * var2) / (n1 + n2 - 2));
-    var t = (mean1 - mean2) / (sd * Math.sqrt(1 / n1 + 1 / n2));
-    var p = jStat.ttest(t, n1 + n2 - 2 +1,1);
-    return [mean1 - mean2, t, p];
-}
 
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2278,6 +1968,547 @@ var idx=Tab.findIndex(ValSousMod);
 
 }
 */
+
+
+function AjoutVarCrois() {
+
+    
+    var elmnt = document.getElementById('TabBDD');
+    if (elmnt) {elmnt.style.display="none"} //{elmnt.remove()}
+
+    var elmnt = document.getElementById("Pied");
+    if (elmnt) {elmnt.style.display="none"}
+
+    document.getElementById("titrebdd").innerText= "Créer un variable par croisement"
+    document.getElementById("sstitrebdd").innerHTML= `<h4 style="float:left"> Choisissez les variables à croiser : </h4>  <a href="https://utbox.univ-tours.fr/s/GEwx9XSc7mmo4fe" target="_blank" style="float:right">demo</a>`
+
+    vLd=0;
+    vCd=0;
+
+
+    // affichage des fonctionnalités dans l'entête du tableau de base
+    var titre = document.getElementById('Titre')
+    var tr = titre.insertRow();
+    var HCell = document.createElement("th");
+    HCell.colSpan=1;
+    var Case = ` 
+
+   
+
+    <div class="input-group-prepend" >
+            <!-- <span class="input-group-text">Lignes    </span> -->
+
+            
+
+            <span class="input-group-text" onclick="openVars('LD')"> V. 1</span>
+
+            <input onclick="openVars('LD')" onkeyup="FiltrerVars(event)" id= "TxtLD" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'LD')">
+
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
+
+
+    </div>
+
+    <div class="input-group-prepend" >
+    <!-- <span class="input-group-text">Lignes    </span> -->
+
+
+
+    <span class="input-group-text" onclick="openVars('CD')"> V. 2</span>
+
+    <input onclick="openVars('CD')" onkeyup="FiltrerVars(event)" id= "TxtCD" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'CD')">
+    <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
+
+
+    </div>
+
+    <div id ="blocnvv" style="display:none">
+
+    <br>  <H3> Nouvelle variable  </h3>
+
+    <div  class="input-group-prepend" style="width:100%;">
+
+    <span class="input-group-text"> Nom :  </span> `
+
+    Case += `<input  type="text" id="NomC" class="form-control" style = "width:150px;placeholder="Nom?" value = ` + Nom.length + ` >
+
+    <span class="input-group-text"> Libellé :  </span> `
+
+    Case += ` <input  type="text" id="LibC" class="form-control" placeholder="Libellé de la variable?" >
+
+    </div>
+
+    `
+    
+                 
+    HCell.innerHTML = Case;
+    tr.appendChild(HCell);
+     
+
+     
+
+}
+
+var coulMods= ['rgba(200, 200, 200, 0.3)', 
+    'rgba(0, 54, 202, 0.3)',
+    'rgba(36, 189, 14, 0.42)',
+    'rgba(255, 131, 0, 0.55)',
+    'rgba(255, 233, 55, 0.55)', 
+    'rgba(213, 71, 71, 0.59)', 
+    'rgba(236, 105, 54, 0.5)',
+    'rgba(189, 14, 101, 0.42)', 
+    'rgba(89, 131, 245, 0.5)', 
+    'rgba(89, 245, 224, 0.3)', 
+    'rgba(89, 245, 224, 0.5)']
+
+function TabRecCrois(vLd, vCd){ // fonction permettant d'afficher le croisement de deux variables en vue de les combiner pour en créer une troisième
+
+
+// vérif du type de variable
+
+        if (TypVar[vLd] != 'a'){alert("La variable " + Nom[vLd] + " n'est pas qualitative. Croisement impossible");return 0}
+        // évitement des variables multiples
+        VarMul = EstMulti(vLd,Moda[vLd]);
+        if (VarMul[0]==true){alert("La variable " + Nom[vLd] + " est multiple. Croisement impossible");return 0}
+
+        if (TypVar[vCd] != 'a'){alert("La variable " + Nom[vCd] + " n'est pas qualitative. Croisement impossible");return 0}
+        // évitement des variables multiples
+        VarMul = EstMulti(vCd,Moda[vCd]);
+        if (VarMul[0]==true){alert("La variable " + Nom[vCd] + " est multiple. Croisement impossible");return 0}
+
+//
+
+
+
+document.getElementById("sstitrebdd").style.display='none'; //.innerText= "Cliquez sur les cases pour définir les combinaisons :"
+document.getElementById("blocnvv").style.display="block"
+
+
+
+    T_C_R(vLd, vCd, false)
+
+    var x= vLd
+    var y = vCd
+
+    document.getElementById("LibC").value = Nom[x] + ` X ` + Nom[y] 
+   
+   
+    //création du tableau des recodages
+    TcrC = new Array(CdMax[x])
+    for (i=0;i<CdMax[x]+1;i++) {
+
+        TcrC[i] = new Array(CdMax[y])
+
+        for (j=0;j<CdMax[y]+1;j++) {
+            TcrC[i][j]=0;
+        }
+    }
+
+
+    var combimax = (CdMax[x]+1) * (CdMax[y]+1)       
+        
+    TapC = new Array(combimax)
+    ModaR = new Array(combimax)  
+
+    ModaR[0] = "N/A"
+    for (i=1;i<combimax;i++) {
+        ModaR[i] = ""
+    }
+
+
+    ModCur = 1
+    Aff_TcrC()
+}
+
+function Aff_TcrC() {
+
+    var nbl = document.getElementById("Titre").rows.length 
+    if (nbl>=3 ){document.getElementById("Titre").deleteRow(2)}; 
+
+    var elmnt = document.getElementById("cadrerec1");
+    if (elmnt) {elmnt.remove()}
+
+    
+    var x= vLd
+    var y = vCd
+
+    // affichage des fonctionnalités dans l'entête du tableau de base
+    var titre = document.getElementById('Titre')
+    var tr = titre.insertRow();
+    var HCell = document.createElement("th");
+    HCell.colSpan=1;
+    
+    
+    var Case = `<div id="cadrerec1" >
+    
+        
+
+    </div> `
+
+    var couleur = `background-color:`+ coulMods[ModCur]
+
+    Case += `<h4> Définir modalité n° ` + ModCur+ `</h4>
+    
+    
+    <div class="input-group-prepend" style="width:60%;">
+
+            <span class="input-group-text" > Num° </span>
+
+            <span class="input-group-text" style="` +  couleur  + `"> ` + ModCur + ` </span>
+
+            <span class="input-group-text" > Libellé </span>
+
+            <input  type="text" id="LibModC" class="form-control" placeholder="Libellé ?" value = ` + ModaR[ModCur] + ` >
+
+
+            <button id= "btnvalmdrc" class="btn btn-primary"  onclick= "ValidModRec()" type="button" style="height:38px;display:none;width:250px">Créer la modalité</button>
+
+
+
+    </div> <br><br>`
+
+
+    Case += `<div style="display: flex;flex-direction:row;"> <div class="tabrec"></div>`
+
+    // création des entêtes de colonnes
+    for (j=0;j<Number(CdMax[y])+1;j++) {
+
+        //n'affiche l'entête que s'il y a une colonne
+        if (MrgY[j]>0) {
+            Case += `<div class="tabrec"  onclick="selcol(` + j + `)" >` + ModaY[j] + `</div>`;
+
+        }
+    }
+
+    Case += `</div>`
+
+
+    // cases (lignes + moda)
+    
+    var nbl=0
+
+        // défilement des lignes
+        for (i=0;i<Number(CdMax[x])+1;i++) {
+
+            if (MrgX[i]>0) {
+
+                Case += `<div style="display: flex;flex-direction:row;">`
+
+                    Case += `<div class="tabrec" onclick="sellig(` + i + `)">` + ModaX[i] + `</div>`;
+
+                    // cases
+                    for (j=0;j<Number(CdMax[y])+1;j++) {
+
+                        //n'affiche la colonne que s'il y a des valeurs 
+                        if (MrgY[j]>0) {
+
+                            // définition de la situation 
+                            var couleur = `background-color:`+ coulMods[Number(TcrC[i][j])]
+                            if (TcrC[i][j]== ModCur){couleur +=';border: 1px solid #80bdff;box-shadow: 0 0 0.15rem 0.1rem rgba(0,123,255, 0.25);'}// +  coulMods[Number(TcrC[i][j])] + ';'}    
+
+                            Case += `<div class="tabrec" style = "padding-top:20px;color:white;` +  couleur  + `" onclick=selCase(`+ i + `,` + j + `) onmouseover=survCase(this,`+ i + `,` + j + `,"in") onmouseleave=survCase(this,`+ i + `,` + j + `,"out") >` + Tcr[i][j] + `</div>`;
+                
+                        }
+                    }
+                    
+                Case += `</div>`
+            } 
+        }
+
+
+        // affichage du tri à plat 
+
+  
+     
+    
+    for (i=0;i<TapC.length;i++) {
+        TapC[i]=0;
+         
+    }
+
+    
+    for (i=0;i<CdMax[x]+1;i++) {
+        
+        for (j=0;j<CdMax[y]+1;j++) {
+        var rg = Number(TcrC[i][j])
+        TapC[rg]+=Tcr[i][j];
+        }
+
+    }
+
+
+
+
+    
+    
+
+
+    Case += ` <br> <h4> Tri à plat de la variable en préparation </h4> <br>`
+
+
+
+    for (i=0;i<TapC.length+1;i++){
+        
+         if (TapC[i]>0 || i==ModCur) {
+
+             
+
+            var couleur = `background-color:`+ coulMods[i]
+            if (i== ModCur){couleur +=';border: 1px solid #80bdff;box-shadow: 0 0 0.5rem 0.1rem rgba(0,123,255, 0.25);'}
+
+            Prct = TapC[i]/PopTot*100;
+            Prct=Prct.toFixed(NbDec);
+            var nomb=  Math.round(Prct);
+
+
+            var r = document.querySelector(':root');
+            r.style.setProperty('--pct', nomb);
+
+            Case += `<div style="height:40px;float:left;width:100%" onclick= selMod(`+ i + `)> 
+                
+                <div  class="Prct" style="height:30px;position:absolute;left:50px;cursor:pointer; width:`+ nomb  + `%;` + couleur + `"></div>
+                <div  style="padding-top:5px;height:30px;position:absolute;left:60px;width:100%;cursor:pointer;">`+  ModaR[i] + `   |   ` + TapC[i] + ` (`+ Prct+` %) </div>   
+            
+                </div> <br>`;
+
+
+             
+
+
+
+         }
+
+    }
+
+   
+    Case += `
+
+
+    <button class="btn btn-primary"  onclick= "AjoutVCr()" type="button" style="width:200px;height:50px;float:left;margin-top:10px;"> Créer la variable </button>
+    
+    `
+
+
+
+    Case += `</div>`;
+    HCell.innerHTML = Case;
+    tr.appendChild(HCell);
+
+    if (document.getElementById('LibModC').value == "") {document.getElementById('LibModC').value = ModaR[ModCur]};
+
+
+
+
+
+}
+
+function ValidModRec() {
+
+    // création de la chaine de réponse 
+    
+    var nommod = document.getElementById("LibModC").value
+    
+    if (nommod=="") {
+    nommod = prompt("Choisissez un libellé pour la combinaison...", "Nouvelle modalité");
+    
+    }
+
+    var rg= Number(ModCur)
+    ModaR[Number(ModCur)] = nommod ;
+
+    ModCur++;
+    Aff_TcrC() 
+
+}
+
+
+function selCase(i,j) { // fonction permettant de déterminer le comportement en cas de clic sur une case
+
+
+    if (TcrC[i][j] ==0) {
+        TcrC[i][j] = ModCur ;
+        
+
+
+    } else {
+        if (TcrC[i][j] == ModCur) {TcrC[i][j] =0};
+    }
+
+    Aff_TcrC()
+    document.getElementById('btnvalmdrc').style.display = "block";
+
+}
+
+function survCase(cntrl, i,j,inorout) { // fonction permettant de déterminer le comportement en cas de survol d'une case
+
+     
+
+        if (TcrC[i][j] == 0) {
+
+            
+            if (inorout == "in") {
+            var coul = coulMods[Number(ModCur)]
+            } else {
+            var coul = coulMods[0]
+            }
+
+            cntrl.style.backgroundColor = coul;
+
+            //TcrC[i][j] = ModCur ;
+        }  
+    
+
+}
+
+function selMod(i) { // fonction permettant de déterminer le comportement en cas de clic sur une case
+
+    if (i==0) {return 0};
+    ModCur =i 
+     
+
+    Aff_TcrC()
+    document.getElementById('btnvalmdrc').innerText = "Modifier"
+    document.getElementById('btnvalmdrc').style.display = "block";
+}
+
+function sellig(i) { // sélection de toutes les cases de la ligne
+ 
+    // nb de cases cochées
+    var nbcoch =0
+    for (j=0;j<TcrC[i].length;j++){
+
+        if (TcrC[i][j] == ModCur) {nbcoch++}
+             
+    }
+
+    var decoch;
+     
+    if (TcrC.length==nbcoch) {decoch=true}
+
+    for (j=0;j<TcrC[i].length;j++){
+
+        if (TcrC[i][j] ==0) {
+            TcrC[i][j] = ModCur ;
+            
+        } else {
+           if (TcrC[i][j] == ModCur && decoch==true) {TcrC[i][j] =0};
+        }
+
+    }
+  
+     
+
+    Aff_TcrC()
+    document.getElementById('btnvalmdrc').style.display = "block";
+
+};
+
+function selcol(j) { // sélection de toutes les cases de la colonne
+ 
+    var nbcoch =0
+    for (i=0;i<TcrC.length;i++){
+            
+        if (TcrC[i][j] == ModCur) {nbcoch++}
+             
+    }
+
+    var decoch;
+    if (TcrC.length==nbcoch) {decoch=true}
+    
+    
+
+    for (i=0;i<TcrC.length;i++){
+
+        if (TcrC[i][j] ==0) {
+            TcrC[i][j] = ModCur ;
+            
+        } else {
+            if (TcrC[i][j] == ModCur && decoch==true) {TcrC[i][j] =0};
+        }
+
+    }
+  
+     
+
+    Aff_TcrC()
+    document.getElementById('btnvalmdrc').style.display = "block";
+
+};
+
+function AjoutVCr(){// création de la variable par croisement 
+
+        // ajout de la colonne
+        var col = Nom.length
+        var nomvar = document.getElementById('NomC').value;
+        var libvar = document.getElementById('LibC').value;
+
+        // définition du code max
+        
+        var nbcomb = 0;
+
+        for (m=0;m<TapC.length;m++){
+        if (TapC[m]>0){nbcomb = m}    
+        }
+        
+
+        // Agrandissement du tableau des variables
+        var nomvar = col;  
+        Nom.splice(col,0,nomvar);
+        Posi.splice(col,0,'2');
+        CdMax.splice(col,0,nbcomb);
+        Reco.splice(col,0,' ');
+        TypVar.splice(col,0,'a');
+        Libellé.splice(col,0,libvar);
+
+        NbVar++;
+
+
+
+        // agrandissement du tableau des modalités
+        Moda.splice(col,0,"0")
+        ModaO.splice(col,0,"0")
+
+        Moda[col] = new Array(nbcomb)
+        ModaO[col] = new Array(nbcomb)
+
+ 
+        for (m=0;m<nbcomb+1;m++){
+            Moda[col][m] = ModaR[m];
+            ModaO[col][m] = Moda[col][m];
+        }
+
+
+        // agrandissement de la base de données
+        for (l=0; l<BDD.length; l++) {
+
+            // définition contenu de la ligne
+
+            var v1= Number(BDD[l][vLd])
+            var v2= Number(BDD[l][vCd])
+
+            var combi= TcrC[v1][v2]
+
+            BDD[l].splice(col,0,combi)
+
+        }
+
+
+
+
+
+        ChargerListVar()
+        Vidage("TabBDD")
+        vL = col;
+        T_A_P()
+
+        // extension du dictionnaire des modalités
+
+        // définition des valeurs 
+
+        // sortie 
+
+}
+ 
 
 
 function Traitements() {

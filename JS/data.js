@@ -78,7 +78,7 @@ var openPOS = function(event) {
         // split du texte par lignes \n
         lignesPOS= text.split("\n");
         ChargerPOS() ;
-        chargerREC() ;
+        //chargerREC() ;
     };
 
     reader.readAsText(input.files[0],'windows-1252');
@@ -293,7 +293,9 @@ function DATversBDD() {
 ////////////////////////////////////////////////////////////////////////////////////////////////
 function chargerREC() {
 
+    return 0; // la fonction a été remplacée par ValApRec qui interprète les règles de recodage à chaque affichage (plus lent mais plus souple )
 
+/*
     // tableau des recodages (un par variable)
     TabRec= new Array (Number(Nom.length));
 
@@ -360,7 +362,7 @@ function chargerREC() {
 
     }
 
-
+*/
 
 }
 
@@ -575,7 +577,7 @@ var LireZip = function(event) {
                 Traitements()
                 endWait()
 
-                //B_A_S_E();
+                B_A_S_E();
             });
         ;}
 
@@ -858,7 +860,7 @@ function TR2versBDD(lignesTR2) {
 
     //ChargerPOS();
     ChargerListVar();
-    chargerREC();
+    //chargerREC();
 
 
     Traitements();
@@ -1265,7 +1267,7 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
     // chargement de la base
     ChargerListVar();
-    chargerREC();
+    //chargerREC();
 
 
     Traitements();
@@ -1314,3 +1316,10 @@ function EffacePnd() {
     t.value = 'Pas de pondération';
     QuelTri()
 }
+
+// Avertissement en cas de sortie sans sauvegarde
+window.onbeforeunload = function() {
+    
+    return "Des modifications peuvent ne pas être enregistrées";
+  
+ };

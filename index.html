@@ -113,22 +113,7 @@
             <hr>
 
             <h2 style="color:white"> Historique des modifications </h2>
-            <h4 style="color:white"> Nouveautés de la version 1.6 </h4>
-
-            <p style="font-size: 1rem"> - Tri et modification des données via l'interface de la base de données  <br>
-             - Enrichissement de l'interface de sélection des variables </p><br>
-
-
-            <h3 style="color:white"> Nouveautés de la version 1.2 </h3>
-
-            <p style="font-size: 1rem"> - Importation directe des classeurs EXCEL</p><br>
-
-            <h3 style="color:white"> Nouveautés de la version 1.1 </h3>
-
-            <p style="font-size: 1rem" > - prise en compte des variables numériques (histogrammes, recodages, croisements)<br>
-             - gestion des variables à réponses multiples dans les croisements<br>
-            - ajout d'une fonction de pondération (voir dans les options de la variable en ligne</p><br>
-
+            
 
         </div>
 
@@ -144,7 +129,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="openInfos()">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.2.0</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.2.3</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -451,7 +436,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/Base_POF_0.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/Base_POF_1.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
@@ -485,6 +470,7 @@
 <script src="JS/variables.js"></script>
 <script src="JS/data.js"></script>
 <script src="JS/tris.js"></script>
+<script src="JS/stats.js"></script>
 <script src="JS/recod.js"></script>
 
 </body>
