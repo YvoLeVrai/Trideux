@@ -48,6 +48,7 @@ var Tap=[]; // tris à plat des effectifs par modalité (variables quali)
 var TapX=[]; // tri à plat par lignes (pour le tableau croisé)
 var TapQ=[]; // tri à plat des valeurs et effectifs pour les variables quanti
 var Tcr=[]; // tri croisé
+var TcrTh= [] // tableau des effectifs théoriques sous l'hypothèse d'indépendance
 var MrgX=[]; // marges en lignes
 var MrgY=[]; // marges en colonnes
 

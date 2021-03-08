@@ -2485,11 +2485,12 @@ function T_C_R(x,y,complet) {
 
     }
 
-    // index de la variable en lignes
-    //var x = vL
+    // index de la variable en lignes (si manquant)
+    if (x==undefined){x = vL}
 
-    // index de la variable en colonnes
-    //var y = vC
+    // index de la variable en colonnes (si manquant)
+    if (y==undefined){y = vC}
+     
 
 
     if (x<=0) {vL=1; return 0;}
@@ -2847,24 +2848,45 @@ function T_C_R(x,y,complet) {
 function khi(x,RgDpX,y,RgDpY){
     //Calcul du khi2
 
-    
-
         Khi2=0;
         lnonvide=0;
         cnonvide=0;
         theoinf5=0;
         theoinf1=0;
 
+    // tableau des effectifs théoriques
+    TcrTh= new Array (Number(CdMax[x])+1);
+
+    //déclaration
+    for (i = 0; i < TcrTh.length; i++) {
+        TcrTh[i]= new Array (Number(CdMax[y])+1);
+    }
+
+    // mise à zéro
+    for (i = 0; i < Number(CdMax[x])+1; i++) {
+        for (j = 0; j < Number(CdMax[y])+1; j++) {
+            TcrTh[i][j]= 0;
+        }
+    }
+
+
 
         for (i = RgDpX; i < Number(CdMax[x])+1; i++) {
 
             for (j = RgDpY; j < Number(CdMax[y])+1; j++) {
 
-                var ContribCase= Contrib(Tcr[i][j],MrgX[i],MrgY[j],PopTot);
 
-                if (isNaN(ContribCase)) {}
-                else {
-                    Khi2 = Khi2 + ContribCase;
+                if (MrgX[i]>0 && MrgY[j]>0 ) { // évitemment des colonnes vides
+
+                    TcrTh[i][j] = MrgX[i]*MrgY[j]/PopTot
+
+                    var ContribCase= Contrib(Tcr[i][j],MrgX[i],MrgY[j],PopTot);
+
+                    if (isNaN(ContribCase)) {}
+                    else {
+                        Khi2 = Khi2 + ContribCase;
+                    }
+
                 }
 
 
@@ -3130,10 +3152,18 @@ function khi(x,RgDpX,y,RgDpY){
                         valaff=PrctY
                     }
 
+
+                    // signalement des eff. théo inf. 5
+                    var styleeff= ""
+                    if (TcrTh[i][j] < 5) {
+                        styleeff="style=color:red"
+                    }
+
+
                     // effectifs
                     if (document.getElementById('ChkEff').checked ==true ) {
 
-                        Case +=`<div class= 'effectifs'>  `+eff+ `</div>`;}
+                        Case +=`<div class= 'effectifs' ` + styleeff + ` >  `+eff+ `</div>`;}
 
                     else {
                         var txt = ""
