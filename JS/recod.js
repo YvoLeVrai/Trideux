@@ -300,6 +300,173 @@ function degrouper() {
 
 }
 
+
+function veilleChkTCR() { // fonction de préparation aux regroupements dans les TCR
+
+    var listchkL= document.getElementsByClassName("ChkModL")
+    var listchkC= document.getElementsByClassName("ChkModC")
+ 
+
+    var nbchkl=0
+    var nbchkc=0
+
+    for (l=0; l<listchkL.length;l++) {
+        if (listchkL[l].checked ==true ) { 
+            nbchkl++; 
+        }
+
+        if (listchkL[l]) {listchkL[l].style.display='inline-block';}
+    }
+
+    for (c=0 ; c<listchkC.length;c++) {
+        if (listchkC[c].checked ==true ) { 
+            nbchkc++;
+        }
+
+        if (listchkC[c]){ listchkC[c].style.display='inline-block';} 
+    }
+
+
+    // affichage des blocs
+    if (nbchkl >1 || nbchkc >1 ) {
+
+       VoirBloc('regroupTCR');
+
+
+    } else {
+        CacheBloc('regroupTCR');
+    }
+
+}
+
+
+function regrouperLC() { //gestion du regroupement des lignes et/ou colonnes 
+
+    // copie du TCR 
+
+    // analyse des lignes 
+    var preml =-1
+    for (i=0;i<Tcr.length;i++) {
+        var nomchk = 'ChkModL' + i
+            
+        var valchk = document.getElementById(nomchk)
+        if (valchk) {
+
+            if (valchk.checked) {
+
+                if (preml==-1) {
+                    
+                    preml=i;}  // définition de la première case cochée
+                    
+                else {
+                    
+                    regroupLignes(preml,i)   
+
+                }
+            }
+
+        }
+
+
+    }
+
+
+    // analyse des colonnes 
+    var premc =-1
+    for (j=0;j<Tcr[0].length;j++) {
+        var nomchk = 'ChkModC' + j
+            
+        var valchk = document.getElementById(nomchk)
+        if (valchk) {
+            if (valchk.checked) {
+
+                if (premc==-1) {
+                    
+                    premc=j;}  // définition de la première case cochée
+                    
+                else {
+                    
+                    regroupColonnes(premc,j)   
+
+                }
+            }
+        }
+
+    }
+
+    
+    // affichage du nouveau tableau
+    var RgDpX, RgDpY;
+    if (NRX == false ) {
+        RgDpX=1; }
+    else {
+        RgDpX = 0;
+    }
+
+    if (NRY == false ) {
+        RgDpY=1; }
+    else {
+        RgDpY = 0;
+    }
+
+    //calcul du nouveau khi2
+    Vidage('TabTCR')
+
+    VarMul = EstMulti(x,ModaM);
+
+
+
+
+    if (VarMul[0]==true) {
+        var multi=true;
+    } else {
+        khi(vL,RgDpX,vC,RgDpY)
+    }
+            
+    
+    Aff_T_C_R(vL, RgDpX, vC, RgDpY, multi) 
+
+
+}
+
+
+function regroupLignes(l1,l2){ // fonction de regroupement effectif des lignes
+
+    for(c=0;c<Tcr[l1].length;c++) {
+
+        //ajout des valeurs
+        Tcr[l1][c] +=Tcr[l2][c] ;
+        Tcr[l2][c] = 0 ;
+        
+    }
+
+   // mise à jour du nom de modalité 
+    ModaX[l1] += ' + ' + ModaX[l2] ;
+     // vidage de la marge
+     MrgX[l1]+=MrgX[l2] ;
+     MrgX[l2]=0 ;
+
+}   
+
+function regroupColonnes(c1,c2){ // fonction de regroupement effectif des lignes
+
+    for(l=0;l<Tcr.length;l++) {
+
+        //ajout des valeurs
+        Tcr[l][c1] +=Tcr[l][c2] ;
+        Tcr[l][c2] = 0 ;
+        
+    }
+
+   // mise à jour du nom de modalité 
+    ModaY[c1] += ' + ' + ModaY[c2] ;
+    // vidage de la marge
+    MrgY[c1]+=MrgY[c2]; ;
+    MrgY[c2]=0 ;
+
+}   
+
+
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Codage logique des questions à choix multiples
 ///////////////////////////////////////////////////////////////////////////////////////////

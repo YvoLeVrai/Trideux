@@ -432,6 +432,8 @@ select:invalid { color: gray; }
 
 }
 
+ 
+
 .TabTri tr:nth-child(odd){background-color: #f2f2f2;}
 
 .TabTri tr:hover {background-color: #ddd;}
@@ -487,9 +489,16 @@ select:invalid { color: gray; }
 
 #TabTCR th {
     height:50px;
-    max-width: 100px;
-    width:100px;
+    max-width: 200px;
+    width:200px;
     padding-top: 0px;
+}
+
+#TabTCR th:nth-child(1)  {
+    height:130px;
+    max-width:300px;
+    width:300px;
+     
 }
 
 .btnTCR {
@@ -953,6 +962,10 @@ select:invalid { color: gray; }
  
 .imgdown {
     background-image: url("down.png");
+}
+
+.imginterv {
+    background-image: url("interv.png");
 }
 
 .process {

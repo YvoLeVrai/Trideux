@@ -733,7 +733,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
                       </div> `;
 
     // ajout du bouton dégrouper
-    strpied +=  `<div class="btn btn-warning" id="degroup" style="display:none;" onclick="degrouper()"> Dégrouper </div>`;
+    strpied +=  `<div class="btn btn-warning" id="degroup" style="display:none;width:300px;" onclick="degrouper()"> Dégrouper </div>`;
 
 
 
@@ -2834,7 +2834,9 @@ function T_C_R(x,y,complet) {
     if (complet == false) {
     //return(TCR,ModaX,ModaY);
     } else {
-        if (multi==false) {khi(x,RgDpX,y,RgDpY)}
+        if (multi==false) {
+            khi(x,RgDpX,y,RgDpY)
+            }
     Aff_T_C_R(x, RgDpX, y, RgDpY, multi)
     }
 }
@@ -2988,8 +2990,8 @@ function khi(x,RgDpX,y,RgDpY){
 
 
         <div style="float:left">
-
-               <button  class="btn btn-outline-primary imgbtn imgup" onclick="vL--;QuelTri()" type="button"></button><br>
+               <button  class="btn btn-outline-primary imgbtn imginterv" onclick="intervLC()" type="button"></button><br>
+               <button  class="btn btn-outline-primary imgbtn imgup" onclick="vL--;QuelTri()" type="button" style="margin-top:2px"></button><br>
                <button  class="btn btn-outline-primary imgbtn imgdown " onclick="vL++;QuelTri()" type="button" style="margin-top:2px"></button>
                </div>
 
@@ -3000,13 +3002,16 @@ function khi(x,RgDpX,y,RgDpY){
 
     tr.appendChild(HCell);
 
-    for (j=RgDpY;j<Number(CdMax[y])+1;j++) {
 
+     var caseMod ="" ;  
+
+    for (j=RgDpY;j<Number(CdMax[y])+1;j++) {
+        caseMod = `<label style="cursor:pointer;font-weight: bold;" ><input type="checkbox" class = "ChkModC" id="ChkModC` + j + `" value="1" onclick = "veilleChkTCR()" style="margin-right : 10px;display:none"></input>` + ModaY[j]+ `</label>`
 
         //n'affiche l'entête que s'il y a une colonne
         if (MrgY[j]>0) {
             var HCell = document.createElement("th");
-            HCell.innerHTML =ModaY[j];
+            HCell.innerHTML = caseMod 
 
             if (j==0){ HCell.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.45em;float: right;margin-right: 3px;margin-top:-15px;"  onclick="SsNr('Y')"></button>`}
 
@@ -3025,16 +3030,17 @@ function khi(x,RgDpX,y,RgDpY){
     //valeurs
 
     for (i = RgDpX; i < Tcr.length; i++) {
-
+ 
 
 
         if (MrgX[i]>0) { //n'affiche la ligne que si elle contient des valeurs
+        caseMod = `<label style="cursor:pointer;font-weight: bold;" ><input type="checkbox" class = "ChkModL" id="ChkModL` + i + `" value="1" onclick = "veilleChkTCR()" style="margin-right : 10px;display:none">`+ ModaX[i] + `</input>`
 
             var tr = tbl.insertRow();
             var Case;
 
             var td = tr.insertCell();
-            td.innerHTML =  ModaX[i]
+            td.innerHTML =  caseMod  
             if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
 
             //td.appendChild(document.createTextNode(Moda[x][i]));
@@ -3138,7 +3144,7 @@ function khi(x,RgDpX,y,RgDpY){
                     var listChk=['ChkEff', 'ChkPT','ChkPL','ChkPC']
                     var valPct=[eff, PrctT,PrctX,PrctY]
 
-                    for (chk=0;chk<4;chk++){
+                    for (chk=0;chk<4;chk++){ // analyse du nombre de valeurs à afficher par case (pour remplacer les effectifs le cas échéant)
                         if (document.getElementById(listChk[chk]).checked ==true ) {
                             nbvalaff++;
                             valaff = valPct[chk]
@@ -3155,7 +3161,7 @@ function khi(x,RgDpX,y,RgDpY){
 
                     // signalement des eff. théo inf. 5
                     var styleeff= ""
-                    if (TcrTh[i][j] < 5) {
+                    if (multi==false && TcrTh[i][j] < 5) {
                         styleeff="style=color:red"
                     }
 
@@ -3427,7 +3433,11 @@ function khi(x,RgDpX,y,RgDpY){
         strpied+=`<p style="color:rgb(255,10,10);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
     }
 
-    Pied.innerHTML = strpied
+    Pied.innerHTML = strpied 
+    // ajout du bouton grouper
+    Pied.innerHTML += `<div class = 'cadrepied' style="float:left;width:1000px">
+    <div class="btn btn-primary" id="regroupTCR" style="display:none;width:200px" onclick="regrouperLC()"> Regrouper</div>
+    </div>`;
 
 
     document.body.appendChild(Pied);
@@ -3446,6 +3456,17 @@ function SsNr(sens) {
     T_C_R(vL,vC)
 
 }
+
+function intervLC() { // interversion Lignes et colonnes
+var vT = vL;
+vL=vC;
+vC=vT;
+
+QuelTri()
+
+
+}
+
 
 function ComparVars(x,y) {
 
