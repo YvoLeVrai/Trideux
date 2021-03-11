@@ -101,3 +101,10 @@ var TcrC=[] // tableau des combinaisons pour les recodages croisés
 var TapC=[] // tri à plat des modalités créées
 var ModCur=0 // modalité en cours de création 
 var ModaR=[] //tableau des modalités recodées
+
+// variables utilisées par la fonction de création de variables score
+
+var TabScr=[] // tableau des combinaisons et de leurs scores
+var TapS = [] // tri à plat de la variable score
+var vS=0 // variable score courante
+var mS=0 // modalité score courante

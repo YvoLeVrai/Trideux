@@ -2247,8 +2247,8 @@ function TabRecCrois(vLd, vCd){ // fonction permettant d'afficher le croisement 
 
 
 
-document.getElementById("sstitrebdd").style.display='none'; //.innerText= "Cliquez sur les cases pour définir les combinaisons :"
-document.getElementById("blocnvv").style.display="block"
+    document.getElementById("sstitrebdd").style.display='none'; //.innerText= "Cliquez sur les cases pour définir les combinaisons :"
+    document.getElementById("blocnvv").style.display="block"
 
 
 
@@ -2675,8 +2675,486 @@ function AjoutVCr(){// création de la variable par croisement
         // sortie 
 
 }
- 
 
+function AjoutVarScore() {
+
+    
+    var elmnt = document.getElementById('TabBDD');
+    if (elmnt) {elmnt.style.display="none"} //{elmnt.remove()}
+
+    var elmnt = document.getElementById("Pied");
+    if (elmnt) {elmnt.style.display="none"}
+
+    document.getElementById("titrebdd").innerText= "Créer un variable score"
+    document.getElementById("sstitrebdd").innerHTML= `` // `<H3> Nouvelle variable  </h3>  <a href="https://utbox.univ-tours.fr/s/GEwx9XSc7mmo4fe" target="_blank" style="float:right">demo</a>`
+
+    vS=0;
+    mS=-1
+    
+    TabScr=[]
+
+    // affichage des fonctionnalités dans l'entête du tableau de base
+    var titre = document.getElementById('Titre')
+    var tr = titre.insertRow();
+    var HCell = document.createElement("th");
+    HCell.colSpan=1;
+    var Case = ` 
+
+    <div id ="blocnvv" >
+
+       
+
+        <div  class="input-group-prepend" style="width:100%;">
+
+        <span class="input-group-text"> Nom :  </span> `
+
+        Case += `<input  type="text" id="NomS" class="form-control" style = "width:150px;placeholder="Nom?" value = ` + Nom.length + ` >
+
+        <span class="input-group-text"> Libellé :  </span> `
+
+        Case += ` <input  type="text" id="LibS" class="form-control" placeholder="Libellé de la variable?" >
+
+        </div>
+
+        <br>
+     
+
+        <h4> Choisissez les variables/modalités à additionner </h4> 
+
+    </div>
+
+    <div class="input-group-prepend" >
+                       
+
+            <span class="input-group-text" onclick="openVars('LD')"> Variable </span>
+
+            <input onclick="openVars('LS')" onkeyup="FiltrerVars(event)" id= "TxtLS" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'LS')">
+
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
+
+
+    </div>
+
+    <div style="width:100%"> 
+        <select id="ComboS" class="custom-select"  onchange='VoirBloc("btnvalsc")' multiple="multiple" style = "float: left; margin-bottom: 2px;display:none">
+            <option value="" disabled selected>Choisissez une ou plusieurs modalités</option>
+        </select>  
+    </div>
+     
+    <br>
+    <br>
+
+    <button id= "btnvalsc" class="btn btn-primary"  onclick= "AjoutScores()" type="button" style="margin-top:10px;height:38px;width:250px;float:right;display:none;">Ajouter </button>
+    
+   
+   
+    <div style="clear:both;"></div>
+
+    <div id="listscores">  <h4> Scores ajoutés </h4>
+
+                <div class="input-group-prepend" > 
+                       
+                 
+                       <span class="input-group-text" style = "width:10%;"> Variable </span>
+                       <span class="input-group-text" style = "width:40%;"> Libellé </span>
+                       <span class="input-group-text" style = "width:35%;"> Modalité </span>
+                       <span class="input-group-text" style = "width:15%;"> Score </span>
+           
+           
+           
+               </div>
+                 
+               
+    </div>
+
+    <div id="tapscores" style='display:none'> Tri à plat temporaire </div>
+
+    `
+    
+                 
+    HCell.innerHTML = Case;
+    tr.appendChild(HCell);
+     
+
+     
+
+}
+
+function ModasScore(z) {
+
+     
+    document.getElementById("ComboS").style.display='block';    
+    document.getElementById("ComboS").options.length = 0;
+
+    if(TypVar[z]=='a') {
+
+        for (m=0;m<= CdMax[z];m++) {
+            document.getElementById("ComboS").options[m]=new Option(Moda[z][m] , m , true, false);
+        }
+
+        var nbl= document.getElementById("ComboS").length
+        if (nbl<5) { 
+        document.getElementById("ComboS").size = nbl;
+        } else {
+        document.getElementById("ComboS").size = 5;
+        }
+    }
+
+    if(TypVar[z]=='e' ||TypVar[z]=='r' ) {
+
+         
+            document.getElementById("ComboS").options[0]=new Option("Variable quantitative : score = valeur" , 0 , true, false);
+        
+
+        document.getElementById("ComboS").size = 1;
+        VoirBloc("btnvalsc")
+
+    }
+
+
+}
+
+function AjoutScores() { // permet d'ajouter les modalités au tableau des scores
+
+
+    if (TypVar[vS]=='a') { // ajout des variables quali
+
+        var select = document.getElementById( 'ComboS' );
+        var nbm=0
+        for(m=0;m<select.length;m++) {
+            
+            if (select.options[m].selected) {
+                
+                //évitement des doublons
+                var dejala=false 
+                for (s=0;s<TabScr.length;s++){
+                    if (TabScr[s][0]==vS && TabScr[s][1]==m){dejala=true}
+                }
+                if (dejala){continue}
+
+                //agandissement du tableau
+                var nbsc = TabScr.push('')
+                nbsc--;
+                
+                TabScr[nbsc] = new Array(2)
+                TabScr[nbsc][0] = vS;
+                TabScr[nbsc][1] = m;
+                TabScr[nbsc][2] = 1;
+
+
+                nbm++
+
+                select.options[m].selected=false;
+
+            }
+
+        }
+
+        if (nbm>0) {
+
+            voirScores()
+        }
+
+    } else { // variables quanti
+
+                        //évitement des doublons
+            var dejala=false 
+            for (s=0;s<TabScr.length;s++){
+            if (TabScr[s][0]==vS){dejala=true}
+            }
+            if (dejala){return 0}
+
+           //agandissement du tableau
+           var nbsc = TabScr.push('')
+           nbsc--;
+           
+           TabScr[nbsc] = new Array(2)
+           TabScr[nbsc][0] = vS;
+           TabScr[nbsc][1] = 0;
+           TabScr[nbsc][2] = CdMax[vS];
+
+           voirScores()
+
+
+    }
+
+
+// dénombrement des options
+
+//
+
+
+}
+
+function voirScores() { // affiche les modalités score déjà choisies
+
+document.getElementById("listscores").innerHTML=""
+
+var Liste = `<div ><h4> Scores ajoutés </h4>
+
+                <div class="input-group-prepend" > 
+                       
+                 
+                       <span class="input-group-text" style = "width:10%;"> Variable </span>
+                       <span class="input-group-text" style = "width:40%;"> Libellé </span>
+                       <span class="input-group-text" style = "width:35%;"> Modalité </span>
+                       <span class="input-group-text" style = "width:15%;"> Score </span>
+           
+           
+           
+               </div>
+                 
+               `
+
+    for (s=0;s<TabScr.length;s++) {
+
+
+    Liste+= `
+    
+    <div class="input-group-prepend" style="margin-top:0px"> 
+                       
+
+             
+
+            <input type="text" class="form-control" style = "width:10%;" onkeypress="return false;" placeholder="` + Nom[TabScr[s][0]]+ `"   >
+            <input type="text" class="form-control" style = "width:40%;" onkeypress="return false;" placeholder="` + Libellé[TabScr[s][0]]+ `" >`
+
+            if (TypVar[TabScr[s][0]]== 'a') {
+            
+                Liste+= `
+
+                <input type="text" class="form-control" style = "width:35%;" onkeypress="return false;" placeholder="` + Moda[TabScr[s][0]][TabScr[s][1]] + `"   >
+                <input type="text" class="form-control" style = "width:10%;" onkeypress="return false;"  placeholder="` +  TabScr[s][2] + `" >
+                <button class="btn btn-outline-primary imgbtn imgminus" style="height:38px" type="button" onclick="scoreMoins(`+s+`)"></button>
+                <button class="btn btn-outline-primary imgbtn imgplus"  style="height:38px" type="button" onclick="scorePlus(`+s+`)"></button>`
+
+            } else {
+
+                Liste+= `
+
+                <input type="text" class="form-control" style = "width:35%;" onkeypress="return false;" placeholder="..."   >
+                <input type="text" class="form-control" style = "width:13.3%;" onkeypress="return false;"  placeholder="valeur (max:` + CdMax[TabScr[s][0]] + `)" >`
+
+            }
+
+
+            Liste+= `
+            <button class="btn btn-outline-warning imgbtn imgtrash" style="height:38px" type="button" onclick="scoreSuppr(`+s+`)"></button>
+
+
+    </div>
+
+    `    
+    }
+
+    Liste +=`</div>`;
+
+    document.getElementById("listscores").innerHTML=Liste;
+    document.getElementById("listscores").style.display="block";
+
+    tapscores();
+
+
+}
+
+function scorePlus(rg){
+TabScr[rg][2]++; 
+voirScores()
+}
+
+function scoreMoins(rg){
+    if (TabScr[rg][2]<=1){return}
+
+    TabScr[rg][2]--;
+    voirScores()
+}
+
+function scoreSuppr(rg){
+    TabScr.splice(rg,1);
+    voirScores()
+}
+
+function tapscores(){ // fonction affichant les scores cumulés des modalités
+    //effacement de l'ancien tri a plat
+    document.getElementById("tapscores").innerHTML = "";
+
+    // calcul du tri à plat
+    
+
+    // définition de la valeur max
+    var scmax=0;
+    for (s=0;s<TabScr.length;s++){
+    scmax+= TabScr[s][2] ;   
+    }
+
+    TapS= new Array(scmax+1)
+    for(t=0;t<scmax+1;t++) {TapS[t]=0} //mise à zéro
+
+    // analyse de la BB
+
+    var scoreli=0
+
+    for(l=0;l<BDD.length;l++) {
+        scoreli=scoreligne(l);
+        
+        // incrémentation du tri à plat
+        scoreli=Math.round(scoreli)
+        TapS[scoreli]++;
+    }
+
+
+
+    // affichage du tri à plat
+
+     
+    var Case = ` <br> <h4> Tri à plat de la variable en préparation </h4> <br>`
+
+
+
+    for (i=0;i<TapS.length+1;i++){
+        
+         if (TapS[i]>0) {
+                     
+
+            Prct = TapS[i]/BDD.length*100;
+            Prct=Prct.toFixed(NbDec);
+            var nomb=  Math.round(Prct);
+
+
+            var r = document.querySelector(':root');
+            r.style.setProperty('--pct', nomb);
+
+            Case += `<div style="height:40px;float:left;width:100%" onclick= selMod(`+ i + `)> 
+                
+                <div  class="Prct" style="height:30px;position:absolute;left:50px;cursor:pointer; width:`+ nomb  + `%;"></div>
+                <div  style="padding-top:5px;height:30px;position:absolute;left:60px;width:100%;cursor:pointer;">`+  i + `   |   ` + TapS[i] + ` (`+ Prct+` %) </div>   
+            
+                </div> <br>`;
+
+
+             
+
+
+
+         }
+
+    }
+
+   
+    Case += `
+
+
+    <button class="btn btn-primary"  onclick= "AjoutVSc()" type="button" style="width:200px;height:50px;float:left;margin-top:10px;"> Créer la variable </button>
+    
+    `
+
+    document.getElementById("tapscores").innerHTML = Case;
+    document.getElementById("tapscores").style.display="block";
+
+}
+
+function scoreligne(l){ //renvoie le score obtenu par l'individu en fonction 
+
+var scoreli=0;
+
+for (s=0;s<TabScr.length;s++){
+
+    var vsc=TabScr[s][0];
+    var msc=TabScr[s][1];
+
+    var valmod=BDD[l][vsc]
+    
+    // application du recodage
+    var rgl = Reco[vsc]
+    if (rgl != "") {valmod=ValApRec(valmod,rgl)}
+    
+    if (TypVar[vsc] =='a') {
+
+        if (valmod==msc){scoreli += Number(TabScr[s][2]) }
+
+    } else {
+
+        scoreli +=valmod
+        
+    }
+       
+}
+
+return scoreli;
+
+
+}
+function AjoutVSc(){// création de la variable par score
+
+    // ajout de la colonne
+    var col = Nom.length
+    var nomvar = document.getElementById('NomS').value;
+    var libvar = document.getElementById('LibS').value;
+    if (libvar==""){libvar="variable score"}
+
+    // définition du code max
+    
+    var nbcomb = 0;
+    for (m=0;m<TapS.length;m++){
+    if (TapS[m]>0){nbcomb = m}    
+    }
+    
+
+    // Agrandissement du tableau des variables
+    var nomvar = col;  
+    Nom.splice(col,0,nomvar);
+    Posi.splice(col,0,'2');
+    CdMax.splice(col,0,nbcomb);
+    Reco.splice(col,0,' ');
+    TypVar.splice(col,0,'e');
+    Libellé.splice(col,0,libvar);
+
+    NbVar++;
+
+
+
+    // agrandissement du tableau des modalités
+    Moda.splice(col,0,"0")
+    ModaO.splice(col,0,"0")
+
+    Moda[col] = new Array(nbcomb)
+    ModaO[col] = new Array(nbcomb)
+
+
+    for (m=0;m<nbcomb+1;m++){
+        Moda[col][m] =m;
+        ModaO[col][m] =m;
+    }
+
+
+    // agrandissement de la base de données
+    for (l=0; l<BDD.length; l++) {
+
+        // définition contenu de la ligne
+
+        var scoreli = scoreligne(l)
+
+        BDD[l].splice(col,0,scoreli)
+
+    }
+
+
+
+
+
+    ChargerListVar()
+    Vidage("TabBDD")
+    vL = col;
+    prepTAP()
+    //T_A_P()
+
+    // extension du dictionnaire des modalités
+
+    // définition des valeurs 
+
+    // sortie 
+
+}
 
 function Traitements() {
     document.getElementById("accueil").style.display = "none";

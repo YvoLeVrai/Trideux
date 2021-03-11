@@ -71,7 +71,7 @@ function B_A_S_E() {
 
       <div class="dropdown-menu">
       <div class="dropdown-item" onclick= "AjoutVarCrois()" style="cursor:pointer;" > Par croisement </div>
-      <div class="dropdown-item"  onclick= "AjoutVarCalc()" style="cursor:pointer;display:none"> Calculée </div>
+      <div class="dropdown-item"  onclick= "AjoutVarScore()" style="cursor:pointer"> Par score </div>
        
 
       
@@ -1565,6 +1565,16 @@ function SelVar(rang) {
         vCd = rang; // variable courante du filtre
          
         if (vLd!=0) {TabRecCrois(vLd, vCd)}
+
+    }
+
+
+    if (FLCXR=="LS") { // en cas de variable pour création de variable score
+
+        vS = rang; // variable courante du filtre
+         
+        if (vS!=0) {ModasScore(vS)}
+
 
     }
 
