@@ -200,6 +200,10 @@ function ValidModifVar(){ // lancement manuel d'une règle de recodage saisie
     Nom[vL] = document.getElementById("TxtNom").value;
     Libellé[vL] = document.getElementById("TxtLib").value;
     var rgl = document.getElementById("TxtRglG").value;
+    
+    //suppresion des espaces
+    rgl = rgl.replace(/\s/g, '') 
+
     DicoRegle(vL);
     Reco[vL]=rgl;
     TypVar[vL]="" // forcer la recherche du type
@@ -412,18 +416,17 @@ function regrouperLC() { //gestion du regroupement des lignes et/ou colonnes
     //calcul du nouveau khi2
     Vidage('TabTCR')
 
-    VarMul = EstMulti(x,ModaM);
+    var VarMul1 = EstMulti(vLd,ModaX);
+    var VarMul2 = EstMulti(vCd,ModaY);
 
-
-
-
-    if (VarMul[0]==true) {
+    if (VarMul1[0]==true || VarMul2[0]==true) {
         var multi=true;
     } else {
         khi(vL,RgDpX,vC,RgDpY)
+        var multi=false;
     }
             
-    
+     
     Aff_T_C_R(vL, RgDpX, vC, RgDpY, multi) 
 
 
@@ -1386,6 +1389,7 @@ function SupprCol(col) {
     ChargerListVar()
     chargerREC()
 //if (vL > 1){vL--};
+    Vidage("TabTAP")
     T_A_P();
 
 }
@@ -2068,7 +2072,6 @@ function dossfichext(fich) { // renvoie le dossier, le nom de fichier sans exten
 function EstMulti(vm,tabmod) { //permet de déterminer si une variable est à choix multiples
 
     var mo;
-    var prescoup = false;
     var delimit = "";
     var ptv =0
     var slh =0
