@@ -30,6 +30,11 @@ h1 {
     margin-left: 40px;
 }
 
+h4 {
+ 
+    font-size: 1rem;
+}
+
 select {
 
     padding: 6px 12px;
@@ -442,7 +447,8 @@ select:invalid { color: gray; }
     padding-top: 12px;
     padding-bottom: 6px;
     text-align: left;
-    background-color:#3b8dbd;
+    background-color: #4b82a2;
+    /*background-color:#3b8dbd;*/
     color: white;
     padding-left: 6px;
 }
@@ -478,7 +484,7 @@ select:invalid { color: gray; }
 /* Affichage de la première colonne */
 
 #TabTCR td:nth-child(1) {
-    background-color:#3b8dbd;
+    background-color:#4b82a2;;
     color: white;
     /*background-color: #3b8dbd09;
     color: #3b8dbd;*/
@@ -968,6 +974,10 @@ select:invalid { color: gray; }
     background-image: url("interv.png");
 }
 
+.imggrph {
+    background-image: url("grph.png");
+}
+
 .process {
     float:left;
     height: 100%;
@@ -1075,4 +1085,16 @@ select:invalid { color: gray; }
 
 .modrec6{
     background-color: rgba(89, 245, 224, 0.5);
+}
+
+.okcalc{
+    border: 2px solid rgb(8, 133, 81);
+    box-shadow: 0 0 0.15rem 0.15rem rgba(20, 252, 155, 0.445);
+
+}
+
+.nocalc{
+    border: 2px solid #ff0000;
+    box-shadow: 0 0 0.15rem 0.15rem rgba(192, 9, 9, 0.582);
+
 }

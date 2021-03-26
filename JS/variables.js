@@ -63,6 +63,13 @@ var vcram=0;
 var theoinf5=0
 var theoinf1=0
 
+// variables liées à l'affichage des histogrammes
+var vuGrph = false
+var TcrH =[]
+var typgrph = 0;
+var tabcouls = ['#225979','#4b82a2','#3a9ed9', '#4fbeff', '#34376f', '#4b50a2a8','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1','#225979','#4b82a2','#3a9ed9', '#4fbeff', '#34376f', '#4b50a2a8','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1']
+
+
 var strpied; // pied des tableaux
 var strPiedPlain; // pied des tableaux pour la copie plainText
 
@@ -108,3 +115,6 @@ var TabScr=[] // tableau des combinaisons et de leurs scores
 var TapS = [] // tri à plat de la variable score
 var vS=0 // variable score courante
 var mS=0 // modalité score courante
+
+// variables utilisées par la fonction de création de variable par calcul
+var NbOps=0

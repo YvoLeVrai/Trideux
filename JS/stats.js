@@ -157,6 +157,7 @@ function Contrib(eff, margl, margc ,popu) {
 function loinorm(ddl,khi) {
 
     //if (khi < 3) {return 0.001;}
+    prob = 0;
 
     var co = new Array(5);
     co[1] = 0.3194;

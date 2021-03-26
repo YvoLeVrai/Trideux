@@ -72,6 +72,7 @@ function B_A_S_E() {
       <div class="dropdown-menu">
       <div class="dropdown-item" onclick= "AjoutVarCrois()" style="cursor:pointer;" > Par croisement </div>
       <div class="dropdown-item"  onclick= "AjoutVarScore()" style="cursor:pointer"> Par score </div>
+      <div class="dropdown-item"  onclick= "AjoutVarCalc()" style="cursor:pointer;"> Par calcul </div>
        
 
       
@@ -1916,7 +1917,7 @@ function AffE_X_P() {
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
-// Histogramme
+// Histogramme univarié
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -2056,8 +2057,16 @@ function Histo(cadre, col, qnts, Moy, vsel) {
         }
 
     }
+
+    
     // ajout de l'étiquette de légende
-    cnv.fillText(Libellé[vL], 350, 490);
+    var lib = Nom[vL] + " - " + Libellé[vL] 
+    var lartxt =  cnv.measureText(lib).width 
+    lartxt=Math.floor(lartxt) +5
+
+    cnv.fillText(lib, margG + (lardisp - lartxt)/2,  hautot - margB + 35);
+
+     
 
 
     // ordonnées
@@ -2936,7 +2945,11 @@ function khi(x,RgDpX,y,RgDpY){
             if (proba==0){proba ="< 0.001"}
         }
 
-        var khi2max = Khi2/(PopTot*deglib);
+        var minmarges = 0 
+        if (lnonvide <= cnonvide){minmarges=lnonvide-1;}
+        if (lnonvide > cnonvide){minmarges=cnonvide-1;}
+
+        var khi2max = Khi2/(PopTot*minmarges);
         vcram = Math.sqrt(khi2max);
         vcram = vcram.toFixed(3);
 
@@ -2955,8 +2968,11 @@ function khi(x,RgDpX,y,RgDpY){
     titre.id='Titre';
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
-    titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > Tableau croisé
-            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> `
+    titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[vC] + ` en fonction de ` + Nom[vL] + `
+     
+    <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right; margin-left:3px" ></div> 
+    <div class="btn btn-outline-primary btn-sm imgbtn imggrph" onclick="vuGrph=true;typgrph=2;QuelTri()" style="float:right" ></div>        
+    `
     /*
         <a>` + Nom[y] + ` | ` + Libellé[y] + `</a> <br>
         <a style="font-size:0.75rem;color: gray">en fonction de</a> <br>
@@ -2965,7 +2981,34 @@ function khi(x,RgDpX,y,RgDpY){
         `
        */
 
-    titre.innerHTML += `</div>`;
+    titre.innerHTML += `</div>`
+    
+    
+    
+    var affhist= "none"
+    if (vuGrph==true){affhist="block";}
+    titre.innerHTML += `<div id = "blocHisto" style="float:none;display:`+ affhist + `"> 
+
+        
+
+        <select id="choixHisto" class="custom-select"  style = " margin-bottom: 2px;width:300px;font-size:1rem;" onchange='HistoTcr()'>
+        <option value="0" disabled>Choisissez un type de graphique</option>
+        <option value="1">Histogramme des effectifs</option>
+        <option value="2">Histogramme % en lignes (par colonnes) </option>
+        <option value="3">Histogramme % en lignes (par lignes) </option>
+        
+        
+        </select>  
+        
+        
+
+    
+
+    <canvas id="fondTcr" width=1000 height=650 style="border:1px solid #333;display: `+ affhist + `"></canvas>
+    </div> 
+    
+    
+    `;
 
 
     //  }
@@ -3051,6 +3094,7 @@ function khi(x,RgDpX,y,RgDpY){
 
             var td = tr.insertCell();
             td.innerHTML =  caseMod  
+
             if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
 
             //td.appendChild(document.createTextNode(Moda[x][i]));
@@ -3103,12 +3147,12 @@ function khi(x,RgDpX,y,RgDpY){
                             //r.style.setProperty('--hpem', hPEM);
 
                             var stylePEM = `style = "background: linear-gradient(to bottom,
-                          white 0%,
-                          white ` + (50-hPEM) + `%,`
+                          rgba(255,255,255,0) 0%,
+                          rgba(255,255,255,0) ` + (50-hPEM) + `%,`
                                 + `rgba(11, 93, 168, 0.20)` + (50-hPEM) + `%,`
                                 + `rgba(11, 93, 168, 0.03) 50%,`
-                                + `white 51%,`
-                                + `white 100%)"`
+                                + `rgba(255,255,255,0) 51%,`
+                                + `rgba(255,255,255,0) 100%)"`
 
 
 
@@ -3119,12 +3163,12 @@ function khi(x,RgDpX,y,RgDpY){
                             var hPEM = Number(PEM/2)*-1;
 
                             var stylePEM = `style = "background: linear-gradient(to bottom,
-                          white 0%,
-                          white 50%,`
+                                rgba(255,255,255,0) 0%,
+                                rgba(255,255,255,0) 50%,`
                                 + `rgba(6, 42, 149, 0.05) 50%, `
                                 + `rgba(5, 0, 157, 0.2) ` + (50+hPEM) + `%,`
-                                + `white ` + (50+hPEM) + `%,`
-                                + `white 100%)"`
+                                + `rgba(255,255,255,0) ` + (50+hPEM) + `%,`
+                                + `rgba(255,255,255,0) 100%)"`
 
 
 
@@ -3161,6 +3205,13 @@ function khi(x,RgDpX,y,RgDpY){
                         }
                     }
 
+                    // substitution des effectifs théoriques aux effectifs
+                    if (document.getElementById("ChkTH").checked ==true ) {
+                         
+                        eff = TcrTh[i][j].toFixed(NbDec); 
+                    }
+
+
                     // % en colonnes (en haut à gauche)
                     if (document.getElementById('ChkPC').checked ==true && nbvalaff>1) {
 
@@ -3170,21 +3221,36 @@ function khi(x,RgDpX,y,RgDpY){
 
 
                     // signalement des eff. théo inf. 5
-                    var styleeff= ""
+                    var styleeff= ``
                     if (multi==false && TcrTh[i][j] < 5) {
-                        styleeff="style=color:red"
+                        styleeff+=`color:red;`
+                         
+                    }
+
+                    // signalement des résidus
+                    if (document.getElementById('ChkRS').checked ==true  ) {
+
+                        // calcul du résidu du khi²
+
+                        var resi= (eff - TcrTh[i][j]) / Math.sqrt(TcrTh[i][j])
+                        
+                        if (resi < -2 || resi > 2) {
+                        styleeff+=`font-weight:bold;`;
+                        }
+                        
                     }
 
 
-                    // effectifs
-                    if (document.getElementById('ChkEff').checked ==true ) {
 
-                        Case +=`<div class= 'effectifs' ` + styleeff + ` >  `+eff+ `</div>`;}
+                    // effectifs
+                    if (document.getElementById('ChkEff').checked ==true || document.getElementById('ChkTH').checked ==true ) {
+
+                        Case +=`<div class= 'effectifs' style="` + styleeff + `" >  `+eff+ `</div>`;}
 
                     else {
                         var txt = ""
                         if (nbvalaff==1){txt=valaff}
-                        Case +=`<div class= 'effectifs'> <label></label>`+txt+` </div>`;
+                        Case +=`<div class= 'effectifs'  style="` + styleeff + `" > <label></label>`+txt+` </div>`;
 
                     }
 
@@ -3214,6 +3280,38 @@ function khi(x,RgDpX,y,RgDpY){
 
                     var HCell = document.createElement("td");
                     HCell.innerHTML = Case ;
+
+
+                    //coloration des cases selon sens de la liaison
+                    
+
+                    if (document.getElementById('ChkCoul').checked ==true && multi==false) {
+                        
+                        if (Tcr[i][j]>TcrTh[i][j]) {
+                        HCell.style.backgroundColor="rgba(91, 230, 91, 0.24)";
+                        
+                            if (document.getElementById('ChkRS').checked ==true) { 
+
+                                if (resi < -2 || resi > 2) {
+                                HCell.style.backgroundColor="rgba(91, 230, 91, 0.45)";
+                                }
+                            }
+
+                        }
+                        if (Tcr[i][j]<TcrTh[i][j]) {
+                            HCell.style.backgroundColor="rgba(255, 121, 2, 0.22)";
+
+                            if (document.getElementById('ChkRS').checked ==true) { 
+
+                                if (resi < -2 || resi > 2) {
+                                HCell.style.backgroundColor="rgba(255, 84, 0, 0.36)";
+                                }
+                            }
+
+                        }
+                    
+                    }
+
                     tr.appendChild(HCell);
 
 
@@ -3416,8 +3514,7 @@ function khi(x,RgDpX,y,RgDpY){
 
     if (multi==false) {
         strPiedPlain += 'Khi² : ' +  Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `proba : ` + proba + " " + signif + '\r\nV de Cramér :' + vcram;
-        strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `
-              proba : ` + proba + "  " + signif 
+        strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + ` proba : ` + proba + "  " + signif 
 
               if (theoinf5>0) {
 
@@ -3445,14 +3542,29 @@ function khi(x,RgDpX,y,RgDpY){
 
     Pied.innerHTML = strpied 
     // ajout du bouton grouper
-    Pied.innerHTML += `<div class = 'cadrepied' style="float:left;width:1000px">
-    <div class="btn btn-primary" id="regroupTCR" style="display:none;width:200px" onclick="regrouperLC()"> Regrouper</div>
-    </div>`;
+    Pied.innerHTML += `<div id = "piedtcr" class = 'cadrepied' style="float:left;width:100%; display:none">
+    <div class="btn btn-primary" id="regroupTCR" style="width:200px" onclick="regrouperLC()"> Regrouper</div>
+    </div>
+     `
+
+
+    // ajout de l'histogramme
+    Pied.innerHTML += `
+    
+
+`;
+
 
 
     document.body.appendChild(Pied);
 
+    // affichage du graphique
+    if (typgrph>0) {
+        document.getElementById('choixHisto').value = typgrph
+        HistoTcr()
+    }
     ;
+
 
 
 };

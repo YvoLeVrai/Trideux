@@ -206,8 +206,9 @@ function ValidModifVar(){ // lancement manuel d'une règle de recodage saisie
 
     DicoRegle(vL);
     Reco[vL]=rgl;
-    TypVar[vL]="" // forcer la recherche du type
-    chargerREC()
+    
+    //TypVar[vL]="" // forcer la recherche du type
+     
     vuDetails=false;
 
     T_A_P()
@@ -334,11 +335,11 @@ function veilleChkTCR() { // fonction de préparation aux regroupements dans les
     // affichage des blocs
     if (nbchkl >1 || nbchkc >1 ) {
 
-       VoirBloc('regroupTCR');
+       VoirBloc('piedtcr');
 
 
     } else {
-        CacheBloc('regroupTCR');
+        CacheBloc('piedtcr');
     }
 
 }
@@ -2891,9 +2892,9 @@ function AjoutScores() { // permet d'ajouter les modalités au tableau des score
 
 function voirScores() { // affiche les modalités score déjà choisies
 
-document.getElementById("listscores").innerHTML=""
+    document.getElementById("listscores").innerHTML=""
 
-var Liste = `<div ><h4> Scores ajoutés </h4>
+    var Liste = `<div ><h4> Scores ajoutés </h4>
 
                 <div class="input-group-prepend" > 
                        
@@ -3149,13 +3150,506 @@ function AjoutVSc(){// création de la variable par score
     Vidage("TabBDD")
     vL = col;
     prepTAP()
-    //T_A_P()
+ 
 
-    // extension du dictionnaire des modalités
+}
 
-    // définition des valeurs 
 
-    // sortie 
+function AjoutVarCalc() {
+        
+    var elmnt = document.getElementById('TabBDD');
+    if (elmnt) {elmnt.style.display="none"} //{elmnt.remove()}
+
+    var elmnt = document.getElementById("Pied");
+    if (elmnt) {elmnt.style.display="none"}
+
+    document.getElementById("titrebdd").innerText= "Créer un variable calculée"
+    document.getElementById("sstitrebdd").innerHTML= `` // `<H3> Nouvelle variable  </h3>  <a href="https://utbox.univ-tours.fr/s/GEwx9XSc7mmo4fe" target="_blank" style="float:right">demo</a>`
+
+    vS=0;
+    mS=-1
+    
+    TabScr=[]
+
+    // affichage des fonctionnalités dans l'entête du tableau de base
+    var titre = document.getElementById('Titre')
+    var tr = titre.insertRow();
+    var HCell = document.createElement("th");
+    HCell.colSpan=1;
+    var Case = ` 
+
+    <div id ="blocnvv" >
+
+        <div  class="input-group-prepend" style="width:100%;">
+
+            <span class="input-group-text"> Nom :  </span> `
+
+            Case += `<input  type="text" id="NomS" class="form-control" style = "width:150px;placeholder="Nom?" value = ` + Nom.length + ` >
+
+            <span class="input-group-text"> Libellé :  </span> `
+
+            Case += ` <input  type="text" id="LibS" class="form-control" placeholder="Libellé de la variable?" >
+
+            </div>
+
+        <br>
+     
+
+        <h4> Composez le calcul à effectuer </h4> 
+
+        </div>
+
+
+    <div id ="operations" >
+ 
+        <div  class="input-group-prepend" style="width:100%;">
+        
+            <div class="dropdown" style = "float:left;width:40%;">
+
+                <input  type="text" id="TxtCalc0" class="form-control dropdown-toggle tcalc" style = "float:left; margin-bottom: 2px;" placeholder="Choisissez une variable ou saisissez une valeur" data-toggle="dropdown" onchange='testCalc()'>
+            
+                <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
+                <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc0")'>Saisir une valeur</a>
+                <div class="dropdown-divider"></div>
+                    
+                </div>
+
+            </div>
+
+            
+            
+
+            <select id="Calc0" class="custom-select opcalc"  style = "float: left; margin-bottom: 2px;width:20%;font-size:1rem" onchange='testCalc()'>
+                    <option value="0" selected >Choisissez un opérateur</option>
+                    <option value="1">+</option>
+                    <option value="2">-</option>
+                    <option value="3">x</option>
+                    <option value="4">/</option>
+            </select>  
+
+        
+            <div class="dropdown" style = "float:left;width:40%;">
+
+                <input  type="text" id="TxtCalc1" class="form-control dropdown-toggle tcalc" style = "float:left; margin-bottom: 2px;" placeholder="Choisissez une variable ou saisissez une valeur" data-toggle="dropdown" onchange='testCalc()'>
+            
+                <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
+                <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc1")'>Saisir une valeur</a>
+                <div class="dropdown-divider"></div>
+                
+            </div>
+
+           
+    
+        </div>
+     
+
+    </div>
+
+    
+
+    `
+
+    HCell.innerHTML = Case;
+    tr.appendChild(HCell);
+
+    fillcmbcalc()
+
+         // affichage des fonctionnalités dans l'entête du tableau de base
+         var titre = document.getElementById('Titre')
+         var tr = titre.insertRow();
+         var HCell = document.createElement("th");
+         HCell.colSpan=1;
+         var Case = `     <button class="btn btn-outline-primary"  onclick= "AjoutOp()" type="button" style="width:10%;height:35px;float:left ;"> Ajouter une opération </button>
+                    <div>
+                        <button class="btn btn-primary"  onclick= "AjoutVCalc()" type="button" style="width:20%;height:35px;float:right"> Calculer la nouvelle variable </button>
+                    
+                    </div>
+                    `
+    
+        HCell.innerHTML = Case;
+        tr.appendChild(HCell);
+        
+    
+    
+
+
+}
+
+function fillcmbcalc(){
+// remplissage des combos avec les variables quanti
+var cmbs = document.getElementsByClassName("cmbcalc")
+
+// remise à zéro des combos
+for (c=0;c<cmbs.length;c++) {
+    cmbs[c].innerHTML = `<a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc`+ c+`")'>Saisir une valeur</a>
+    <div class="dropdown-divider"></div>`;
+}
+
+// défilement des variables
+for (v = 1; v < Nom.length; v++) { //défilement des variables
+
+   if (TypVar[v] != 'a') { // si variables quanti
+
+
+
+       for (c=0;c<cmbs.length;c++) {
+           cmbs[c].innerHTML += `<a class="dropdown-item" href="#" onclick='defvcalc("[`+ v + `] ` + Nom[v] + ` - ` +  Libellé[v] + `","TxtCalc` + c + `");testCalc()'>` + Nom[v] + ` - ` +  Libellé[v] +  `</a>`
+
+       }
+
+   }
+   
+}
+
+}
+function defvcalc(val,control){
+
+    document.getElementById(control).value=val;
+}
+
+function AjoutOp(){
+
+    NbOps++;
+
+    testCalc();
+
+    //définition du rang 
+var cmbs = document.getElementsByClassName("cmbcalc")
+var rg = cmbs.length;
+
+ 
+
+ // affichage des fonctionnalités dans l'entête du tableau de base
+ var titre = document.getElementById('Titre')
+
+ var nbrow = document.getElementById('Titre').rows.length
+ nbrow--;
+ var tr = titre.insertRow(nbrow);
+ 
+ var HCell = document.createElement("th");
+ HCell.colSpan=1;
+ var Case = ` 
+ 
+    <select id="opint`+ (rg/2) +`" class="custom-select opintcalc"  style = "float: left; margin-bottom: 12px;  ; width:10%;font-size:1rem" onchange='testCalc()'>
+
+        <option value="0" selected >Choisissez un opérateur</option>
+        <option value="1">+</option>
+        <option value="2">-</option>
+        <option value="3">x</option>
+        <option value="4">/</option>
+    
+    </select>  
+ 
+
+<div  class="input-group-prepend" style="width:100%;">
+
+        <div class="dropdown" style = "float:left;width:40%;">
+
+        <input  type="text" id="TxtCalc`+ rg +`" class="form-control dropdown-toggle tcalc" style = "float:left; margin-bottom: 2px;" placeholder="Choisissez une variable ou saisissez une valeur" data-toggle="dropdown" onchange='testCalc()'>
+
+        <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
+        <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc`+ rg +`")'>Saisir une valeur</a>
+        <div class="dropdown-divider"></div>
+            
+        </div>
+
+        </div>
+
+
+
+
+        <select id="Calc`+ (rg/2) +`" class="custom-select opcalc"  style = "float: left; margin-bottom: 2px;width:20%;font-size:1rem" onchange='testCalc()' >
+            <option value="0" selected >Choisissez un opérateur</option>
+            <option value="1">+</option>
+            <option value="2">-</option>
+            <option value="3" >x</option>
+            <option value="">/</option>
+        </select>  
+
+
+        <div class="dropdown" style = "float:left;width:40%;">
+
+        <input  type="text" id="TxtCalc`+ (rg+1) +`" class="form-control dropdown-toggle tcalc" style = "float:left; margin-bottom: 2px;" placeholder="Choisissez une variable ou saisissez une valeur" data-toggle="dropdown" onchange='testCalc()' >
+
+        <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
+        <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc`+ (rg+1) +`")'>Saisir une valeur</a>
+        <div class="dropdown-divider"></div>
+
+        </div>
+    </div>
+
+    
+
+
+`    
+
+HCell.innerHTML = Case;
+tr.appendChild(HCell);
+fillcmbcalc()
+
+
+
+}
+
+function testCalc(){ //fonction permettant de vérifier que les valeurs saisies permettent le calcul
+ 
+
+    // vérification des valeurs
+    var cmbs = document.getElementsByClassName("tcalc") ;
+    var nbcalc = cmbs.length;
+    var nbok = 0 ;
+
+    for (c=0;c<cmbs.length;c++) {
+        var okvar=false
+
+        //remplacement des virgules
+        cmbs[c].value =cmbs[c].value.replace(",", ".") 
+        var vcalc = cmbs[c].value;
+
+
+        if(vcalc!=""){ 
+        
+        
+
+            if (isNaN(vcalc)) {
+
+                // recherche d'un numéro de variable quanti entre [ ]
+                if(vcalc!=""){
+                
+                    var dcr = decroch(vcalc)
+                    if(dcr[0]==true){
+
+                        if (isNaN(dcr[1])==false) {
+
+                            if (TypVar[dcr[1]]!='a') {okvar=true }
+                        }
+                    }
+
+                }
+
+
+            } else {
+                if (vcalc>0) {okvar=true}
+
+            }
+
+        } else {
+            okvar==false;
+        }
+
+        if (okvar==true){
+            $(cmbs[c]).removeClass("nocalc");
+            $(cmbs[c]).addClass("okcalc");
+            nbok++;
+        } else {
+            $(cmbs[c]).removeClass("okcalc");
+            $(cmbs[c]).addClass("nocalc");
+        }
+    }
+
+    // vérification des opérateurs de ligne
+    var cmbs = document.getElementsByClassName("opcalc")
+    nbcalc += cmbs.length
+
+    for (c=0;c<cmbs.length;c++) {
+        
+        var opcalc = cmbs[c].selectedIndex; 
+
+         
+
+        if (opcalc>0) {
+            $(cmbs[c]).removeClass("nocalc");
+            $(cmbs[c]).addClass("okcalc");
+            nbok++;
+
+        } else {
+            $(cmbs[c]).removeClass("okcalc");
+            $(cmbs[c]).addClass("nocalc");
+        }
+    }
+
+
+     // vérification des opérateurs inter-lignes
+     var cmbs = document.getElementsByClassName("opintcalc")
+     nbcalc += cmbs.length
+ 
+     for (c=0;c<cmbs.length;c++) {
+         
+         var opcalc = cmbs[c].selectedIndex; 
+  
+         if (opcalc>0) {
+             $(cmbs[c]).removeClass("nocalc");
+             $(cmbs[c]).addClass("okcalc");
+             nbok++;
+ 
+         } else {
+             $(cmbs[c]).removeClass("okcalc");
+             $(cmbs[c]).addClass("nocalc");
+         }
+     }
+
+     
+
+    if(nbok==nbcalc) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
+function decroch(vcalc){
+
+var cr1= vcalc.indexOf("[")
+var cr2= vcalc.indexOf("]")
+
+    if (cr1>-1 && cr2>-1) {
+        var v = vcalc.substr(cr1+1,cr2-cr1-1)
+        return[true,v]
+    }
+    else {
+        return[false,vcalc]
+    }
+}
+
+function AjoutVCalc() {
+
+    var okcalc = testCalc()
+    if(okcalc==false) {alert("calcul impossible.");return 0}
+
+    // ajout de la colonne
+    var col = Nom.length
+    var nomvar = document.getElementById('NomS').value;
+    var libvar = document.getElementById('LibS').value;
+    if (libvar==""){libvar="variable calculée"}
+
+    // définition du code max
+    
+    var nbcomb = 1;
+    //for (m=0;m<TapS.length;m++){
+    //if (TapS[m]>0){nbcomb = m}    
+    //}
+  
+
+  // Agrandissement du tableau des variables
+  var nomvar = col;  
+  Nom.splice(col,0,nomvar);
+  Posi.splice(col,0,'2');
+  CdMax.splice(col,0,nbcomb);
+  Reco.splice(col,0,' ');
+  TypVar.splice(col,0,'r');
+  Libellé.splice(col,0,libvar);
+
+  NbVar++;
+
+
+
+  // agrandissement du tableau des modalités
+  Moda.splice(col,0,"0")
+  ModaO.splice(col,0,"0")
+
+  Moda[col] = new Array(nbcomb)
+  ModaO[col] = new Array(nbcomb)
+
+
+  for (m=0;m<nbcomb+1;m++){
+      Moda[col][m] =m;
+      ModaO[col][m] =m;
+  }
+
+  // création du tableau de mémorisation des opérations intermédiaires
+  
+
+  // agrandissement de la base de données
+  for (l=0; l<BDD.length; l++) {
+
+      // définition contenu de la ligne
+
+      // succession des opérations
+      var calcli = 0
+      var sstot = new Array (NbOps)
+
+
+      for (op=0;op<NbOps+1;op++) {
+
+        // définition de l'opération courante
+        
+        var val1=0
+        var val2=0
+
+        
+        // première valeur 
+        var nomv1= 'TxtCalc'+ (op*2);
+        var txtv1 = document.getElementById(nomv1).value 
+         
+
+        var vd=decroch(txtv1)
+        
+        if(vd[0]==false) { 
+            val1= Number(vd[1])
+        } else {
+            val1= Number(BDD[l][Number(vd[1])])
+        }
+
+
+        // deuxième  valeur 
+        var nomv2= 'TxtCalc'+ ((op*2)+1);
+        var txtv2 = document.getElementById(nomv2).value
+         
+        
+        var vd=decroch(txtv2)
+        
+        if(vd[0]==false) { 
+            val2= Number(vd[1])
+        } else {
+            val2= Number(BDD[l][Number(vd[1])])
+        }
+
+
+        
+        //opérateur
+        var nomop = "Calc" + (op);
+        var  oper=document.getElementById(nomop).selectedIndex; 
+        
+
+        if (oper==1) {sstot[op] = val1 + val2 }
+        if (oper==2) {sstot[op] = val1 - val2 }
+        if (oper==3) {sstot[op] = val1 * val2 }
+        if (oper==4) {sstot[op] = val1 / val2 }
+
+         
+
+      }
+      
+
+      // traitement des opérations intermédiaires
+      calcli = sstot[0]
+      for (op=1;op<NbOps+1;op++) {
+
+        var nomop = "opint" + (op);
+        var  oper=document.getElementById(nomop).selectedIndex; 
+        
+
+        if (oper==1) {calcli = calcli + sstot[op] }
+        if (oper==2) {calcli = calcli - sstot[op]}
+        if (oper==3) {calcli = calcli * sstot[op]}
+        if (oper==4) {calcli = calcli / sstot[op]}
+
+
+      }
+
+      BDD[l].splice(col,0,calcli)
+
+  }
+
+
+
+
+
+  ChargerListVar()
+  Vidage("TabBDD")
+  vL = col;
+  prepTAP()
+
 
 }
 

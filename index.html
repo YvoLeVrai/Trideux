@@ -14,14 +14,15 @@
     <!-- Tests statistiques-->
     <script type="text/javascript" src="jstat.min.js"></script>
 
-
+ 
 
     <!-- images boutons 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     -->
 
-    <LINK href="CSS\Styles.css" rel="stylesheet" type="text/css">
 
+    <LINK href="CSS\Styles.css" rel="stylesheet" type="text/css">
+ 
 
 
     <!-- BOOTSTRAP Les fichiers sont à la racine du site pour pouvoir être utilisé hors ligne-->
@@ -129,7 +130,7 @@
 
 
     <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.2.6</label>
+    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.0</label>
 
     <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
         <div class="dropdown-content" id = "menubases">
@@ -147,7 +148,7 @@
     <div id="cadreboutons" style="display: none;position: relative;">
 
 
-        <div class="btnfonction" onclick="Vidage('TabBDD'); B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
+        <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
         <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
         <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
         <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
@@ -188,7 +189,7 @@
             <!-- <span class="input-group-text">Filtre</span> -->
 
 
-            <span class="input-group-text"><img src="Images\filtre-ico.PNG"  alt="filtre" onclick="openVars('F')"></span>
+            <span class="input-group-text"><img src="Images\filtre-ico.png"  alt="filtre" onclick="openVars('F')"></span>
 
             <input onclick="openVars('F')" id= "TxtF" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
@@ -340,9 +341,27 @@
             </div>
 
             <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
-                <input type="checkbox" class="custom-control-input" id="ChkPEM" onclick='T_C_R()' checked="true">
-                <label class="custom-control-label" for="ChkPEM">% écart max (PEM)</label>
+                <input type="checkbox" class="custom-control-input" id="ChkPEM" onclick='T_C_R()'>
+                <label class="custom-control-label" for="ChkPEM">PEM</label>
             </div>
+
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkCoul" onclick='T_C_R()' checked="true">
+                <label class="custom-control-label" for="ChkCoul">Color. +/-</label>
+            </div>
+
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkRS" onclick='T_C_R()' >
+                <label class="custom-control-label" for="ChkRS">Résidus X² > 2</label>
+            </div>
+
+            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkTH" onclick='T_C_R()' >
+                <label class="custom-control-label" for="ChkTH">Eff. théo</label>
+            </div>
+
+
+
 
         </div>
 
@@ -436,7 +455,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/Base_POF_1.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/Base_POF_2.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
@@ -446,10 +465,8 @@
          
 </div>
 
-<div id='contenu' style="position:relative">
-  
-
-</div>
+<!-- <div id='panneau-g' style="position:relative;float:left;height:50%;width:20%;">Là il y a quelque chose normalement</div> !--> 
+<div id='contenu' style="position:relative;"></div>
 
 
 
@@ -472,6 +489,7 @@
 <script src="JS/tris.js"></script>
 <script src="JS/stats.js"></script>
 <script src="JS/recod.js"></script>
+<script src="JS/graphs.js"></script>
 
 </body>
 
