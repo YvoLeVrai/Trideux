@@ -171,13 +171,14 @@ function loinorm(ddl,khi) {
     var f2=10000000000;
     var f=fis;
 
+    /*
     if(fis < 1) {
         f = 1 / fis;
         var f3 = f1;// interversion
         f1=f2;
         f2=f3;
     }
-
+    */
     var a1 = 2 / (9 * f1);
     var a2 = 2 / (9 * f2);
     var w = (1 - a2) * Math.pow(f,0.33333333) - (1 - a1);

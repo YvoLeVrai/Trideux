@@ -2942,7 +2942,7 @@ function khi(x,RgDpX,y,RgDpY){
             if (proba<0.1){signif="*";}
             if (proba<=0.05){signif+="*";}
             if (proba<=0.01){signif+="*";}
-            if (proba==0){proba ="< 0.001"}
+            
         }
 
         var minmarges = 0 
@@ -2971,7 +2971,7 @@ function khi(x,RgDpX,y,RgDpY){
     titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[vC] + ` en fonction de ` + Nom[vL] + `
      
     <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right; margin-left:3px" ></div> 
-    <div class="btn btn-outline-primary btn-sm imgbtn imggrph" onclick="vuGrph=true;typgrph=2;QuelTri()" style="float:right" ></div>        
+    <div class="btn btn-outline-primary btn-sm imgbtn imggrph" onclick="if(vuGrph==true){vuGrph=false} else {vuGrph=true};typgrph=2;QuelTri()" style="float:right" ></div>        
     `
     /*
         <a>` + Nom[y] + ` | ` + Libellé[y] + `</a> <br>
@@ -2991,10 +2991,10 @@ function khi(x,RgDpX,y,RgDpY){
 
         
 
-        <select id="choixHisto" class="custom-select"  style = " margin-bottom: 2px;width:300px;font-size:1rem;" onchange='HistoTcr()'>
+        <select id="choixHisto" class="custom-select"  style = " margin-bottom: 2px;width:350px;font-size:1rem;" onchange='HistoTcr()'>
         <option value="0" disabled>Choisissez un type de graphique</option>
         <option value="1">Histogramme des effectifs</option>
-        <option value="2">Histogramme % en lignes (par colonnes) </option>
+        <option value="2">Histogramme % en lignes (par colonnes) </option>s
         <option value="3">Histogramme % en lignes (par lignes) </option>
         
         
@@ -3016,9 +3016,9 @@ function khi(x,RgDpX,y,RgDpY){
     //titre.innerHTML = "";
     //}
 
-
-    document.body.appendChild(titre);
-
+    var cnt = document.getElementById("contenu")    
+    //document.body.appendChild(titre);
+    cnt.appendChild(titre)    
 
     tbl  = document.createElement('table');
     tbl.id = 'TabTCR';
@@ -3287,7 +3287,8 @@ function khi(x,RgDpX,y,RgDpY){
 
                     if (document.getElementById('ChkCoul').checked ==true && multi==false) {
                         
-                        if (Tcr[i][j]>TcrTh[i][j]) {
+                        
+                        if (Tcr[i][j]>TcrTh[i][j] && proba <0.1) {
                         HCell.style.backgroundColor="rgba(91, 230, 91, 0.24)";
                         
                             if (document.getElementById('ChkRS').checked ==true) { 
@@ -3298,7 +3299,7 @@ function khi(x,RgDpX,y,RgDpY){
                             }
 
                         }
-                        if (Tcr[i][j]<TcrTh[i][j]) {
+                        if (Tcr[i][j]<TcrTh[i][j] && proba<0.1 ) {
                             HCell.style.backgroundColor="rgba(255, 121, 2, 0.22)";
 
                             if (document.getElementById('ChkRS').checked ==true) { 
@@ -3491,7 +3492,8 @@ function khi(x,RgDpX,y,RgDpY){
     //td.appendChild(document.innerHTML("Champ" + "Population Totale"));
     //}
 
-    body.appendChild(tbl);
+    cnt.appendChild(tbl);
+    //body.appendChild(tbl);
 
     Pied  = document.createElement('p');
     Pied.id='Pied';
@@ -3513,6 +3515,7 @@ function khi(x,RgDpX,y,RgDpY){
     }
 
     if (multi==false) {
+        if (proba==0){proba ="< 0.001"}
         strPiedPlain += 'Khi² : ' +  Khi2.toFixed(NbDec) + ` ddl : ` + deglib + `proba : ` + proba + " " + signif + '\r\nV de Cramér :' + vcram;
         strpied+=`  Khi² : ` + Khi2.toFixed(NbDec) + ` ddl : ` + deglib + ` proba : ` + proba + "  " + signif 
 
@@ -3556,7 +3559,8 @@ function khi(x,RgDpX,y,RgDpY){
 
 
 
-    document.body.appendChild(Pied);
+    //document.body.appendChild(Pied);
+    cnt.appendChild(Pied);
 
     // affichage du graphique
     if (typgrph>0) {
@@ -3564,6 +3568,12 @@ function khi(x,RgDpX,y,RgDpY){
         HistoTcr()
     }
     ;
+
+     document.getElementById("fondpage").style.width=window.innerWidth
+     // définition de la largeur du tableau
+    var lartab=document.getElementById("TabTCR").offsetWidth
+    // ajustement du titre
+    document.getElementById("Titre").style.width=lartab
 
 
 
@@ -4941,3 +4951,9 @@ function EstVu(Bloc) {
         return 0;} else {return 1;}
 
 }
+
+function cacheOptions() {
+    document.getElementById("OptVar1").style.display = "none"
+    document.getElementById("OptVar2").style.display = "none"
+    document.getElementById("OptVar3").style.display = "none"
+} 

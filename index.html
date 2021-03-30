@@ -127,48 +127,48 @@
 
 
 
+    <div id="entete" >
 
+        <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.3</label>
 
-    <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-    <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.0</label>
-
-    <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
-        <div class="dropdown-content" id = "menubases">
-            <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
-            <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
-            <a> <label for="filezip" style="cursor: pointer;width:100%;height:100%" >  Base DAT/POS/DIC format ZIP </label> <br> <input type="file" id="filezip" accept='.ZIP' name="file" onchange='LireZip(event)' multiple /> </a>
-            <a> <label for="filexls" style="cursor: pointer;width:100%;height:100%">  Classeur EXCEL (*.xlsx) </label> <br> <input type="file" id="filexls"   name="file" onchange='LireXLSX(event)'  accept='.XLSX, .XLS'  /> </a>
-            <a> <label for="filecsv" style="cursor: pointer;width:100%;height:100%">  Fichier *.CSV/*.TXT </label> <br> <input type="file" id="filecsv"   name="file" onchange='LireCSV(event)'  accept='.CSV, .TXT'  /> </a>
-            
+        <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
+            <div class="dropdown-content" id = "menubases">
+                <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
+                <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
+                <a> <label for="filezip" style="cursor: pointer;width:100%;height:100%" >  Base DAT/POS/DIC format ZIP </label> <br> <input type="file" id="filezip" accept='.ZIP' name="file" onchange='LireZip(event)' multiple /> </a>
+                <a> <label for="filexls" style="cursor: pointer;width:100%;height:100%">  Classeur EXCEL (*.xlsx) </label> <br> <input type="file" id="filexls"   name="file" onchange='LireXLSX(event)'  accept='.XLSX, .XLS'  /> </a>
+                <a> <label for="filecsv" style="cursor: pointer;width:100%;height:100%">  Fichier *.CSV/*.TXT </label> <br> <input type="file" id="filecsv"   name="file" onchange='LireCSV(event)'  accept='.CSV, .TXT'  /> </a>
+                
+            </div>
         </div>
-    </div>
 
 
 
-    <div id="cadreboutons" style="display: none;position: relative;">
+        <div id="cadreboutons" style="display: none;position: relative;">
 
 
-        <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
-        <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
-        <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
-        <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
-        <div  class="btnfonction" onclick="VoirBloc('BlocFiltre')"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
-        <div class="btnfonction" id="btnexport"><img src="Images\DAT2.png"   alt="Outils"><label class='txtbtn'>Exporter</label>
-            <div class="dropdown-content" id = "menu">
-                <a id="btnexport0" onclick="ExportTR2()" style="cursor: pointer;">  Format Tri2.cloud (*.TR2)</a>
-                <a id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Format (DAT/POS/DIC)</a>
-                <!-- <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a> !-->
-                <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Format CSV</a>
-                <a id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Dictionnaire des variables</a>
+            <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
+            <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
+            <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
+            <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
+            <div  class="btnfonction" onclick="VoirBloc('BlocFiltre')"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
+            <div class="btnfonction" id="btnexport"><img src="Images\DAT2.png"   alt="Outils"><label class='txtbtn'>Exporter</label>
+                <div class="dropdown-content" id = "menu">
+                    <a id="btnexport0" onclick="ExportTR2()" style="cursor: pointer;">  Format Tri2.cloud (*.TR2)</a>
+                    <a id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Format (DAT/POS/DIC)</a>
+                    <!-- <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a> !-->
+                    <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Format CSV</a>
+                    <a id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Dictionnaire des variables</a>
+                </div>
+
             </div>
 
+            <div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> 
+
         </div>
 
-        <!-- <div  class="btnfonction" onclick="DefNA()"><label class='txtbtn'>Fonction</label></div> !-->
-
     </div>
-
-
 
     <div style="clear:both;"></div>
 
@@ -455,7 +455,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/Base_POF_2.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/Base_POF_3.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
@@ -465,9 +465,11 @@
          
 </div>
 
-<!-- <div id='panneau-g' style="position:relative;float:left;height:50%;width:20%;">Là il y a quelque chose normalement</div> !--> 
-<div id='contenu' style="position:relative;"></div>
 
+<!-- <div id='panneau-g' style="position:relative;float:left;height:50%;width:20%;">Là il y a quelque chose normalement</div> !--> 
+<div id='fondpage' style="position:relative;" onclick="cacheOptions();CaleSsHead()">
+    <div id='contenu' style="position:relative;" ></div>
+</div>
 
 
 
@@ -490,6 +492,23 @@
 <script src="JS/stats.js"></script>
 <script src="JS/recod.js"></script>
 <script src="JS/graphs.js"></script>
+
+<script> 
+window.onscroll = function() {scrollFunction()};
+
+function scrollFunction() {
+    if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
+      document.getElementById("entete").style.display="none";
+      
+    } else {
+      document.getElementById("entete").style.display="block";
+      CaleSsHead()
+    }
+   
+
+}
+</script>
+
 
 </body>
 

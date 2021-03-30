@@ -286,8 +286,19 @@ function degrouper() {
 
             if (document.getElementById(chk).checked ==true) { // la case est cochée, la règle est supprimée
 
-                //récupérartion de la valeur de la modalité avant recodage
+                 
+                //récupérartion des valeurs de modalité avant recodage
                 Moda[v][res] = ModaO[v][res]
+                
+                /* a priori seule la modalité de résultat a besoin d'être rhabillée. Le cas échéant, la fonction ci-dessous permettrait de tout remettre à plat
+                for (m=0;m<CdMax[v]+1;m++) {
+                    if (ValApRec(m,rgl)==res) {
+                        alert("le code " + m + "renvoie bien " + res)    
+                        if (Moda[v][m] != ModaO[v][m]) {Moda[v][m] = ModaO[v][m]}
+                    }
+
+                }
+                */
 
             }
         }
@@ -1213,14 +1224,16 @@ function Interv(mod1,mod2) {
 
     // transformation du dictionnaire
     var modswap = Moda[v][mod1]
-    Number(modswap);
-
-
+    
+    // interversion des valeurs actives
     Moda[v][mod1]=Moda[v][mod2]
     Moda[v][mod2]=modswap;
 
-    ModaO[v][mod1] = Moda[v][mod1]
-    ModaO[v][mod2] = Moda[v][mod2]
+    // interversion des valeurs d'origine
+    var modswap = ModaO[v][mod1]
+
+    ModaO[v][mod1] = ModaO[v][mod2]
+    ModaO[v][mod2] =modswap 
 
 
 
@@ -3827,3 +3840,20 @@ function wait(message) {
 }
 
 function endWait() { document.getElementById("processing").style.display="none"}
+
+function redefModaO() {
+
+    for (v=1;v<NbVar;v++) {
+        
+        for (m=0;m<Moda[v].length;m++) {
+
+            ModaO[v][m] = Moda[v][m]
+
+        }
+
+
+    }
+
+     
+    
+}
