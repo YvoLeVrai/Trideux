@@ -27,6 +27,7 @@ var vP=[0]; //variable de pondération
 
 var vCopy= 0; // variable servant aux copiers/collers
 
+var TypTri="base"; // mémorisation du type de tri courant (permet de relancer les calculs)
 var NR; // prise en compte des non réponses
 var NRX; // en lignes
 var NRY; // en colonnes
@@ -94,7 +95,9 @@ var ExpPct =[]; // pourcentage au niveau
 var ExpPctT = []; // pourcentage du total
 var ExpMum =[]; // 'mère de la moda'
 var ExpRng = []; // rang (nombre d'ascendants)
+var ExpAct = []; // active ou non
 var ExpRgDp;
+var ExpFltr=[0]; //tableau des combinaisons éliminatoires par ordre (var; mod)
 var nbmum; // variable de calcul du nombre d'ascendants
 
 
@@ -118,3 +121,6 @@ var mS=0 // modalité score courante
 
 // variables utilisées par la fonction de création de variable par calcul
 var NbOps=0
+
+//variables liées à la fenêtre d'affichage des variables
+var enlig=true // par défaut, les variables sont présentées en ligne

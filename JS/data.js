@@ -163,11 +163,25 @@ function ChargerPOS() {
 };
 
 function ChargerListVar(){
+ 
+
+    var qli= document.getElementById("ChkVqli").checked;
+    var qti= document.getElementById("ChkVqti").checked;
+    enlig = document.getElementById("optligs").checked;
+    
+    
 
     var htmlvariables = ``;
 
+    if(enlig==false) {
+        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(10, minmax(150px, 1fr) )">`
+    }
+
     // défilement des variables
     for (v = 1; v < Nom.length; v++) {
+
+        // évitement des types de variables désactivés
+        if (TypVar[v]=='a' && qli==false || TypVar[v]!='a' && qti==false) {continue}
 
         // définition du type d'image à afficher en fonction du type de variable
         var htmlimg = `<img src='Images/\Abc.png'   alt="Abc">`
@@ -176,17 +190,22 @@ function ChargerListVar(){
         var htmlmods = ""
 
         for (m=0;m<4;m++){
-            if (TypVar[v]!='a') {
+            if (TypVar[v]!='a'&& qti!=false) {
 
                 if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v] + `, `}
 
             } else {
 
-                if (m<=CdMax[v] && Moda.length >=v) {htmlmods+=Moda[v][m] + `, `}
+                if (qli!=false) {
+
+                    if (m<=CdMax[v] && Moda.length >=v ) {htmlmods+=Moda[v][m] + `, `} 
+                }
 
             }
         }
         htmlmods += " ... (" + CdMax[v] + ")"
+        
+        if (enlig==false) {htmlmods=''}
 
         // Ajout de la variable au menu de sélection
         var num = Nom.length-1;
@@ -200,12 +219,19 @@ function ChargerListVar(){
         //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
         //         </table>
         //         </li>`
+        if (enlig==true) {
         htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary">' + v + '</small></div><div class="col-11">' + htmlimg + ' <strong>' + Nom[v] + '</strong> | ' + Libellé[v] + ' <small class="text-secondary">' + htmlmods + '</small></div></div></a>';
+        } else {
+        htmlvariables += '<a class="list-group-item list-group-item-action" style="padding:0.5rem 1rem;white-space: nowrap;" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary" style="font-size:60%">' + v + '</small></div><div class="col-11"> <strong>' + Nom[v] + '</strong></div></div></a>';
+
+        }    
     }
 
-    document.getElementById("ListVars").innerHTML = htmlvariables;
+    document.getElementById("fondvars").innerHTML = htmlvariables;
 
 }
+
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////

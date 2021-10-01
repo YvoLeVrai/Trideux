@@ -2037,8 +2037,22 @@ function SauvegarderSurDisque(textToWrite,fileNameToSaveAs, format) {
 
 
 
+function openFrmvar() {
+    document.getElementById("headervar").style.display = "block";
+     
+    document.getElementById("ListeVariables").style.display = "block";
+    document.getElementById("ListeVariables").style.height = "calc(100vh - 70px)";
+    document.getElementById("TxtVr").focus()
+     
+     
+}
 
-
+function closeFrmVar() { // masque progressif de la fenêtre de sélection des variables (différent de closevar)
+    document.getElementById("headervar").style.display = "none";
+    document.getElementById("ListeVariables").style.height = "0%";
+    document.getElementById("TxtVr").value='';
+    ChargerListVar()
+}
 
 function openNav() {
     document.getElementById("myNav").style.height = "100%";
@@ -2980,7 +2994,7 @@ voirScores()
 }
 
 function scoreMoins(rg){
-    if (TabScr[rg][2]<=1){return}
+   // if (TabScr[rg][2]<=1){return}
 
     TabScr[rg][2]--;
     voirScores()
@@ -3669,7 +3683,9 @@ function AjoutVCalc() {
 function Traitements() {
     document.getElementById("accueil").style.display = "none";
 
-    document.getElementById("cadreboutons").style.display = "block";
+    var cdrbtn = document.getElementById("cadreboutons")
+    $(cdrbtn).removeClass("greyed");
+    
     document.getElementById("lblbase").innerText = nomBase;
     document.getElementById("lblbase").style.display = "block";
 
@@ -3787,6 +3803,7 @@ function CaleSsHead() {
     var Pos = hpage.getBoundingClientRect();
     var PosY = Number(Pos.height)  + 10
 
+    document.getElementById('BlocFiltre').style.marginTop = PosY
     document.getElementById('contenu').style.marginTop = PosY
 
 }

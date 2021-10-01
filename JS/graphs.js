@@ -264,6 +264,7 @@ function HistoTcr(){
         
 
                          //affichage de la moyenne 
+                         /*
                          if (typgrph == 2 ){ 
                             var valcat = Mrg1[l]/PopTot*100
                             var haubar = valcat/echymax * haudisp
@@ -272,6 +273,7 @@ function HistoTcr(){
                             cnv.fillRect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, 1 );
         
                         }  
+                        */
 
  /*
     var rangl=0;
@@ -344,6 +346,7 @@ if (pasprog > 100) {
                     var haubar = valcat/echymax * haudisp
 
                     cnv.fillStyle = tabcouls[l];
+                    //cnv.globalAlpha=0.25; // opacité
                     cnv.fillRect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, haubar );
                     
                     
@@ -374,3 +377,17 @@ if (pasprog > 100) {
 
 }
 
+function splitchaine(chaine,largeur) {
+
+
+
+}
+
+function getTextWidth(text, font) {
+    // re-use canvas object for better performance
+    var canvas = document.getElementById("cnvGetLar");
+    var context = canvas.getContext("2d");
+    context.font = font;
+    var metrics = context.measureText(text);
+    return metrics.width;
+}

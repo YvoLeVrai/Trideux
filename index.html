@@ -73,12 +73,93 @@
         </div>
     </div>
 
+      
 
     <div id="processing" class="process" style="display: none;" >
         <div class="spin"></div>
         <div id = "lblwait" class="lblspin" >Chargement en cours. Merci de patienter </div>
 
     </div>
+
+    <!-- =======================================================================================================-->
+    <!-- =======================================================================================================-->
+    <!-- fenêtre de sélection des variables-->
+    <!-- =======================================================================================================-->
+    <!-- =======================================================================================================-->
+    
+    <div id="headervar" class="headervar" > 
+    
+        <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="logo Trideux" class="logo" >
+
+        <div id="optionschvars" style="font-size: 16px;text-align: left; ">
+             
+            <div class= "txtbtn" style="float:left;font-size: large;top:20px "> Choisir une variable </div>
+
+            <div class="input-group-prepend"  style="margin-right: 5px; float:right;width:50%;z-index:0;margin-top: 10px">
+                <!-- <span class="input-group-text">Lignes    </span> -->
+    
+                 
+                <!-- Choix du mode d'affichage-->
+                <form style="width:170px;position:relative;top:7px;" onclick="ChargerListVar()">
+
+                      
+                    <div class="custom-control custom-checkbox" style="float: left;">
+                        <label>
+                            <input type="checkbox" class="custom-control-input" id="ChkVqli"  value='true' >
+                            <label class="custom-control-label" for="ChkVqli"></label>
+                            <img src="Images\Abc.png"  alt="quali" style="margin-left:-7px;margin-top:3px">
+                        </label>
+                      </div>
+
+                      <div class="custom-control custom-checkbox" style="float: left;margin-left:10px;">
+                        <label>
+                            <input type="checkbox" class="custom-control-input" id="ChkVqti" name="example" value='true'>
+                            <label class="custom-control-label" for="ChkVqti"></label>
+                            <img src="Images\Num.png"  alt="colonnes"    style="margin-left:-7px;margin-top:3px">
+                        </label>
+                      </div> 
+                </form>
+
+                 <!-- Choix du type de variables -->
+                 <form style="width:170px;position:relative;top:7px;" onclick="ChargerListVar()">
+                    <div class="custom-control custom-radio custom-control-inline" style="float: left;">
+                        <label>
+                            <input type="radio" class="custom-control-input" id="optligs" name="example" value="true" >
+                            <label class="custom-control-label" for="optligs"></label>
+                            <img src="css\lignes.png"  alt="lignes" style="margin-left:-7px;margin-top:3px">
+                        </label>
+                      </div>
+                      <div class="custom-control custom-radio custom-control-inline" style="float: left;">
+                        <label>
+                            <input type="radio" class="custom-control-input" id="optcols" name="example" value="customEx">
+                            <label class="custom-control-label" for="optcols"></label>
+                            <img src="css\colonnes.png"  alt="colonnes" style="margin-left:-7px;margin-top:3px" >
+                        </label>
+                      </div> 
+                </form>
+
+
+                <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." onkeydown="GetClav(event,'L')">
+                
+                 
+               
+                <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "closeFrmVar()" type="button" style="margin-left: 10px;"></button>
+    
+            </div>
+
+             
+        </div>
+    </div>    
+        
+    <div id="ListeVariables" class="cadrevar"  > 
+        <div id="fondvars" style="position:relative"> 
+
+        </div>
+
+    </div>
+
+    <!-- =======================================================================================================-->
+
 
     <div id="infostrideux" class="overlay">
         <a href="javascript:void(0)" class="closebtn" onclick="closeInfos()">&times;</a>
@@ -130,9 +211,9 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.3</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.4</label>
 
-        <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 90;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
+        <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 0;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content" id = "menubases">
                 <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
                 <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
@@ -145,14 +226,14 @@
 
 
 
-        <div id="cadreboutons" style="display: none;position: relative;">
+        <div id="cadreboutons" class = "greyed"  style=" position: relative;">
 
 
             <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
             <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
             <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
             <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
-            <div  class="btnfonction" onclick="VoirBloc('BlocFiltre')"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
+            <div  class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
             <div class="btnfonction" id="btnexport"><img src="Images\DAT2.png"   alt="Outils"><label class='txtbtn'>Exporter</label>
                 <div class="dropdown-content" id = "menu">
                     <a id="btnexport0" onclick="ExportTR2()" style="cursor: pointer;">  Format Tri2.cloud (*.TR2)</a>
@@ -164,7 +245,7 @@
 
             </div>
 
-            <div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> 
+           <!-- <div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> -->
 
         </div>
 
@@ -175,48 +256,10 @@
 
 
 
-    <!-- ==========================================================================================
-            =============================================================================================
-            VARIABLE FIlTRE
-            =============================================================================================
-            ==========================================================================================-->
+    
 
 
-    <div class="ChoixVar" id="BlocFiltre">
-
-
-        <div class="input-group-prepend">
-            <!-- <span class="input-group-text">Filtre</span> -->
-
-
-            <span class="input-group-text"><img src="Images\filtre-ico.png"  alt="filtre" onclick="openVars('F')"></span>
-
-            <input onclick="openVars('F')" id= "TxtF" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
-
-
-            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocFiltre');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
-
-
-
-        </div>
-
-        <div class="options" id='OptFiltre' >
-
-
-
-            <select id="Combo4" class="custom-select" onchange='QuelTri()' multiple="multiple" style = "float: left; margin-bottom: 2px">
-                <option value="" disabled selected>Choisissez une ou plusieurs modalités</option>
-            </select> <!-- onFocus='expand(Combo1)'-->
-
-            <!-- <button  class="btn btn-outline-secondary imgbtn imgclose type="button" onclick= "CacheBloc('OptFiltre')"></button> !-->
-
-
-
-
-        </div>
-
-
-    </div>
+     
 
     <div style="clear:both;"></div>
 
@@ -384,7 +427,7 @@
 
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="racine" onclick=" ExpRgDp=0; openVars('X')"></span>
 
-            <input onclick="openVars('X')" onkeyup="FiltrerVars(event)" id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
+            <input onclick="openVars('X');ExpRgDp=0" onkeyup="FiltrerVars(event)" id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
             <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar3')"  type="button"></button>
@@ -415,7 +458,7 @@
             ========================================================================================= -->
 
 
-    <div id="ListeVariables" class="overflow-auto collapse" style="max-height: calc(100vh - 150px);">
+   <!--  <div id="ListeVariables" class="overflow-auto collapse" style="max-height: calc(100vh - 150px);"> -->
 
         <!--<div id = "headervar" class="input-group-prepend" style="position:fixed;width:100% ; display:none;">-->
 
@@ -425,12 +468,12 @@
 
         <!--</div>-->
 
-        <ul id="ListVars" class="list-group">
+   <!--     <ul id="ListVars" class="list-group">
         </ul>
 
 
     </div>
-
+    -->
 
 
 </div>
@@ -467,11 +510,53 @@
 
 
 <!-- <div id='panneau-g' style="position:relative;float:left;height:50%;width:20%;">Là il y a quelque chose normalement</div> !--> 
-<div id='fondpage' style="position:relative;" onclick="cacheOptions();CaleSsHead()">
-    <div id='contenu' style="position:relative;" ></div>
+
+<div class="container-fluid" id='fondpage' style="position:relative;" onclick="cacheOptions();CaleSsHead()">
+    <div class="row">
+    
+        <div id='BlocFiltre' class="col-sm-2" style="display:none;border-right: 1px solid rgb(200,200,200);min-width:500px;max-width:300px;margin-left:-10px;">  
+        <div class="input-group-prepend">
+            
+            <span class="input-group-text"><img src="Images\filtre-ico.png"  alt="filtre" onclick="openVars('F')"></span>
+
+            <input onclick="openVars('F');ExpRgDp=0" id= "TxtF" type="text" class="form-control" placeholder="Choisissez une variable" >
+
+            <button class="btn btn-outline-secondary imgbtn imgclose"  onclick= "CacheBloc('BlocFiltre');Vidage('TabBDD','TabTAP','TabTCR','TabEXP','TabFIL');SuppFltr();QuelTri()" type="button"></button>
+
+            
+        </div>
+
+        <div id="fondfiltre"> 
+
+
+        </div>
+        <!--
+        <div class="options" id='OptFiltre' >
+
+
+
+            <select id="Combo4" class="custom-select" onchange='QuelTri()' multiple="multiple" style = "float: left; margin-bottom: 2px">
+                <option value="" disabled selected>Choisissez une ou plusieurs modalités</option>
+            </select> 
+
+            
+
+
+
+
+        </div>
+    
+    !-->
+
+    </div>
+    <div id='contenu' class="col-sm" style="position:relative;max-width: 66.66%;" ></div>
+    <canvas id="cnvGetLar" style="display:none"></canvas> 
+
+
+    </div>
 </div>
 
-
+<div id="testlong"></div> <!-- div servant à estimer la largeur des chaînes de caractères ( pour ajustements de largeur dans les canvas )-->
 
 
 <!--
@@ -494,9 +579,13 @@
 <script src="JS/graphs.js"></script>
 
 <script> 
+
+// réaction en cas de scroll sur toute la page (tassement du header)
 window.onscroll = function() {scrollFunction()};
 
 function scrollFunction() {
+
+ 
     if (document.body.scrollTop > 50 || document.documentElement.scrollTop > 50) {
       document.getElementById("entete").style.display="none";
       
@@ -507,6 +596,10 @@ function scrollFunction() {
    
 
 }
+
+
+
+
 </script>
 
 
