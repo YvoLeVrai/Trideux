@@ -34,7 +34,8 @@
 
 
 
-    <link rel="icon" type="image/png" href="/images/tri2.png" />
+    <link rel="icon" type="image/png"   href="icotri2.png" />
+     
 
 </head>
 
@@ -100,12 +101,12 @@
     
                  
                 <!-- Choix du mode d'affichage-->
-                <form style="width:170px;position:relative;top:7px;" onclick="ChargerListVar()">
+                <form style="width:225px;position:relative;top:7px;" onclick="ChargerListVar()">
 
                       
                     <div class="custom-control custom-checkbox" style="float: left;">
                         <label>
-                            <input type="checkbox" class="custom-control-input" id="ChkVqli"  value='true' >
+                            <input type="checkbox" class="custom-control-input" id="ChkVqli"  checked >
                             <label class="custom-control-label" for="ChkVqli"></label>
                             <img src="Images\Abc.png"  alt="quali" style="margin-left:-7px;margin-top:3px">
                         </label>
@@ -113,27 +114,20 @@
 
                       <div class="custom-control custom-checkbox" style="float: left;margin-left:10px;">
                         <label>
-                            <input type="checkbox" class="custom-control-input" id="ChkVqti" name="example" value='true'>
+                            <input type="checkbox" class="custom-control-input" id="ChkVqti"  checked>
                             <label class="custom-control-label" for="ChkVqti"></label>
                             <img src="Images\Num.png"  alt="colonnes"    style="margin-left:-7px;margin-top:3px">
                         </label>
                       </div> 
-                </form>
+                
 
-                 <!-- Choix du type de variables -->
-                 <form style="width:170px;position:relative;top:7px;" onclick="ChargerListVar()">
-                    <div class="custom-control custom-radio custom-control-inline" style="float: left;">
+                 <!-- Choix du type d'affichage  -->
+                  
+                        <div class="custom-control  custom-checkbox custom-control-inline" style="float: left;margin-left:10px;">
                         <label>
-                            <input type="radio" class="custom-control-input" id="optligs" name="example" value="true" >
-                            <label class="custom-control-label" for="optligs"></label>
-                            <img src="css\lignes.png"  alt="lignes" style="margin-left:-7px;margin-top:3px">
-                        </label>
-                      </div>
-                      <div class="custom-control custom-radio custom-control-inline" style="float: left;">
-                        <label>
-                            <input type="radio" class="custom-control-input" id="optcols" name="example" value="customEx">
+                            <input type="checkbox" class="custom-control-input" id="optcols"  >
                             <label class="custom-control-label" for="optcols"></label>
-                            <img src="css\colonnes.png"  alt="colonnes" style="margin-left:-7px;margin-top:3px" >
+                            <img src="Images\colonnes.png"  alt="colonnes" style="margin-left:-7px;margin-top:3px" >
                         </label>
                       </div> 
                 </form>
@@ -161,47 +155,7 @@
     <!-- =======================================================================================================-->
 
 
-    <div id="infostrideux" class="overlay">
-        <a href="javascript:void(0)" class="closebtn" onclick="closeInfos()">&times;</a>
-        <div class="overlay-content" style="font-size: 24px;text-align: left; margin-left: 120px;">
 
-            <p>Trideux.cloud est une version en ligne du logiciel <a href="https://cibois.pagesperso-orange.fr/Trideux.html"> Trideux </a> (développé par Philippe Cibois). <br> La présente version a été developpée par Alex Alber (Université de Tours), avec l'aide d'Yvo Toso.</p>
-
-            <p> Cette version en ligne permet de lire des bases au format trideux (Dat/Pos/dic) mais aussi d'importer des bases EXCEL ou CSV/TXT <br>
-                pouvant contenir des variables numériques discètes ou continues. </p><br>
-
-            <p> Un format de base spécifique à Trideux.cloud (*.TR2) permet de sauvegarder les traitements réalisés dans la base. <br> </p>
-
-            <h3 style="color:white"> Comment ça fonctionne? <br></h3>
-
-            <p> Trideux.cloud n'est pas vraiment un site, c'est plutôt un logiciel codé en javascript. <br>
-                En vous rendant à l'adresse www.trideux.cloud, vous téléchargez une page qui va être interprétée localement. <br>
-                Aucun autre fichier n'est chargé sur le site ni depuis le site. Le serveur ne joue aucun rôle dans les calculs. <br>
-                Toutes les opérations sont réalisées sur votre machine.</p><br>
-
-            <p style="color:white"> Trideux ne réalise aucune analyse d'audience et ne contient aucun lien publicitaire. </p> <br> 
-
-
-            <p style="color:rgb(238, 178, 178);font-size: 20px"> NB: Les modifications apportées à la base s'appliquent instantanément mais les bases doivent être téléchargées au format TR2 (menu Export) pour que ces recodages et habillages de modalités soient pérennes. <br> </p>
-
-            
-            
-          
-
-                 
-
-            <br>
-            <br>
-            <hr>
-
-            <h2 style="color:white"> Historique des modifications </h2>
-            
-
-        </div>
-
-
-
-    </div>
 
     <!--  <div style="bottom:2%;position:fixed; font-size: 10px;margin-left: 50%; color:rgb(92, 92, 155);">  <img src="Images\univtours-logo-horizontal.jpg" height="25px" width="70px" alt='Université de Tours'><br> Alex Alber - 2020 </div>  -->
 
@@ -211,7 +165,7 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.4</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.5</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 0;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content" id = "menubases">
@@ -489,8 +443,8 @@
 <div id='accueil' style="position:relative;padding-left: 40px;">
     <H1 style="font-size:1.5rem;padding-top: 100px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
     
-    <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br><br><br>
-    
+    <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br> Il est totalement gratuit, ne nécessite aucune création de compte ni abonnement et ne dépose aucun cookie sur votre ordinateur.<br> 
+    <br><p>Plus d'informations <a href="info.html" target="_blank" rel="noopener noreferrer">ici</a>.</p>
 
     <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
                 
@@ -498,7 +452,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/Base_POF_3.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> 
+   <!-- <a href="#" onclick="openFich('/Data/Base_POF_3.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> -->
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->

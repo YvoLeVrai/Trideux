@@ -167,13 +167,13 @@ function ChargerListVar(){
 
     var qli= document.getElementById("ChkVqli").checked;
     var qti= document.getElementById("ChkVqti").checked;
-    enlig = document.getElementById("optligs").checked;
+    encol = document.getElementById("optcols").checked;
     
     
 
     var htmlvariables = ``;
 
-    if(enlig==false) {
+    if(encol==true) {
         htmlvariables = `<div style="display:grid; grid-template-columns: repeat(10, minmax(150px, 1fr) )">`
     }
 
@@ -205,7 +205,7 @@ function ChargerListVar(){
         }
         htmlmods += " ... (" + CdMax[v] + ")"
         
-        if (enlig==false) {htmlmods=''}
+        if (encol==true) {htmlmods=''}
 
         // Ajout de la variable au menu de sélection
         var num = Nom.length-1;
@@ -219,7 +219,7 @@ function ChargerListVar(){
         //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
         //         </table>
         //         </li>`
-        if (enlig==true) {
+        if (encol!=true) {
         htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary">' + v + '</small></div><div class="col-11">' + htmlimg + ' <strong>' + Nom[v] + '</strong> | ' + Libellé[v] + ' <small class="text-secondary">' + htmlmods + '</small></div></div></a>';
         } else {
         htmlvariables += '<a class="list-group-item list-group-item-action" style="padding:0.5rem 1rem;white-space: nowrap;" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary" style="font-size:60%">' + v + '</small></div><div class="col-11"> <strong>' + Nom[v] + '</strong></div></div></a>';

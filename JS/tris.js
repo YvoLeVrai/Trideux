@@ -5385,6 +5385,7 @@ function ChampFiltre(){
 /* Détermination du type de tri en fonction des éléments affichés*/
 function QuelTri() {
  
+     
     if (TypTri=='base'){B_A_S_E();}
     if (TypTri=='tap'){T_A_P();}
     if (TypTri=='exp'){E_X_P();}

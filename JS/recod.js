@@ -3111,6 +3111,7 @@ for (s=0;s<TabScr.length;s++){
        
 }
 
+if (scoreli==0) {scoreli=""}
 return scoreli;
 
 

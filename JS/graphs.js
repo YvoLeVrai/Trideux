@@ -106,10 +106,10 @@ function HistoTcr(){
 
     // définition des bornes (pour la légende)
     
-    var margG= 200
+    var margG= 250
     var margD= 10
     var margH= 50
-    var margB= 60
+    var margB= 100
 
     var lartot = lartab  // document.getElementById("fondTcr").offsetWidth
     var hautot = 650// document.getElementById("fondTcr").offsetHeight
@@ -159,10 +159,7 @@ function HistoTcr(){
     for (b=0;b<CdMax[v2]+1;b++) {
         
         if (Mrg2[b] >0) {
-            // définition de la largeur de la catégorie
-            var lartxt =  cnv.measureText(Moda2[b]).width 
-            lartxt=Math.floor(lartxt) +5
-            if (lartxt > larcat) {lartxt = larcat}
+
 
             cnv.fillStyle = 'rgb(220 220 250)';
             var posleg = margG + rgleft*larcat;
@@ -172,7 +169,17 @@ function HistoTcr(){
             cnv.fillRect(posleg + 2, hautot - margB + 10, lartot, 40);
 
             cnv.fillStyle = 'rgb(90 90 90)';
-            cnv.fillText(Moda2[b], posleg + (larcat - lartxt)/2, hautot - margB + 20);
+
+             
+            var tlignes = splitchaine(Moda2[b],larcat,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+            
+            var rgtop =hautot - margB + 20
+            for (l=0;l<tlignes.length;l++) {
+                var lartxt =  cnv.measureText(tlignes[l]).width 
+                cnv.fillText(tlignes[l], posleg + (larcat - lartxt)/2,rgtop );
+                rgtop+=15; 
+            }
+            
             rgleft++; 
         }
 
@@ -186,7 +193,7 @@ function HistoTcr(){
     var lartxt =  cnv.measureText(lib).width 
     lartxt=Math.floor(lartxt) +5
 
-   cnv.fillText(lib, margG + (lardisp - lartxt)/2,  hautot - margB + 50);
+   cnv.fillText(lib, margG + (lardisp - lartxt)/2,  hautot - 20);
 
 
     // légende 
@@ -194,14 +201,26 @@ function HistoTcr(){
     cnv.fillText(lib, 20, margH - 20);
 
     var rgtop = 0
+
     for (b=0;b<CdMax[v1]+1;b++) {
         
         if (Mrg1[b] >0) {
-            var posleg = 25 ;
+            var posleg = 15 ;
             cnv.fillStyle = tabcouls[b]
-            cnv.fillRect(posleg, margH + rgtop*25, 15, 15);
-            cnv.fillText(Moda1[b], posleg + 25, margH + rgtop*25 + 15);
-            rgtop++; 
+            cnv.fillRect(posleg, margH + rgtop, 15, 15);
+
+            // évaluation de la longueur
+                        
+            var tlignes = splitchaine(Moda1[b],margG-posleg-55,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+            
+            for (l=0;l<tlignes.length;l++) {
+                cnv.fillText(tlignes[l], posleg + 25, margH + rgtop + 8);
+                rgtop+=15; 
+            }
+            rgtop+=10; 
+
+
+            
         }
 
     }
@@ -377,9 +396,87 @@ if (pasprog > 100) {
 
 }
 
-function splitchaine(chaine,largeur) {
 
+function splitchaine(chaine,largeur,font) { // fonction permettant de gérer les sauts de lignes lors de l'impression de texte dans les canvas
 
+    var lartemp;
+    var sschaine = "";
+    var tablignes=[];
+    tablignes[0]="";
+    var nmots=0;
+
+    // 1/ splittage de la chaine
+     
+    var tabmots = chaine.split(/\s+/);
+     
+    // 2/ ajout des mots jusqu'à besoin de saut de ligne 
+    for (m=0;m<tabmots.length;m++) {
+         
+        sschaine += tabmots[m] + " "; // il est ajouté à la sous-chaine
+        
+        lartemp = getTextWidth(sschaine,font); // on mesure la largeur de l'ensemble
+       
+
+        if(lartemp > largeur) { // l'ajout du dernier mot amène-t-il la chaine à excèder la largeur autorisé?
+                     
+            // le dernier mot déborderait-il s'il était seul? 
+            var larmot = getTextWidth(tabmots[m],font)
+
+            if (larmot>largeur) { // si oui
+
+                var ssmot =splitmot(tabmots[m],largeur, font)
+                tablignes[tablignes.length-1] += ssmot[0]
+                for (sm=1;sm<ssmot.length;sm++){
+                    tablignes.push(ssmot[sm] + " ") 
+                    sschaine=ssmot[sm] + " ";     
+                }
+
+            } else { // si non
+
+                tablignes.push(tabmots[m] + " "); // création d'une nouvelle ligne vide
+
+                sschaine=tabmots[m] + " ";   
+                
+            }
+
+ 
+
+        } else {
+
+            tablignes[tablignes.length-1] += tabmots[m] + " ";
+            
+             
+            
+        }
+        
+    }
+     
+    return tablignes;
+
+}
+
+function splitmot(mot, largeur, font){
+
+    var tabcars=[];
+    tabcars[0]="";
+    var sschaine;
+
+    for (c=0;c<mot.length+1;c++){
+        var carext = mot.substr(c,1);
+        sschaine +=carext;
+
+        lartemp = getTextWidth(sschaine,font); // on mesure la largeur de l'ensemble
+
+        if(lartemp > largeur) {
+            tabcars.push(carext); // création d'une nouvelle ligne vide
+            sschaine=carext;
+        } else {
+            tabcars[tabcars.length-1] +=carext;
+        }
+
+    }
+
+    return tabcars;
 
 }
 

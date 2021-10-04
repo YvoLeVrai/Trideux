@@ -1,0 +1,112 @@
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <LINK href="CSS\Styles.css" rel="stylesheet" type="text/css">
+ 
+
+
+        <!-- BOOTSTRAP Les fichiers sont à la racine du site pour pouvoir être utilisé hors ligne-->
+    <link rel="stylesheet" href="CSS\Bootstrap\bootstrap.css" type="text/css">
+
+    <link rel="icon" type="image/png"   href="icotri2.png" />
+    <title>+ d'informations</title>
+</head>
+
+<body>
+
+    <div id="entete" >
+
+        <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
+         
+        
+        <H1 style="font-size:1.5rem;padding-top: 10px;margin-left:3px;float:left">Plus d'informations sur Trideux.cloud...</H1>
+               
+
+    </div>
+
+    <div style="clear:both;"></div>
+ 
+     
+            <div class="prgrph">
+
+            <h2 style="font-size: 20px"> Généralités <br> </h2>
+            
+            <p> Trideux.cloud a été programmé à l’université de Tours afin de servir de <strong> support à l’apprentissage de la démarche d’enquête quantitative en sociologie</strong>.</p> 
+
+            <img src="Images\univtours-logo-horizontal.jpg" height="60" width="166"  alt="logo univ-tours" class="logo"  >
+
+            <br>
+            <br>
+            <br>
+            
+
+            <p>Le logiciel est pensé pour être <strong> simple et très facile d’accès</strong>. Ses fonctionnalités sont centrées sur les opérations les plus courantes dont ont besoin des étudiants de licence de sociologie :
+                <ul>
+                    <li>visualisation et modification de la base,</li>
+                    <li>tris à plat et/ou calcul indicateurs de tendance centrale et de dispersion, </li>
+                    <li>tris croisés avec tests d’indépendance (Khi², V de Cramèr, T de student/Anova),</li>
+                    <li>recodages par regroupement ou croisement,</li>
+                    <li>représentations graphiques </li>
+                </ul>    
+
+            </p>
+            
+            <p>Il est <strong>totalement gratuit</strong>, ne nécessite aucune création de compte ni abonnement et ne dépose aucun cookie sur votre ordinateur.</p>
+
+                        
+            <h2 style="font-size: 20px"> Fonctionnement <br> </h2>
+
+            Tri2.cloud est développé en html/javascript. <strong>Il peut être exécuté sans installation depuis n’importe quel système d’exploitation et n’importe quel type de terminal informatique (ordinateur, tablette, smartphone)</strong>. Il suffit qu’un navigateur internet relativement récent soit installé. 
+
+            Il n'est même pas nécessaire d'avoir une connexion internet pour l'utiliser. L’intégralité du code est interprété localement par votre navigateur Internet, que vous soyez en ligne ou non. 
+            Si vous n’avez pas de connexion stable, téléchargez la <a href="https://github.com/YvoLeVrai/Trideux/archive/refs/heads/main.zip"> version hors-ligne du logiciel.</a> <br><br>
+
+            Lors de l'utilisation de trideux.cloud <strong> Aucune donnée ne transite entre le site et votre ordinateur </strong>. Les bases que vous chargez restent dans la mémoire vive de votre navigateur, qui effectue tous les calculs. 
+
+            <br>
+            <br>
+
+            <h2 style="font-size: 20px"> De Trideux à trideux.cloud <br> </h2>
+
+            <p>Trideux.cloud est une <strong> version en ligne du logiciel <a href="https://cibois.pagesperso-orange.fr/Trideux.html"> Trideux </a> </strong> (développé par Philippe Cibois). Il en reprend la logique d’ensemble et certains algorithmes </p>
+
+            <!-- <button class="accordion">Quelles différences avec Trideux? </button>
+            <div class="panel"> !-->
+            
+                Principales différences : <br>
+                <ul>
+                <li>Trideux.cloud repose sur un format de base différent (*.TR2). <strong>Toute la base est contenue dans un seul fichier</strong>, au lieu des 3 nécessaires à Trideux bureau  (DAT POS DIC). </li>
+                <li>Les bases TR2 <strong>prennent en compte les variables quantitatives continues et permettent la gestion des réponses multiples</strong>.</li>  
+                <li> Une autre différence est que <strong>de nombreuses fonctionnalités de Trideux n’ont pas encore été implémentées en ligne</strong> (ACM,Régressions).</li>    
+                </ul>
+            
+            <!-- </div> !-->         
+
+            
+            <h2 style="font-size: 20px"> Crédits : <br> </h2>
+
+            <a>Trideux.cloud a été développé à partir de 2020 par Alex Alber, Maître de conférences en sociologie, avec l'aide d'Yvo Toso, et les précieux conseils des premiers utilisateurs dans les universités de Tours et de Grenoble (tout particulièrement Sofia Aouani, Antoine Machut, Pierre Mercklé et Olivier Zerbib)</a> <br> <br> 
+        
+        </div>
+
+
+     
+
+</body>
+
+<script>
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+    
+    for (i = 0; i < acc.length; i++) {
+      acc[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        var panel = this.nextElementSibling;
+        if (panel.style.maxHeight) {
+          panel.style.maxHeight = null;
+        } else {
+          panel.style.maxHeight = panel.scrollHeight + "px";
+        }
+      });
+    }
+</script>
