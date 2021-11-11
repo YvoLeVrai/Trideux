@@ -174,42 +174,97 @@ function ChargerListVar(){
     var htmlvariables = ``;
 
     if(encol==true) {
-        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(10, minmax(150px, 1fr) )">`
+
+        // définition du nombre de colonnes nécessaires
+        // hauteur dispo
+        var ht = window.innerHeight;
+        ht=ht-62;
+
+        
+        var lparc= Math.floor(ht/32) ;
+        
+        
+        //if (lparc < Nom.length) {encol=false;continue;} 
+         
+        //lparc ++;
+
+        var nbcol = Math.floor((Nom.length-1)/lparc)  ;
+        if ((Nom.length-1)%lparc > 0){nbcol++;}
+         
+        //nbcol= Math.round(nbcol);
+        
+        //if (Nom.length%lparc>0){nbcol++;}
+        
+        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) )">`
     }
 
     // défilement des variables
-    for (v = 1; v < Nom.length; v++) {
+    
+    //nombre de cases du tableau 
+    var nbv=Nom.length
+    if(encol==true) {nbv=nbcol*lparc +1};
 
+    for (v = 1; v < nbv; v++) {
+
+        // interversion des modalités (pour la mise en colonne)
+        var v2= v;
+
+        if(encol==true) {
+
+            // dans quelle colonne est-on?
+            var qlcol = v % nbcol;
+            
+            
+            var qllig = Math.floor(v/nbcol) 
+            if (v%nbcol > 0){qllig++;}
+
+            
+            if (qlcol<=0){ // si on est dans la dernières colonne
+                qlcol=nbcol;
+            }  
+            qlcol--;
+
+            
+            v2 =  qlcol  * lparc + qllig  ;
+
+             
+          
+        }
+
+        
         // évitement des types de variables désactivés
-        if (TypVar[v]=='a' && qli==false || TypVar[v]!='a' && qti==false) {continue}
+        if (TypVar[v2]=='a' && qli==false || TypVar[v2]!='a' && qti==false) {continue}
+
 
         // définition du type d'image à afficher en fonction du type de variable
-        var htmlimg = `<img src='Images/\Abc.png'   alt="Abc">`
-        if (TypVar[v]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123">` }
+        var htmlimg = `<img src='Images/\Abc.png'   alt="Abc" height="9" width="18" >`
+        
+        if (TypVar[v2]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123" height="11" width="18"  >` }
 
         var htmlmods = ""
 
+        // affichage des 4 premières modalités 
         for (m=0;m<4;m++){
-            if (TypVar[v]!='a'&& qti!=false) {
+            if (TypVar[v2]!='a'&& qti!=false) {
 
-                if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v] + `, `}
+                if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v2] + `, `}
 
             } else {
 
                 if (qli!=false) {
 
-                    if (m<=CdMax[v] && Moda.length >=v ) {htmlmods+=Moda[v][m] + `, `} 
+                    if (m<=CdMax[v2] && Moda.length >=v ) {htmlmods+=Moda[v2][m] + `, `} 
                 }
 
             }
         }
-        htmlmods += " ... (" + CdMax[v] + ")"
+        htmlmods += " ... (" + CdMax[v2] + ")"
         
         if (encol==true) {htmlmods=''}
 
         // Ajout de la variable au menu de sélection
         var num = Nom.length-1;
-        // htmlvariables = String(htmlvariables) + `<li id='v` + v + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
+        // htmlvariables = String(htmlvariables) + `<li id='v` + v2 + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
         //         <table>
         //             <tr >
         //                 <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
@@ -220,14 +275,22 @@ function ChargerListVar(){
         //         </table>
         //         </li>`
         if (encol!=true) {
-        htmlvariables += '<a class="list-group-item list-group-item-action" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary">' + v + '</small></div><div class="col-11">' + htmlimg + ' <strong>' + Nom[v] + '</strong> | ' + Libellé[v] + ' <small class="text-secondary">' + htmlmods + '</small></div></div></a>';
-        } else {
-        htmlvariables += '<a class="list-group-item list-group-item-action" style="padding:0.5rem 1rem;white-space: nowrap;" href="#" id=\'v' + v + '\' onclick="SelVar(' + v + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary" style="font-size:60%">' + v + '</small></div><div class="col-11"> <strong>' + Nom[v] + '</strong></div></div></a>';
+        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary">' + v2 + '</small></div><div class="col-11">' + htmlimg + ' <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + ' <small class="text-secondary">' + htmlmods + '</small></div></div></a>';
+        } else { 
 
-        }    
+            if (v2 <Nom.length) { // évitement des variables hors cadre
+            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')"><div class="row"><div class="col-id text-right" style="padding-left:5px">' + htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
+            else {
+                
+            htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\'></a>';
+            
+            }    
+        }   
+        
+        
     }
 
-    document.getElementById("fondvars").innerHTML = htmlvariables;
+   document.getElementById("fondvars").innerHTML = htmlvariables;    
 
 }
 
@@ -691,8 +754,8 @@ var LireTR2 = function(event,obj) {
 
 
     }).catch(function (err) {
-        alert("problème lors de l'importation ")
-        alert('Erreur lors du chargement du TR2!' + err );
+        alert("problème lors de l'importation")
+        alert('Erreur lors du chargement du TR2! : ' + err );
 
     });
 
@@ -700,6 +763,8 @@ var LireTR2 = function(event,obj) {
 
 };
 
+var lignebaseimport;
+var colonnebaseimport;
 
 
 function TR2versBDD(lignesTR2) {
@@ -1349,3 +1414,17 @@ window.onbeforeunload = function() {
     return "Des modifications peuvent ne pas être enregistrées";
   
  };
+
+ function fautSauver() {
+     
+    $("#btnexport").addClass("bouton-chaud");
+    $("#btnoptexport").addClass("bouton-chaud");
+    
+ }
+
+
+ function sauvOk() {
+        
+    $("#btnexport").removeClass("bouton-chaud");
+     $("#btnoptexport").removeClass("bouton-chaud");
+ }

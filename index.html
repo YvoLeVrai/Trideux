@@ -75,8 +75,7 @@
     </div>
 
       
-
-    <div id="processing" class="process" style="display: none;" >
+    <div id="processing" class="process" style="display: none;z-index:0" >
         <div class="spin"></div>
         <div id = "lblwait" class="lblspin" >Chargement en cours. Merci de patienter </div>
 
@@ -101,7 +100,7 @@
     
                  
                 <!-- Choix du mode d'affichage-->
-                <form style="width:225px;position:relative;top:7px;" onclick="ChargerListVar()">
+                <form style="width: 280px;position:relative;top:7px;" onclick="ChargerListVar()">
 
                       
                     <div class="custom-control custom-checkbox" style="float: left;">
@@ -125,7 +124,7 @@
                   
                         <div class="custom-control  custom-checkbox custom-control-inline" style="float: left;margin-left:10px;">
                         <label>
-                            <input type="checkbox" class="custom-control-input" id="optcols"  >
+                            <input type="checkbox" class="custom-control-input" id="optcols"  checked>
                             <label class="custom-control-label" for="optcols"></label>
                             <img src="Images\colonnes.png"  alt="colonnes" style="margin-left:-7px;margin-top:3px" >
                         </label>
@@ -133,10 +132,10 @@
                 </form>
 
 
-                <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." onkeydown="GetClav(event,'L')">
+                <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." onkeydown="GetClav(event,FLCXR)">
                 
                  
-               
+                <button class="btn btn-outline-secondary imgbtn imgplus "  onclick= "croisetotal()" type="button" style="margin-left: 10px;display:none"></button>
                 <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "closeFrmVar()" type="button" style="margin-left: 10px;"></button>
     
             </div>
@@ -165,10 +164,10 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.3.5</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.0</label>
 
-        <div class="btnfonction" id = "btnbase" style="position: relative;z-index: 0;" ><img src="Images\folder.png"   alt="Données"><label class='txtbtn' id="lblbase" >Ouvrir base</label>
-            <div class="dropdown-content" id = "menubases">
+        <div class="btnfonction" id = "btnbase" style="position: relative; " ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase" >Ouvrir base</label>
+            <div class="dropdown-content menudrlnt" id = "menubases">
                 <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
                 <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
                 <a> <label for="filezip" style="cursor: pointer;width:100%;height:100%" >  Base DAT/POS/DIC format ZIP </label> <br> <input type="file" id="filezip" accept='.ZIP' name="file" onchange='LireZip(event)' multiple /> </a>
@@ -183,21 +182,41 @@
         <div id="cadreboutons" class = "greyed"  style=" position: relative;">
 
 
-            <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn'>Base</label></div>
-            <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn'>Variables</label></div>
-            <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn'>Explor</label></div>
-            <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn'>Tableau</label></div>
-            <div  class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn'>Filtre</label></div>
-            <div class="btnfonction" id="btnexport"><img src="Images\DAT2.png"   alt="Outils"><label class='txtbtn'>Exporter</label>
-                <div class="dropdown-content" id = "menu">
-                    <a id="btnexport0" onclick="ExportTR2()" style="cursor: pointer;">  Format Tri2.cloud (*.TR2)</a>
-                    <a id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Format (DAT/POS/DIC)</a>
-                    <!-- <a id="btnexport2" onclick="Outils()" style="cursor: pointer;">  Base après recodages (="Lancer Outils")</a> !-->
-                    <a id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Format CSV</a>
-                    <a id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Dictionnaire des variables</a>
+            <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn txtbtn-bleu'>Base</label></div>
+            <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn txtbtn-bleu '>Variables</label></div>
+            <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn txtbtn-bleu'>Explor</label></div>
+            <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn txtbtn-bleu'>Tableau</label></div>
+            <div  class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn txtbtn-bleu'>Filtre</label></div>
+            
+            
+
+
+            <div class="btnfonction"  id="btnoptexport"  style="float:right;
+                                                                height:56px;
+                                                                border:1px solid rgb(230,230,230);
+                                                                margin-right:2px;
+                                                                border-radius: 0 5px 5px 0;"
+                                                                >  
+                <img src="CSS\caret-bas.png" alt="plus d'options" style="margin: 10px;" >
+                 
+                <div class="dropdown-content menudrlnt " id = "menuexport" style="left: calc(100vw - 370px)">
+                    <a> <label id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Convertir au format trideux (DAT/POS/DIC)</label></a>
+                    <a> <label  id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Convertir en format CSV</label></a>
+                    <a> <label  id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Exporter dictionnaire des variables</label></a>
                 </div>
 
             </div>
+
+            <div class="btnfonction" id="btnexport"  onclick="ExportTR2()" style="float:right;
+                                                            border:1px solid rgb(230,230,230);
+                                                            border-right:0px;
+                                                            border-radius: 5px 0 0 5px;">
+
+                <img src="Images\DAT2.png"   alt="enregistrer">
+                <label id = "lblbtnexport" class='txtbtn txtbtn-bleu'>Enregistrer</label>
+                
+            </div>
+            
 
            <!-- <div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> -->
 
@@ -240,11 +259,11 @@
 
             <input onclick="openVars('L')" onkeyup="FiltrerVars(event)" id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
             <!-- <button  class="btn btn-outline-secondary imgbtn imgleft" onclick="vL--;QuelTri()" type="button"></button>
-              <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button> !-->
+              <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button>
 
-            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button> !-->
             <button id="BtnOptL" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar1')"  type="button"></button>
-            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose selectHide" style="margin-right:2px" onclick= "CacheBloc('BlocVar');Vidage('TabBDD','TabTAP','TabTCR','TabEXP');" type="button"></button>
 
         </div>
 
@@ -303,7 +322,7 @@
 
             <input onclick="openVars('C')" onkeyup="FiltrerVars(event)" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
 
-            <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog selectHide"  onclick="VoirOpt('OptVar2')"  type="button"></button>
+            <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog selectHide"  style="margin-right:2px" onclick="VoirOpt('OptVar2')"  type="button"></button>
             <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "prepTAP()" type="button"></button>
 
 
@@ -317,42 +336,42 @@
                 <label class="custom-control-label" for="ChkNRY">Non réponses (0)</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkEff" checked onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkEff">Effectifs</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPL" checked onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPL">% en lignes</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPC" onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPC">% en colonnes</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPT" onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPT">% du total</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkPEM" onclick='T_C_R()'>
                 <label class="custom-control-label" for="ChkPEM">PEM</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkCoul" onclick='T_C_R()' checked="true">
                 <label class="custom-control-label" for="ChkCoul">Color. +/-</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
-                <input type="checkbox" class="custom-control-input" id="ChkRS" onclick='T_C_R()' >
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkRS" onclick='T_C_R()' checked="true">
                 <label class="custom-control-label" for="ChkRS">Résidus X² > 2</label>
             </div>
 
-            <div class="custom-control custom-switch" style='float: left;margin-left:20px; margin-right: 5px;'>
+            <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkTH" onclick='T_C_R()' >
                 <label class="custom-control-label" for="ChkTH">Eff. théo</label>
             </div>
@@ -385,7 +404,7 @@
 
             <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar3')"  type="button"></button>
-            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
+            <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  style="margin-right:2px" onclick= "CacheBloc('BlocEXP');Vidage('TabEXP');" type="button"></button>
 
         </div>
 
@@ -447,8 +466,10 @@
     <br><p>Plus d'informations <a href="info.html" target="_blank" rel="noopener noreferrer">ici</a>.</p>
 
     <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
-                
-    <a href="#" onclick="openFich('/Data/Hvr_0.TR2');closeInfos()" > <label style="cursor: pointer;">  . HVR </label> </a> <a>(Enquête "Hygiène de vie des Rabelaisiens" portant sur la santé et l'alimentation, réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2014)</a> <br>
+
+    <a href="#" onclick="openFich('/Data/Engagement_2015.TR2');closeInfos()" > <label style="cursor: pointer;">  . ENGAGEMENT2015 </label> </a> <a>(Enquête "Engagement des étudiants", réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2015) (Extraits)</a> <br>
+
+    <a href="#" onclick="openFich('/Data/Affect_2017.TR2');closeInfos()" > <label style="cursor: pointer;">  . AFFECT2017 </label> </a> <a>(Enquête "Vie affective des étudiants", réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2017) (Extraits)</a> <br>
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     

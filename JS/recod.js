@@ -212,6 +212,7 @@ function ValidModifVar(){ // lancement manuel d'une règle de recodage saisie
     vuDetails=false;
 
     T_A_P()
+    fautSauver()
 
 }
 
@@ -250,8 +251,7 @@ function regrouper() {
 
     T_A_P();
     CacheBloc('regroup');
-    document.getElementById("btnexport1").innerText = "Base actuelle (modifiée)"
-
+    fautSauver()
 
 
 
@@ -311,7 +311,7 @@ function degrouper() {
     chargerREC();
     T_A_P();
     CacheBloc('degroup');
-    document.getElementById("btnexport1").innerText = "Base actuelle (modifiée)"
+    fautSauver() 
 
 
 }
@@ -646,7 +646,7 @@ function Eclater(v) {
 
 
     alert("Les variables ont bien été créées à la suite.")
-
+    fautSauver()
 
 }
 
@@ -750,7 +750,7 @@ function Agreger(v) {
 
     T_A_P();
 
-
+    fautSauver()
 
 
 
@@ -771,6 +771,7 @@ function SuppRecod(v) { // suppression de tous les recodages
     TypVar[v]="" // forcer le tri à plat à déterminer
     chargerREC()
     T_A_P();
+    fautSauver()
 
 }
 
@@ -1152,7 +1153,7 @@ function MàJMod(event,variable,modalité) {
             T_A_P();
         }
 
-
+        fautSauver()
 
     }
 
@@ -1166,6 +1167,7 @@ function MàJMod(event,variable,modalité) {
       var key = event.keyCode;
     }
      */
+  
 
 }
 
@@ -1214,7 +1216,7 @@ function PrepInterv(sens){
     document.getElementById("ChkMod" + mod1).checked=true;
 
     VoirBloc('swap')
-
+    
 
 }
 
@@ -1254,7 +1256,7 @@ function Interv(mod1,mod2) {
 
     }
 
-
+    fautSauver()
 }
 
 
@@ -1368,6 +1370,7 @@ function dupliCol(v,col,recod) {
     chargerREC()
     vL++;
     T_A_P();
+    fautSauver()
 
 }
 
@@ -1405,7 +1408,7 @@ function SupprCol(col) {
 //if (vL > 1){vL--};
     Vidage("TabTAP")
     T_A_P();
-
+    fautSauver()
 }
 
 // codage automatique de toutes les valeurs 0 (fonction non accessible aux utilisateurs)
@@ -1422,6 +1425,7 @@ function DefNA() {
     }
 
     alert("fin du remplacement")
+    fautSauver()
 }
 
 ////////  //     //   ///////    //////   ///////    ///////
@@ -1742,7 +1746,7 @@ function SauvCSV() { //écriture de la base au format CSV
 
 function ExportTR2() {
     SauvegarderSurDisque(SauvTR2(),nomBase + ".TR2", "UTF-8")
-
+    sauvOk();
 }
 
 function SauvTR2() { //écriture de la base au format CSV
@@ -3239,7 +3243,7 @@ function AjoutVarCalc() {
                 <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
                 <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc0")'>Saisir une valeur</a>
                 <div class="dropdown-divider"></div>
-                    
+                <a class="dropdown-item" href="#" onclick="openVars('Calc0')">Choisissez une variable</a>    
                 </div>
 
             </div>
@@ -3263,6 +3267,7 @@ function AjoutVarCalc() {
                 <div class="dropdown-menu cmbcalc" style = "float:left;width:100%;">
                 <a class="dropdown-item" href="#" onclick='defvcalc("0","TxtCalc1")'>Saisir une valeur</a>
                 <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#" onclick="openVars('Calc1')">Choisissez une variable</a>
                 
             </div>
 
@@ -3280,7 +3285,7 @@ function AjoutVarCalc() {
     HCell.innerHTML = Case;
     tr.appendChild(HCell);
 
-    fillcmbcalc()
+    //fillcmbcalc()
 
          // affichage des fonctionnalités dans l'entête du tableau de base
          var titre = document.getElementById('Titre')
@@ -3304,6 +3309,8 @@ function AjoutVarCalc() {
 }
 
 function fillcmbcalc(){
+
+    /*
 // remplissage des combos avec les variables quanti
 var cmbs = document.getElementsByClassName("cmbcalc")
 
@@ -3329,6 +3336,7 @@ for (v = 1; v < Nom.length; v++) { //défilement des variables
    
 }
 
+*/
 }
 function defvcalc(val,control){
 
@@ -3875,3 +3883,4 @@ function redefModaO() {
      
     
 }
+

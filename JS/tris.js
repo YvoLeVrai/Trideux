@@ -567,7 +567,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
     //Création du tableau de résultats
     var body = document.body
-
+    
     tbl  = document.createElement('table');
     tbl.id = 'TabTAP';
     tbl.className= 'TabTri';
@@ -623,8 +623,10 @@ function T_A_P() { // Calcule et affiche le tri à plat
                     }
                     if (j==1) {
 
+                        var coulPol="black"
 
-                        Case = `<label class= 'LibMod' onclick="VoirModas()" style="cursor:pointer;">  `+ ModaM[i] + `</label> <input type="text" class="NvMod" id=mod`+i+ ` value="`+ ModaM[i] + `" onkeydown="MàJMod(event,` + x +`,`+ i + `)">`;
+                        if (VarMul[0]==true) {coulPol='#1a3f55';}
+                        Case = `<label class= 'LibMod' onclick="VoirModas()" style="cursor:pointer;color:`+ coulPol + `;">  `+ ModaM[i] + `</label> <input type="text" class="NvMod" id=mod`+i+ ` value="`+ ModaM[i] + `" onkeydown="MàJMod(event,` + x +`,`+ i + `)">`;
 
                     }
 
@@ -640,8 +642,11 @@ function T_A_P() { // Calcule et affiche le tri à plat
                         var r = document.querySelector(':root');
                         r.style.setProperty('--pct', nomb);
 
+                        if (VarMul[0]!=true) {
                         Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;}">`+Prct+`% </div>  `;
-
+                        } else { 
+                        Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;background-color:#1a3f55bd;">`+Prct+`% </div>  `;
+                        }    
 
                     };
 
@@ -1387,10 +1392,12 @@ function closeVars() {
 };
 
 function FiltrerVars(event) {
+    
     var nbli=0;
     var lastli=0;
     var key = event.keyCode;
 
+    
 
 if (key==27){ // sortie par échap
 closeVars()
@@ -1563,7 +1570,7 @@ function SelVar(rang) {
     if (isNaN(Nom[rang])) {prefix = rang + " | "}
 
     var nomtxt= "Txt"+FLCXR
-
+    
     if (FLCXR=='X' && ExpRgDp==0) {document.getElementById(nomtxt).placeholder = prefix+ Nom[rang] + " | "+ Libellé[rang];}
     if (FLCXR!='X') {document.getElementById(nomtxt).placeholder = prefix +  Nom[rang] + " | "+ Libellé[rang];document.getElementById(nomtxt).focus()}
 
@@ -1676,6 +1683,7 @@ function E_X_P(x,RgDp,fonction) {
 
     if (x==0) {return 0;}
 
+    // inclusion ou non des non-réponses
 
     // tableau des valeurs
     TapX= new Array (Number(CdMax[x])+1);
@@ -1798,8 +1806,17 @@ function E_X_P(x,RgDp,fonction) {
     // Calcul du total de la sous population
 
     var SousPop=0 ;
+     // les non réponses sont-elles incluses?
+     NRE = document.getElementById('ChkNRE').checked
+      
+     if (NRE == false ) {
+         RgDpE=1; }
+     else {
+         RgDpE = 0;
+     }
 
-    for (j=0;j<TapX.length;j++) {
+
+    for (j=RgDpE;j<TapX.length;j++) {
         SousPop=SousPop + Number(TapX[j]);
     }
 
@@ -1822,7 +1839,7 @@ function E_X_P(x,RgDp,fonction) {
     ExpAct.splice(Rg,0, 1);
 
      
-    for (i = 0; i < TapX.length+1; i++) {
+    for (i = RgDpE; i < TapX.length+1; i++) {
 
         //if (TapX[0]==0) {break;}
 
@@ -2003,7 +2020,7 @@ function AffE_X_P(fonction) {
             var lardisp= larfond - (ExpRng[i]+1) *45 - 60;
             var Prctaff = Prct*lardisp/larfond
              
-            var nomb=  Math.round(Prctaff);
+            var nomb= Math.round(Prctaff);
             
             var r = document.querySelector(':root');
             r.style.setProperty('--pct', nomb);
@@ -2026,8 +2043,8 @@ function AffE_X_P(fonction) {
             }
 
             Case += `<div onclick = "SousTri(`+ l + `,'` + fonction + `')"> 
-            <div  class="PrctExp ` + balise + ` " style="height:30px;position:absolute;cursor:pointer;padding-left:2.5%;width:`+ nomb  + `%;` + prg + `"></div>
-            <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:2.5%; padding-left:10px;cursor:pointer;">`+  ExpLib[i] + `  </div>   
+            <div  class="PrctExp ` + balise + ` " style="height:30px;position:absolute;cursor:pointer;width:`+ nomb  + `%;` + prg + `"></div>
+            <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:10px;cursor:pointer;">`+  ExpLib[i] + `  </div>   
             </div> `
 
             if (fonction != "filtre") {
@@ -3411,11 +3428,14 @@ function khi(x,RgDpX,y,RgDpY){
         
 
         <select id="choixHisto" class="custom-select"  style = " margin-bottom: 2px;width:350px;font-size:1rem;" onchange='HistoTcr()'>
-        <option value="0" disabled>Choisissez un type de graphique</option>
+        <option value="0" disabled>Histogrammes</option>
         <option value="1">Histogramme des effectifs</option>
         <option value="2">Histogramme % en lignes (par colonnes) </option>s
-        <option value="3">Histogramme % en lignes (par lignes) </option>
-        
+        <option value="3">Histogramme % en lignes (par lignes) </option> 
+        <option value="4" disabled>Tableaux "à tiroirs"</option>
+        <option value="5"> Tab. des effectifs</option>
+        <option value="6"> Tab. des % en lignes </option>
+        <option value="7"> Tab. des écarts à l'indépendance </option>
         
         </select>  
         
@@ -3429,6 +3449,10 @@ function khi(x,RgDpX,y,RgDpY){
     
     `;
 
+    /* 
+<option value="8"> Tab. des contributions au khi2 </option>
+        
+    */ 
 
     //  }
     //else {
@@ -3647,7 +3671,7 @@ function khi(x,RgDpX,y,RgDpY){
                     }
 
                     // signalement des résidus
-                    if (document.getElementById('ChkRS').checked ==true  ) {
+                    if (document.getElementById('ChkRS').checked ==true && multi==false ) {
 
                         // calcul du résidu du khi²
 
@@ -5459,4 +5483,17 @@ function VoirPann() {
         document.getElementById('BlocFiltre').style.display = "block";
         }
     }
+}
+
+function croisetotal() {
+
+    wait("Analyse en cours. Merci de patienter "); // affichage de l'indicateur de chargement
+
+    for (v=1;v<Nom.length;v++) {
+
+       if(TypVar[v]=="a"){ T_C_R(vL,v,false)};
+       document.getElementById('v'+v).style.backgroundColor = "rgba(10,200,255,0.5)"
+    }
+
+    endWait()
 }
