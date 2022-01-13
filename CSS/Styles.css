@@ -28,17 +28,25 @@ body {
 
 h1 {
     color: rgb(0,102,166);
-    margin-left: 40px;
+    font-size: 1.60rem;
 }
 
 h2{
     color: rgb(0,102,166);
-    margin-left: 40px;  
+    margin-bottom: 20px; 
+    font-size: 1.5rem;
+}
+
+h3{
+    color: rgb(0,169,155);
+    font-size :1.35rem !important;
+    margin-left: 30px;  
 }
 
 h4 {
- 
-    font-size: 1rem;
+    color: rgb(0,102,166);
+     font-size: 1rem !important;
+     margin-left: 35px;  
 }
 
 select {
@@ -179,15 +187,19 @@ select:invalid { color: gray; }
 
 }
 
+.bouton-froid{
+    border:1px solid rgb(230,230,230); 
+}
 .bouton-chaud{
 
-    border: 2px solid rgb(29, 90, 236);
-    background-color: rgba(0,0,255,0.1);
+    border: 1px solid rgb(29, 90, 236);
+    background-color: rgba(0,0,255,0.15);
+    
 
 }
 
 
-.bouton:hover {background-color: rgb(221,221,221);}
+.bouton:hover {background-color: rgb(29, 90, 236);}
 
 .dropdown {
     position: relative;
@@ -1112,6 +1124,8 @@ select:invalid { color: gray; }
     height:65px;
     margin:2px;
     cursor: pointer;
+     
+
  
 }
 
@@ -1208,10 +1222,20 @@ select:invalid { color: gray; }
  .prgrph {
 
     padding-top: 30px;
-    margin-left:33%;
-    width:33%;
+    margin-left:28%;
+    width:45%;
     text-align: justify;
+    font-size: 1.1rem;
      
+
+ }
+
+ .plan {
+
+    position:fixed;
+    left:0;
+    width: 27%;
+    top:100px;
 
  }
  
@@ -1263,6 +1287,30 @@ select:invalid { color: gray; }
     z-index:100;
   }
 
-  .desactive {
-      color:rgb(240,240,240);
+  .varsel{
+    background-color: rgb(240,240,250) !important;
+    z-index:100;
+    box-shadow : 5px 5px 3px rgb(175, 182, 218);
+  }
+
+  .video{
+      width:100%;
+      border: 2px solid rgb(0,102,166);
+      margin-top: 10px;
+     margin-bottom: 20px;
+  }
+
+  .vignette{
+
+    width:33%;
+    border: 2px solid rgb(0,102,166);
+    float:right;
+    margin-bottom: 20px;
+    margin-left: 30px;
+  }
+
+  .attention {
+    color:rgb(206, 39, 39);
+    font-size: 0.90rem;
+    padding-left:30px;
   }

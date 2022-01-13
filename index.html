@@ -89,11 +89,11 @@
     
     <div id="headervar" class="headervar" > 
     
-        <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="logo Trideux" class="logo" >
+        <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="logo Trideux" class="logo" onclick= "closeFrmVar()">
 
         <div id="optionschvars" style="font-size: 16px;text-align: left; ">
              
-            <div class= "txtbtn" style="float:left;font-size: large;top:20px "> Choisir une variable </div>
+            <div class= "txtbtn" id= "lblchoixvar" style="float:left;font-size: large;top:20px "> Choisir une variable </div>
 
             <div class="input-group-prepend"  style="margin-right: 5px; float:right;width:50%;z-index:0;margin-top: 10px">
                 <!-- <span class="input-group-text">Lignes    </span> -->
@@ -132,10 +132,10 @@
                 </form>
 
 
-                <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." onkeydown="GetClav(event,FLCXR)">
-                
+                <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." >
+                <!-- onkeydown="GetClav(event,FLCXR)" !-->
                  
-                <button class="btn btn-outline-secondary imgbtn imgplus "  onclick= "croisetotal()" type="button" style="margin-left: 10px;display:none"></button>
+                <button class="btn btn-outline-secondary imgbtn imgplus d-none"  onclick= "croisetotal()" type="button" style="margin-left: 10px;"></button>
                 <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "closeFrmVar()" type="button" style="margin-left: 10px;"></button>
     
             </div>
@@ -164,11 +164,11 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.0</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.7</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative; " ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content menudrlnt" id = "menubases">
-                <a>  <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
+                <a> <label  for="filetrd" style="cursor: pointer;width:100%;height:100%">  Base Trideux.cloud (*.TR2) </label> <br> <input type="file" id="filetrd"   name="file" onchange='LireTR2(event)'  accept='.TR2'  /> </a>
                 <a> <label onclick="openNav()" style="cursor: pointer;width:100%;height:100%">  Fichiers DAT/POS/DIC</label></a>
                 <a> <label for="filezip" style="cursor: pointer;width:100%;height:100%" >  Base DAT/POS/DIC format ZIP </label> <br> <input type="file" id="filezip" accept='.ZIP' name="file" onchange='LireZip(event)' multiple /> </a>
                 <a> <label for="filexls" style="cursor: pointer;width:100%;height:100%">  Classeur EXCEL (*.xlsx) </label> <br> <input type="file" id="filexls"   name="file" onchange='LireXLSX(event)'  accept='.XLSX, .XLS'  /> </a>
@@ -191,9 +191,8 @@
             
 
 
-            <div class="btnfonction"  id="btnoptexport"  style="float:right;
+            <div class="btnfonction bouton-froid"  id="btnoptexport"  style="float:right;
                                                                 height:56px;
-                                                                border:1px solid rgb(230,230,230);
                                                                 margin-right:2px;
                                                                 border-radius: 0 5px 5px 0;"
                                                                 >  
@@ -207,8 +206,7 @@
 
             </div>
 
-            <div class="btnfonction" id="btnexport"  onclick="ExportTR2()" style="float:right;
-                                                            border:1px solid rgb(230,230,230);
+            <div class="btnfonction bouton-froid" id="btnexport"  onclick="ExportTR2()" style="float:right;
                                                             border-right:0px;
                                                             border-radius: 5px 0 0 5px;">
 
@@ -257,7 +255,7 @@
 
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="lignes" onclick="openVars('L')"></span>
 
-            <input onclick="openVars('L')" onkeyup="FiltrerVars(event)" id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
+            <input onclick="openVars('L')"   id= "TxtL" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'L')">
             <!-- <button  class="btn btn-outline-secondary imgbtn imgleft" onclick="vL--;QuelTri()" type="button"></button>
               <button  class="btn btn-outline-secondary imgbtn imgright" onclick="vL++;QuelTri()" type="button"></button>
 
@@ -320,7 +318,7 @@
 
             <span class="input-group-text"><img src="Images\Col.PNG"  alt="lignes" onclick="openVars('C')"></span>
 
-            <input onclick="openVars('C')" onkeyup="FiltrerVars(event)" id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
+            <input onclick="openVars('C')"   id= "TxtC" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'C')">
 
             <button id="BtnOptC" class="btn btn-outline-secondary imgbtn imgcog selectHide"  style="margin-right:2px" onclick="VoirOpt('OptVar2')"  type="button"></button>
             <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "prepTAP()" type="button"></button>
@@ -391,16 +389,16 @@
             =============================================================================================
             ==========================================================================================-->
 
-    <div class="ChoixVar3" id="BlocEXP">
+    <div class="ChoixVar3" id="BlocEXP" >
 
 
-        <div class="input-group-prepend" >
+        <div class="input-group-prepend" onkeydown="alert('quille')">
             <!-- <span class="input-group-text">Lignes    </span> -->
 
 
             <span class="input-group-text"><img src="Images\Lig.PNG"  alt="racine" onclick=" ExpRgDp=0; openVars('X')"></span>
 
-            <input onclick="openVars('X');ExpRgDp=0" onkeyup="FiltrerVars(event)" id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
+            <input onclick="openVars('X');ExpRgDp=0"  id="TxtX" type="text" class="form-control picthb" placeholder="Choisissez une variable" >
 
             <button class="btn btn-outline-secondary imgbtn bi-caret-up-fill d-none" onclick= "closeVars();" type="button"></button>
             <button id="BtnOptX" class="btn btn-outline-secondary imgbtn imgcog selectHide" onclick="VoirOpt('OptVar3')"  type="button"></button>
@@ -463,7 +461,11 @@
     <H1 style="font-size:1.5rem;padding-top: 100px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
     
     <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br> Il est totalement gratuit, ne nécessite aucune création de compte ni abonnement et ne dépose aucun cookie sur votre ordinateur.<br> 
-    <br><p>Plus d'informations <a href="info.html" target="_blank" rel="noopener noreferrer">ici</a>.</p>
+    
+    <br>
+    <p> <img src="Tutos/manuel.jpg" alt="Manuel"  style = "width:40px">
+
+     <a href="Tutos/intro.html" target="_blank" rel="noopener noreferrer">+ d'informations et documentation</a>.</p>
 
     <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
 
@@ -492,7 +494,7 @@
         <div id='BlocFiltre' class="col-sm-2" style="display:none;border-right: 1px solid rgb(200,200,200);min-width:500px;max-width:300px;margin-left:-10px;">  
         <div class="input-group-prepend">
             
-            <span class="input-group-text"><img src="Images\filtre-ico.png"  alt="filtre" onclick="openVars('F')"></span>
+            <span class="input-group-text"><img src="Images\filtre-ico.png"  alt="filtre" onclick="openVars('F');ExpRgDp=0"></span>
 
             <input onclick="openVars('F');ExpRgDp=0" id= "TxtF" type="text" class="form-control" placeholder="Choisissez une variable" >
 

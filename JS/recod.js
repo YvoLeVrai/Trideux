@@ -199,7 +199,11 @@ function ChgTypVar(){
 function ValidModifVar(){ // lancement manuel d'une règle de recodage saisie
     Nom[vL] = document.getElementById("TxtNom").value;
     Libellé[vL] = document.getElementById("TxtLib").value;
+    
+    ChargerListVar() // mise à jour des variables (en cas de modif)
+
     var rgl = document.getElementById("TxtRglG").value;
+    
     
     //suppresion des espaces
     rgl = rgl.replace(/\s/g, '') 
@@ -972,6 +976,15 @@ function DicoRegle(vL){
             var avEgal= Rgl[r].substr(0,posEgal);
             var apEgal = Rgl[r].substr(posEgal+1);
 
+            if (Number(apEgal)>CdMax[vL]) {
+            //alert("Le code " + Number(apEgal) + " est supérieur à la valeur maximale de la variable \n Choisissez une valeur inférieure ou égale à " +  CdMax[vL] + " .");
+              
+                for (md=CdMax[vL]+1;md<Number(apEgal)+1;md++) {
+                    Moda[vL].push('')
+                }
+                CdMax[vL] = Number(apEgal);
+            }
+
             if (TypVar[vL]!='a') { // variables quanti
 
                 if (isNaN(apEgal)==false) {
@@ -1149,7 +1162,7 @@ function MàJMod(event,variable,modalité) {
             document.getElementById(Msuiv).focus();
 
         } else {
-
+             
             T_A_P();
         }
 
@@ -1675,6 +1688,9 @@ function SauvCSV() { //écriture de la base au format CSV
         return ;
     }
 
+     
+    //if (sep.toUpperCase() =="TAB") {sep= String.fromCharCode(9); }
+
     var nl= BDD.length-1;
     var TxtFile="";
     var Ligne = "";
@@ -1688,7 +1704,7 @@ function SauvCSV() { //écriture de la base au format CSV
 
         if (lib == "") {lib=Nom[v]};
 
-        if (isNaN(lib)) {lib = lib.replace(sep," ")}
+        if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
 
         Ligne = Ligne + lib;
         if (v<nv) {Ligne = Ligne + sep;}
@@ -1716,7 +1732,7 @@ function SauvCSV() { //écriture de la base au format CSV
             if (TypVar[v] == "a" ) {
 
                 var modalité = Moda[v][val2];
-                if (isNaN(modalité)) { modalité = modalité.replace(sep," ")}
+                if (isNaN(modalité)) { modalité = modalité.replaceAll(sep," ")}
 
                 Ligne = Ligne + modalité;
 
@@ -1773,7 +1789,7 @@ function SauvTR2() { //écriture de la base au format CSV
 
         if (lib == "") {lib=v};
 
-        if (isNaN(lib)) {lib = lib.replace(sep," ")}
+        if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
 
         Ligne = Ligne + lib;
         if (v<nv) {Ligne +=  sep;}
@@ -1792,7 +1808,7 @@ function SauvTR2() { //écriture de la base au format CSV
 
         if (lib == "") {lib=Nom[v]};
 
-        if (isNaN(lib)) {lib = lib.replace(sep," ")}
+        if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
 
         Ligne = Ligne + lib;
         if (v<nv) {Ligne +=  sep;}
@@ -2042,6 +2058,18 @@ function SauvegarderSurDisque(textToWrite,fileNameToSaveAs, format) {
 
 
 function openFrmvar() {
+
+    var lbl = document.getElementById("lblchoixvar")
+    lbl.innerText = "Choisissez une variable"
+    
+    if (FLCXR == "L" && TypTri=="tcr") {
+        lbl.innerText += " en lignes"
+    }
+    
+    if (FLCXR == "C" && TypTri=="tcr") {
+        lbl.innerText += " en colonnes"
+    }
+
     document.getElementById("headervar").style.display = "block";
      
     document.getElementById("ListeVariables").style.display = "block";
@@ -2055,7 +2083,7 @@ function closeFrmVar() { // masque progressif de la fenêtre de sélection des v
     document.getElementById("headervar").style.display = "none";
     document.getElementById("ListeVariables").style.height = "0%";
     document.getElementById("TxtVr").value='';
-    ChargerListVar()
+    //ChargerListVar()
 }
 
 function openNav() {
@@ -2181,7 +2209,7 @@ function AjoutVarCrois() {
     var elmnt = document.getElementById("Pied");
     if (elmnt) {elmnt.style.display="none"}
 
-    document.getElementById("titrebdd").innerText= "Créer un variable par croisement"
+    document.getElementById("titrebdd").innerText= "Créer une variable par croisement"
     document.getElementById("sstitrebdd").innerHTML= `<h4 style="float:left"> Choisissez les variables à croiser : </h4>  <a href="https://utbox.univ-tours.fr/s/GEwx9XSc7mmo4fe" target="_blank" style="float:right">demo</a>`
 
     vLd=0;
@@ -2286,6 +2314,9 @@ function TabRecCrois(vLd, vCd){ // fonction permettant d'afficher le croisement 
     document.getElementById("blocnvv").style.display="block"
 
 
+    // les non réponses sont incluses d'office
+    document.getElementById('ChkNRX').checked=true;
+    document.getElementById('ChkNRY').checked=true;
 
     T_C_R(vLd, vCd, false)
 
@@ -2360,10 +2391,10 @@ function Aff_TcrC() {
 
             <span class="input-group-text" > Libellé </span>
 
-            <input  type="text" id="LibModC" class="form-control" placeholder="Libellé ?" value = ` + ModaR[ModCur] + ` >
+            <input  type="text" id="LibModC" class="form-control" onkeyup="AjoutModaCrois(event)" placeholder="Libellé ?" value = ` + ModaR[ModCur] + `  >
 
 
-            <button id= "btnvalmdrc" class="btn btn-primary"  onclick= "ValidModRec()" type="button" style="height:38px;display:none;width:250px">Créer la modalité</button>
+            <button id= "btnvalmdrc" class="btn btn-primary"  onclick= "ValidModRec()" type="button" style="height:38px;display:none;width:300px">Créer la modalité</button>
 
 
 
@@ -2377,7 +2408,7 @@ function Aff_TcrC() {
 
         //n'affiche l'entête que s'il y a une colonne
         if (MrgY[j]>0) {
-            Case += `<div class="tabrec"  onclick="selcol(` + j + `)" >` + ModaY[j] + `</div>`;
+            Case += `<div class="tabrec"  style="background-color:white;" onclick="selcol(` + j + `)" >` + ModaY[j] + `</div>`;
 
         }
     }
@@ -2396,7 +2427,7 @@ function Aff_TcrC() {
 
                 Case += `<div style="display: flex;flex-direction:row;">`
 
-                    Case += `<div class="tabrec" onclick="sellig(` + i + `)">` + ModaX[i] + `</div>`;
+                    Case += `<div class="tabrec" style="background-color:white;" onclick="sellig(` + i + `)">` + ModaX[i] + `</div>`;
 
                     // cases
                     for (j=0;j<Number(CdMax[y])+1;j++) {
@@ -2502,6 +2533,15 @@ function Aff_TcrC() {
 
 
 
+}
+
+function AjoutModaCrois(event) { // pour valider l'ajout par entrée
+
+    var key = event.keyCode;
+
+    if (key==13) {
+        ValidModRec()
+    }
 }
 
 function ValidModRec() {
@@ -2685,8 +2725,13 @@ function AjoutVCr(){// création de la variable par croisement
 
             // définition contenu de la ligne
 
-            var v1= Number(BDD[l][vLd])
+            var v1= Number(BDD[l][vLd]);
+            var rgl = Reco[vLd];
+            v1=ValApRec(v1,rgl);
+
             var v2= Number(BDD[l][vCd])
+            var rgl = Reco[vCd];
+            v2=ValApRec(v2,rgl);
 
             var combi= TcrC[v1][v2]
 
@@ -3752,8 +3797,9 @@ function GetClav(event, typv) {
 
             document.getElementById("TxtL").focus()
             return 0;
-        }
-        if (key==115) { // inversion des variables avec F4
+    }
+    
+    if (key==115) { // inversion des variables avec F4
             var vtrans= vL;
             vL=vC;
             vC=vtrans;

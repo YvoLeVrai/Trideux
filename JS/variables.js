@@ -123,4 +123,5 @@ var mS=0 // modalité score courante
 var NbOps=0
 
 //variables liées à la fenêtre d'affichage des variables
-var enlig=true // par défaut, les variables sont présentées en ligne
+var encol; // par défaut, les variables sont présentées en ligne
+var Vsrv=0; // variable présélectionnée dans la fenêtre de sélection

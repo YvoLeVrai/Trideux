@@ -1404,7 +1404,7 @@ function EffacePnd() {
 
     vP=0;
     var t= document.getElementById('TxtP');
-    t.value = 'Pas de pondération';
+    t.placeholder = 'Pas de pondération';
     QuelTri()
 }
 
@@ -1418,7 +1418,9 @@ window.onbeforeunload = function() {
  function fautSauver() {
      
     $("#btnexport").addClass("bouton-chaud");
+    $("#btnexport").removeClass("bouton-froid");
     $("#btnoptexport").addClass("bouton-chaud");
+    $("#btnoptexport").removeClass("bouton-froid");
     
  }
 
@@ -1426,5 +1428,39 @@ window.onbeforeunload = function() {
  function sauvOk() {
         
     $("#btnexport").removeClass("bouton-chaud");
-     $("#btnoptexport").removeClass("bouton-chaud");
+    $("#btnoptexport").removeClass("bouton-chaud");
+    $("#btnexport").addClass("bouton-froid");
+    $("#btnoptexport").addClass("bouton-froid");
  }
+
+ function voirMajBase() {
+    
+    var casebase = document.getElementById("txtModifNomBase");
+    casebase.style.display="block";
+    casebase.focus();
+
+ }
+
+ /*Rhabillage d'une modalité*/
+function MàJNomBase(event) {
+    var key = event.keyCode;
+
+
+
+    if (key===13) {
+       
+
+        var nvBase = document.getElementById("txtModifNomBase").value;
+        
+        if (nvBase==''){B_A_S_E();return 0}
+        
+        nomBase = nvBase;
+        document.getElementById("lblbase").innerText = nvBase;
+        B_A_S_E();
+
+        
+        
+
+    }
+
+}

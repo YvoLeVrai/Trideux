@@ -180,8 +180,9 @@ function HistoTcr(){
 
             cnv.fillStyle = 'rgb(90 90 90)';
 
-             
-            var tlignes = splitchaine(Moda2[b],larcat,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+            var txtmoda =  Moda2[b]
+            if (txtmoda==""){txtmoda=b}
+            var tlignes = splitchaine(txtmoda,larcat,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
             
             var rgtop =hautot - margB + 20
             for (l=0;l<tlignes.length;l++) {
@@ -220,8 +221,10 @@ function HistoTcr(){
             cnv.fillRect(posleg, margH + rgtop, 15, 15);
 
             // évaluation de la longueur
-                        
-            var tlignes = splitchaine(Moda1[b],margG-posleg-55,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+            
+            var txtmoda =  Moda1[b]
+            if (txtmoda==""){txtmoda=b}
+            var tlignes = splitchaine(txtmoda,margG-posleg-55,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
             
             for (l=0;l<tlignes.length;l++) {
                 cnv.fillText(tlignes[l], posleg + 25, margH + rgtop + 8);
@@ -369,6 +372,542 @@ function legendTcr(){
     rgtop+=15;     
     }
     
+
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Boites à moustaches
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+function Moustaches(cadre, x, y,nbc) {
+
+
+    const canvas = document.getElementById(cadre);
+
+    if (!canvas.getContext) {
+        return;
+    }
+    const cnv = canvas.getContext('2d');
+
+
+    // extraction de la colonne des y (sans filtrage pour échelle)
+
+    // les non réponses sont-elles incluses?
+    var NRC = document.getElementById('ChkNRY').checked
+
+    var col = ExtractCol(y,NRC, 0,0)
+    TriParTas (col);
+
+    var rgl = Reco[y]
+
+
+
+    var valmin = ValApRec(col[0],rgl)
+    valmin = Math.floor(valmin);
+    var valmax = ValApRec(col[col.length-1],rgl)
+    valmax= Math.floor(valmax)+1;
+
+
+
+
+    // définition des bornes (pour la légende)
+
+    // variables pour l'affichage
+    var margG= 50
+    var margD= 50
+    var margH= 50
+    var margB= 50
+
+    var lartot= 1000
+    var hautot= 500
+    var lardisp = lartot - (margG+margD)
+    var haudisp = hautot - (margH+margB)
+
+    // dessin du fond
+    // fond blanc
+    cnv.fillStyle = "white";
+    cnv.fillRect(0, 0, lartot, hautot);
+
+    var my_gradient = cnv.createLinearGradient(margG, margH, margG, haudisp);
+    my_gradient.addColorStop(0, "white");
+    my_gradient.addColorStop(0.5,"rgb(250 250 255)");
+    my_gradient.addColorStop(1, "rgb(245 245 250)");
+    cnv.fillStyle = my_gradient;
+    cnv.fillRect(margG, margH, lardisp, haudisp);
+
+
+
+    // ordonnées
+    effmaxtxt = String(valmax);
+    pas = effmaxtxt.length;
+
+    var ech = 1;
+    if (pas>1) {
+        var ech = Math.pow(10,(pas-1))
+    } else {
+        ech=2;
+    }
+
+    ech=ech/2;
+
+    var reste = valmax%ech;
+    var echymax = valmax + ech - reste;
+    var reste = valmin%ech;
+    var echymin = valmin - ech - reste;
+    if (echymin<0){echymin=0}
+
+
+    var hautech = haudisp/(echymax-echymin);
+    //hautech=Math.round(hautech);
+
+
+
+    // légende en Y
+    cnv.fillStyle = 'rgb(90 90 90)';
+    cnv.fillRect(margG, margH, 1, haudisp);
+    cnv.font = "12px Arial";
+    var lastpct;
+    for (b=echymax;b>echymin-1;b--) {
+
+        if (b%ech==0) {
+
+            // effectifs (à gauche)
+            var posleg = margH + (echymax-b)*hautech;
+            cnv.fillStyle = 'rgb(220 220 250)';
+            cnv.fillRect(margG-5, posleg, lardisp+5, 1);
+
+            cnv.fillStyle = 'rgb(90 90 90)';
+            cnv.fillText(b, margG-30, posleg+5);
+
+
+            pct= b/PopTot *100
+            pct=pct.toFixed(2)
+            //pct=Math.round(pct)
+
+
+
+        }
+
+    }
+    // ajout de l'étiquette de légende
+    cnv.fillText("n", 10, 250);
+
+
+    // abcisses
+    posleg = margG // calage à gauche de l'affichage
+
+
+    var larbar = lardisp/(nbc);
+    if (larbar > 200) {larbar = 200};
+    var hautech =  echymax-echymin;
+
+    // les non réponses sont-elles incluses?
+    var NRX = document.getElementById('ChkNRX').checked;
+    var rgstart =0;
+    if (NRX == false ) {rgstart=1};
+
+    for (c=rgstart;c<CdMax[x]+1;c++) {
+        //larbar=Math.round(larbar) ;
+
+        // extraction de la colonne
+        Colonne = ExtractCol(y,NRC, x,c)
+
+        // if (Colonne.length<1) {continue}
+
+
+        // légende en X
+        cnv.fillStyle = 'rgb(90 90 90)';
+        cnv.fillRect(margG, hautot-margB, lardisp, 1);
+        cnv.font = "12px Arial";
+
+        //Etiquette de ligne
+
+        cnv.fillStyle = 'rgb(250 250 250)';
+        cnv.fillRect(posleg, 452, 1000, margB);
+
+        cnv.fillStyle = 'rgb(90 90 90)';
+
+        //var posleg = margG + (c+1) *larbar;
+        cnv.fillRect(posleg, 450, 1, 5);
+
+        // ajout de l'étiquette de légende
+
+        var tlignes = splitchaine(Moda[x][c],larbar-15,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+                 
+        var rgtop=470;
+        for (l2=0;l2<tlignes.length;l2++) {
+            // définition de la largeur de l'étiquette
+            var lartxt =  cnv.measureText(tlignes[l2]).width 
+            var lft= (larbar/2) - (lartxt/ 2 )
+
+            if (lft<0){lft=5}
+            
+            cnv.fillText(tlignes[l2], posleg + lft,rgtop);
+            rgtop+=15;    
+        }
+
+
+
+
+
+
+        
+
+
+        // extremas
+        var valmin = jStat.min(Colonne)
+        var valmax = jStat.max(Colonne)
+
+        var y1 = hautot-margB - ((valmax-echymin)/hautech) * haudisp;
+        var y2 =  ((valmax-valmin)/hautech) * haudisp
+
+        cnv.fillRect(posleg+larbar/2, y1, 1, y2);
+
+        cnv.fillRect(posleg+larbar/2 - 4, y1, 9, 1);
+        cnv.fillRect(posleg+larbar/2 - 4, y1+y2, 9, 1);
+
+
+        // Quartiles
+        var Qrts =jStat.quartiles(Colonne)
+
+        var valQ2 = Qrts[0]
+        var valMed = Qrts[1]
+        var valQ3 = Qrts[2]
+
+
+        var y1 = hautot-margB - ((valQ3-echymin)/hautech) * haudisp;
+        var y2 =  ((valQ3-valQ2)/hautech) * haudisp
+
+        cnv.fillStyle = 'rgb(103 148 189)';
+        cnv.fillRect(posleg+ 20, y1, larbar-40, y2);
+
+        cnv.fillStyle = 'rgb(9 9 9)';
+        cnv.beginPath();
+        cnv.rect(posleg+ 20, y1, larbar-40, y2);
+        cnv.stroke();
+
+
+        //médiane
+        var y1 = hautot-margB - ((valMed-echymin)/hautech) * haudisp;
+        cnv.fillRect(posleg+ 20, y1, larbar-40, 1);
+
+
+        posleg += larbar;
+
+    }
+
+
+
+
+
+
+
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Nuage de points
+///////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+function Nuage(cadre, x, y ) {
+
+
+    const canvas = document.getElementById(cadre);
+
+    if (!canvas.getContext) {
+        return;
+    }
+    const cnv = canvas.getContext('2d');
+
+
+    // extraction de la colonne des y (sans filtrage pour échelle)
+
+    // les non réponses sont-elles incluses?
+    var NRC = document.getElementById('ChkNRY').checked
+
+    var col = ExtractCol(y,NRC, 0,0)
+    TriParTas (col);
+
+    var rgl = Reco[y]
+
+
+
+    var valminx = ValApRec(jStat(Cols[1]).min(),rgl)
+    valminx = Math.floor(valminx);
+    var valmaxx = ValApRec(jStat(Cols[1]).max(),rgl)
+    valmaxx= Math.floor(valmaxx);
+
+    var valminy = ValApRec(jStat(Cols[2]).min(),rgl)
+    valminy = Math.floor(valminy);
+    var valmaxy = ValApRec(jStat(Cols[2]).max(),rgl)
+    valmaxy= Math.floor(valmaxy);
+
+
+    // définition des bornes (pour la légende)
+
+    // variables pour l'affichage
+    var margG= 60
+    var margD= 50
+    var margH= 50
+    var margB= 60
+
+    var lartot= 1200
+    var hautot= 650
+    var lardisp = lartot - (margG+margD)
+    var haudisp = hautot - (margH+margB)
+
+    // dessin du fond
+    // fond blanc
+    cnv.fillStyle = "white";
+    cnv.fillRect(0, 0, lartot, hautot);
+
+    var my_gradient = cnv.createLinearGradient(margG, margH, margG, haudisp);
+    my_gradient.addColorStop(0, "white");
+    my_gradient.addColorStop(0.5,"rgb(250 250 255)");
+    my_gradient.addColorStop(1, "rgb(245 245 250)");
+    cnv.fillStyle = my_gradient;
+    cnv.fillRect(margG, margH, lardisp, haudisp);
+
+
+    /////////////////://///////////////://///////////////://///////////////://///////////////://///////////////:
+    // légendes 
+    /////////////////://///////////////://///////////////://///////////////://///////////////://///////////////:
+     
+        
+    cnv.font = "14px Arial"
+    cnv.fillStyle = 'black';
+
+
+
+        // variable en colonnes
+        var txtlbl = Nom[x] + " - " + Libellé[x];
+
+        var tlignes = splitchaine(txtlbl,lardisp,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+        
+        var rgtop= margH + haudisp + 35
+
+        for (l2=0;l2<tlignes.length;l2++) {
+            var lartxt =  cnv.measureText(tlignes[l2]).width
+            var x1= margG +   (lardisp  - lartxt ) /2 
+            cnv.fillText(tlignes[l2], x1 ,rgtop);
+        rgtop+=15;     
+        }
+
+
+        // variable en lignes
+        var txtlbl = Nom[y] + " - " + Libellé[y];
+
+        var tlignes = splitchaine(txtlbl,haudisp,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
+        var lartxt =  cnv.measureText(tlignes[0]).width
+
+        cnv.save();
+        cnv.translate(0, margH  +  haudisp);
+        cnv.rotate(-Math.PI/2);
+        //cnv.textAlign = "center";           
+        
+        
+        var rgtop= 20 
+        for (l2=0;l2<tlignes.length;l2++) {
+
+        // rotation pour écriture verticale
+
+        var lartxt =  cnv.measureText(tlignes[l2]).width
+             
+            cnv.fillText(tlignes[l2],(haudisp  - lartxt)/2 ,rgtop);
+        rgtop+=15;     
+                   
+            
+        }
+
+        cnv.restore();
+
+
+
+
+
+    // abscisse
+    effmaxtxt = String(valmaxx);
+    pas = effmaxtxt.length;
+
+    var ech = 1;
+    if (pas>1) {
+        var ech = Math.pow(10,(pas-1))
+    } else {
+        ech=2;
+    }
+
+    ech=ech/2;
+    
+    var reste = valmaxx%ech;
+    if (reste>0) {var echxmax = valmaxx + ech - reste;} else {var echxmax = valmaxx; }
+    var reste = valminx%ech;
+    if (reste>0) {var  echxmin = valminx - ech - reste;} else {var echxmin = valminx  }
+    //var echxmin = valminx - ech - reste;
+    if (echxmin<0 && valminx > 0){echxmin=0}
+
+    
+
+     
+    var larech = lardisp/(echxmax-echxmin);
+    
+
+    // légende en x 
+    cnv.fillStyle = 'rgb(90 90 90)';
+    cnv.fillRect(margG, margH, 1, haudisp);
+    cnv.font = "12px Arial";
+         
+    for (b=echxmin;b<echxmax+1;b++) {
+
+        if (b%ech==0) {
+             
+            // effectifs (à gauche)
+            var posleg = margG + b*larech;
+            cnv.fillStyle = 'rgb(220 220 250)';
+            cnv.fillRect( posleg, margH + haudisp, 1,10);
+
+            cnv.fillStyle = 'rgb(90 90 90)';
+            cnv.fillText(b,  posleg+2 , margH + haudisp+ 15);
+
+
+           
+
+
+        }
+
+    }
+
+ 
+
+
+
+    // ordonnées
+    effmaxtxt = String(valmaxy);
+    pas = effmaxtxt.length;
+
+    var ech = 1;
+    if (pas>1) {
+        var ech = Math.pow(10,(pas-1))
+    } else {
+        ech=2;
+    }
+
+    ech=ech/2;
+
+    var reste = valmaxy%ech;
+    if (reste > 0) {var echymax = valmaxy + ech - reste;} else {var echymax = valmaxy;} 
+    var reste = valminy%ech;
+    if (reste > 0) {var echymin = valminy - ech - reste;} else {var echymin = valminy;}
+    if (echymin < 0 && valminy >=0) {echymin=0;}
+     
+
+
+    var hautech = haudisp/(echymax-echymin);
+    //hautech=Math.round(hautech);
+
+
+
+    // légende en Y
+    cnv.fillStyle = 'rgb(90 90 90)';
+    cnv.fillRect(margG, margH, 1, haudisp);
+    cnv.font = "12px Arial";
+    var lastpct;
+    for (b=echymax;b>echymin-1;b--) {
+
+        if (b%ech==0) {
+
+            // effectifs (à gauche)
+            var posleg = margH + (echymax-b)*hautech;
+            cnv.fillStyle = 'rgb(220 220 250)';
+            cnv.fillRect(margG-5, posleg, lardisp+5, 1);
+
+            cnv.fillStyle = 'rgb(90 90 90)';
+            cnv.fillText(b, margG-30, posleg+5);
+
+
+            pct= b/PopTot *100
+            pct=pct.toFixed(2)
+            //pct=Math.round(pct)
+
+
+
+        }
+
+    }
+    // ajout de l'étiquette de légende
+    cnv.fillText("n", 10, 250);
+
+
+    // ajout des points 
+    var valx,valy; // valeurs x et y pour le point 
+    var valxs,valys; // valeurs x et y pour le point suivant
+    var nbi=0; // nombre d'individus à la combinaison donnée
+ 
+
+
+    for (l=0;l<Cols[1].length+1;l++){
+        valx= Cols[1][l];
+        valy = Cols[2][l];
+        valxs= Cols[1][l+1];
+        valys = Cols[2][l+1];
+
+         if (valx != valxs || valy != valys || l == Cols[1].length ) { // si la valeur suivante est différente ou si l'on est à la fin des enregistrements
+            // définition de la position en fonction des valeurs
+            var posx = margG + valx / (echxmax - echxmin) * lardisp
+            var posy = margH + haudisp - valy / (echymax - echymin) * haudisp
+            
+            cnv.globalAlpha=0.2 +nbi*0.05;
+
+            cnv.beginPath();
+            cnv.arc(posx, posy, 3 + nbi, 0, 2 * Math.PI, false);
+            cnv.fillStyle =  'rgb(200 200 250)';
+            cnv.fill();
+            cnv.lineWidth = 2;
+            cnv.strokeStyle = 'rgb(100 100 250)';
+            cnv.stroke();
+
+       
+            nbi=0;
+        } else {
+            nbi+= 100/PopTot;    
+        }
+
+
+      
+    }
+
+
+    // calcul du coeff directeur (méthode des moindres carrés)
+    var covar = jStat.covariance( Cols[1], Cols[2] )
+    var varx = jStat.variance(Cols[1])
+    var a = covar/varx;
+    var oo= jStat.mean(Cols[2]) - a*jStat.mean(Cols[1])
+
+    //alert("coeff dir = " + a + "\n" + "ordonnée à l'origine = " + oo)
+
+    //tracé de la droite de régression linéaire
+    var x1= echxmin;
+    var y1= a * x1 + oo;
+    var x2= echxmax;
+    var y2= a * x2 + oo;
+
+    x1=margG
+    x2=margG + lardisp
+    y1=margH + haudisp - (y1 / (echymax-echymin)*haudisp); 
+    y2=margH + haudisp - (y2 / (echymax-echymin)*haudisp); 
+
+    cnv.strokeStyle = 'rgb(155 155 255)';
+    cnv.lineWidth = 1;
+    cnv.globalAlpha=1
+    cnv.beginPath(); 
+    cnv.moveTo(x1,y1);
+    cnv.lineTo(x2,y2);
+    cnv.stroke();
+
+
 
 
 }
@@ -1090,7 +1629,7 @@ function splitchaine(chaine,largeur,font) { // fonction permettant de gérer les
 
      
 
-    if (chaine=="" && chaine==undefined){ return 0;}
+    if (chaine=="" || chaine==undefined){ return 0;}
 
     var lartemp;
     var sschaine = "";
