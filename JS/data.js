@@ -165,6 +165,7 @@ function ChargerPOS() {
 function ChargerListVar(){
  
 
+    
     var qli= document.getElementById("ChkVqli").checked;
     var qti= document.getElementById("ChkVqti").checked;
     encol = document.getElementById("optcols").checked;
@@ -172,6 +173,7 @@ function ChargerListVar(){
     
 
     var htmlvariables = ``;
+    larcolvar = window.innerWidth;
 
     if(encol==true) {
 
@@ -184,16 +186,14 @@ function ChargerListVar(){
         var lparc= Math.floor(ht/32) ;
         
         
-        //if (lparc < Nom.length) {encol=false;continue;} 
-         
-        //lparc ++;
-
+ 
         var nbcol = Math.floor((Nom.length-1)/lparc)  ;
         if ((Nom.length-1)%lparc > 0){nbcol++;}
-         
-        //nbcol= Math.round(nbcol);
         
-        //if (Nom.length%lparc>0){nbcol++;}
+        
+        larcolvar = window.innerWidth / nbcol;
+        larcolvar=Math.round(larcolvar)
+         
         
         htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) )">`
     }
@@ -262,6 +262,8 @@ function ChargerListVar(){
         
         if (encol==true) {htmlmods=''}
 
+        var htmlmagnet = '<div class="magnet" id=\'m' + v2 +  '\' ></div>'
+
         // Ajout de la variable au menu de sélection
         var num = Nom.length-1;
         // htmlvariables = String(htmlvariables) + `<li id='v` + v2 + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
@@ -275,11 +277,21 @@ function ChargerListVar(){
         //         </table>
         //         </li>`
         if (encol!=true) {
-        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')"><div class="row"><div class="col-id text-right"><small class="text-secondary">' + v2 + '</small></div><div class="col-11">' + htmlimg + ' <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + ' <small class="text-secondary">' + htmlmods + '</small></div></div></a>';
+        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 
+        + '\' onclick="SelVar(' + v2 + ')">'  
+        + htmlmagnet 
+        + '<div class="row"><div class="col-id text-right"><small class="text-secondary">' 
+        + v2 
+        + '</small></div><div class="col-11">' 
+        + htmlimg + ' <strong>' 
+        + Nom[v2] + '</strong> | ' 
+        + Libellé[v2] + ' <small class="text-secondary">' 
+        + htmlmods + '</small></div></div></a>';
+
         } else { 
 
             if (v2 <Nom.length) { // évitement des variables hors cadre
-            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')"><div class="row"><div class="col-id text-right" style="padding-left:5px">' + htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
+            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')">' + htmlmagnet + '<div class="row"><div class="col-id text-right" style="padding-left:5px">' +  htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
             else {
                 
             htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\'></a>';
@@ -1290,17 +1302,29 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
 
         // création de la variable
-        var nomvar= TxtMef(c+1,3,0);
+
+        // définition de l'identifiant
+
+        var nomvar;
+        var libvar;        
+        var entete = TabXLS[0][c]; // récupération de l'intitulé (et éventuellement de l'identifiant) de la variable dans la première ligne de la colonne
+        var posslash = entete.indexOf("|");
+
+        if (posslash >-1) { // s'il y a un séparateur
+            nomvar = entete.substr(0,posslash)
+            libvar = entete.substr(posslash+1)
+        } else {
+            nomvar= TxtMef(c+1,3,0);
+            libvar = entete
+        }
+
+         
 
 
 
         if (typv=="a") {
             var maxvar = modcol.length-1;
         }
-
-
-        var libvar = TabXLS[0][c]; // récupération de l'intitulé de la variable dans la première ligne de la colonne
-
 
         if (typv == "e") {maxvar = Number(maxval);}
         if (typv == "r") {
@@ -1310,7 +1334,7 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
         }
 
         //Remplissage du tableau des variables
-        Nom.push(nomvar);
+        Nom.push(nomvar.trim());
         Posi.push(0);
         CdMax.push(maxvar)
         Reco.push('');

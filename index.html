@@ -135,7 +135,7 @@
                 <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." >
                 <!-- onkeydown="GetClav(event,FLCXR)" !-->
                  
-                <button class="btn btn-outline-secondary imgbtn imgplus d-none"  onclick= "croisetotal()" type="button" style="margin-left: 10px;"></button>
+                <button id ="btnmagnet" class="btn btn-outline-secondary imgbtn imgmagnet d-none"  onclick= "croisetotal()" type="button" style="margin-left: 10px;"></button>
                 <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "closeFrmVar()" type="button" style="margin-left: 10px;"></button>
     
             </div>
@@ -164,7 +164,7 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.7</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.8</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative; " ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content menudrlnt" id = "menubases">
@@ -475,7 +475,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-   <!-- <a href="#" onclick="openFich('/Data/Base_POF_3.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . POF_2020 </label> </a> </a> </p> -->
+    <a href="#" onclick="openFich('/Data/ETUALIM_2.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->

@@ -1053,6 +1053,12 @@ select:invalid { color: gray; }
     background-image: url("grph.png");
 }
 
+.imgmagnet {
+    background-image: url("magnet.png");
+    height:38px;
+    width:38px;
+}
+
 .process {
     float:left;
     height: 100%;
@@ -1313,4 +1319,16 @@ select:invalid { color: gray; }
     color:rgb(206, 39, 39);
     font-size: 0.90rem;
     padding-left:30px;
+  }
+
+  .magnet{
+    position:absolute;
+    float:left;
+    height: 100%;
+    width:5px;
+    background-color: #9393930a;
+    margin-top: -0.5rem;
+    margin-left:-1rem;
+    color: #0066ff36;
+
   }

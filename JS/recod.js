@@ -1700,9 +1700,9 @@ function SauvCSV() { //écriture de la base au format CSV
 //Ajout des en-têtes
     for (v=1; v<= nv; v++) { // défilement des variables
 
-        var lib = Libellé[v];
+        var lib = Nom[v] + " | " + Libellé[v];
 
-        if (lib == "") {lib=Nom[v]};
+        //if (lib == "") {lib=Nom[v]};
 
         if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
 
@@ -2061,13 +2061,26 @@ function openFrmvar() {
 
     var lbl = document.getElementById("lblchoixvar")
     lbl.innerText = "Choisissez une variable"
+    //$("btnmagnet").addClass("d-none");
+
     
     if (FLCXR == "L" && TypTri=="tcr") {
-        lbl.innerText += " en lignes"
+        lbl.innerText += " en ligne"
+        if(vC != 0){
+            $("#btnmagnet").removeClass("d-none");
+        }
+         
+        if (VMagnet[1]=="L"){ChargerListVar();}
+
     }
     
     if (FLCXR == "C" && TypTri=="tcr") {
-        lbl.innerText += " en colonnes"
+        lbl.innerText += " en colonne"
+        if(vL != 0){
+            $("#btnmagnet").removeClass("d-none");
+        }
+         
+        if (VMagnet[1]=="C"){ChargerListVar();}
     }
 
     document.getElementById("headervar").style.display = "block";

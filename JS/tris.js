@@ -1379,7 +1379,8 @@ function closeVars() {
     document.getElementById("ListeVariables").style.height = "0%";
     document.getElementById("ListeVariables").style.display = "none";
     document.getElementById("TxtVr").value='';
-    ChargerListVar()
+    
+    //ChargerListVar()
     
     //document.getElementById("ListeVariables").style.height = "0%";
     //document.getElementById("headervar").style.display = "none";
@@ -2385,6 +2386,39 @@ function defFiltre(){
 function SuppFltr() {
 
     ExpFltr=[];
+}
+
+function FltrEnTxt() {
+        // inventaire des lignes
+        for (l=0;l<ExpVar.length+1;l++) {
+
+            
+            if (ExpAct[l]==false && ExpMod[l]!="var"){ // la case est désactivée (il y a un filtre à ajouter)
+            
+                chaineFltr += ExpVar[l] + "-" + ExpMod[l] + "-" + ExpAct[l] + "/"; // ajout de la ligne
+    
+                var rg= ExpRng[l] // nombre d'itérations
+                
+    
+                    if (rg>0) { // s'il y a une ascendance à ajouter
+    
+    
+                        var mumc = ExpMum[l]
+                        
+                        for (r=1;r<rg+1;r++) {
+                             
+                            chaineFltr += ExpVar[mumc] + "-" + ExpMod[mumc] + "-" + ExpAct[mumc] + "/"
+                         
+                            mumc = ExpMum[mumc]
+                        }
+                    }    
+    
+                    ExpFltr.push(chaineFltr)    
+                    
+            }
+            chaineFltr="";
+        }
+
 }
 
 
@@ -5601,19 +5635,47 @@ async function croisetotal() {
 
     wait("Analyse en cours. Merci de patienter "); // affichage de l'indicateur de chargement
 
-        
+    // définition de la variable opposée
+
+    var v; // variable testée 
+    var vO = 0; // variable opposée
+    var sensVO="";
+    if (FLCXR=="L") {vO=vC;sensVO="C";}
+    if (FLCXR=="C") {vO=vL;sensVO="L";}
+
+   VMagnet = [vO,sensVO];
+     
+    
+    document.getElementById('ChkNRX').checked=false;
+    document.getElementById('ChkNRY').checked=false;
+
 
     for (v=1;v<Nom.length;v++) {
 
+       //if (v=vO){continue;}
 
-       if(TypVar[v]=="a"){
+        /*
+       var  VarMul = EstMulti(v,ModaM);
+
+       if (VarMul[0]==true) {continue;}
+*/
+
+
+       if(TypVar[v]=="a" && v != vO && CdMax[v] <= 20 ){
            
-        T_C_R(vL,v,false);
-        khi(vL,0,v,0);
+        T_C_R(vO,v,false);
+        khi(vO,0,v,0);
 
-        if (proba<0.1 && vcram > 0.1) {
+        if (proba<0.1) {
 
-            document.getElementById("v"+ v ).style.backgroundColor ="rgba(10,200,250,0.6)"
+            document.getElementById("m"+ v ).style.backgroundColor = "#0066ff36"
+             
+            var larcram = vcram * larcolvar; 
+            larcram=Math.round(larcram)
+            
+            larcram +="px";
+             
+            document.getElementById("m"+ v ).style.width = larcram;
 
         }
 

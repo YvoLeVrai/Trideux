@@ -18,7 +18,7 @@ var CdMax=[0]; // tableau des Codes max de variable
 var Reco=[0]; // tableau des recodages de variable
 var Libellé=[0]; // tableau des Libellés de variable
 var TypVar=[0]; // tableau des types de variable : (a)lpha par défaut dans trideux (n)=numérique (m) = alpha multiple
-
+ 
 var vL=0; //variable en lignes
 var vC=0; //variable en colonnes
 var vF=0; //variable filtre
@@ -125,3 +125,5 @@ var NbOps=0
 //variables liées à la fenêtre d'affichage des variables
 var encol; // par défaut, les variables sont présentées en ligne
 var Vsrv=0; // variable présélectionnée dans la fenêtre de sélection
+var VMagnet=[0,""]; //tableau mémorisant la dernière variable dont on a recherché les liaisons et le sens d'affichage 
+var larcolvar = 0;// mémorisation de la largeur par défaut des colonnes 
