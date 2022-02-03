@@ -654,20 +654,20 @@ function Eclater(v) {
 
 }
 
-function Agreger(v) {
-    v=vL;
+function Agreger() {
+    var v=vL;
 
     // définition du nombre de colonnes à agréger
     var nbcol = prompt("Combien de colonnes souhaitez vous agréger (en comptant celle-ci)?")
     if (nbcol<2 || isNaN(nbcol)==true) {return 0}
 
-    var nomvar = prompt("Quel est le nom de la variable créée ?")
+    var nomvar = prompt("Quel est le libellé de la variable créée ?")
 
     var col = v
 
 
     // création de la variable au rang -1
-    Nom.splice(col,0,Nom[col] + "(multi)");
+    Nom.splice(col,0,Nom[col] + "_(multi)");
     Posi.splice(col,0,'');
     CdMax.splice(col,0,10);
     Reco.splice(col,0,'');
@@ -709,6 +709,7 @@ function Agreger(v) {
                 // la chaine de modalité est allongée du nom de la colonne
                 // retrait de la partie commune
                 var libssttr= Libellé[c].replace(nomvar,"")
+                libssttr= libssttr.replace("/"," ") // évitement de la présence des slashs dans la modalité ajoutée
                 strlig +=  libssttr + "/"
 
             }
@@ -2057,47 +2058,7 @@ function SauvegarderSurDisque(textToWrite,fileNameToSaveAs, format) {
 
 
 
-function openFrmvar() {
 
-    var lbl = document.getElementById("lblchoixvar")
-    lbl.innerText = "Choisissez une variable"
-    //$("btnmagnet").addClass("d-none");
-
-    
-    if (FLCXR == "L" && TypTri=="tcr") {
-        lbl.innerText += " en ligne"
-        if(vC != 0){
-            $("#btnmagnet").removeClass("d-none");
-        }
-         
-        if (VMagnet[1]=="L"){ChargerListVar();}
-
-    }
-    
-    if (FLCXR == "C" && TypTri=="tcr") {
-        lbl.innerText += " en colonne"
-        if(vL != 0){
-            $("#btnmagnet").removeClass("d-none");
-        }
-         
-        if (VMagnet[1]=="C"){ChargerListVar();}
-    }
-
-    document.getElementById("headervar").style.display = "block";
-     
-    document.getElementById("ListeVariables").style.display = "block";
-    document.getElementById("ListeVariables").style.height = "calc(100vh - 70px)";
-    document.getElementById("TxtVr").focus()
-     
-     
-}
-
-function closeFrmVar() { // masque progressif de la fenêtre de sélection des variables (différent de closevar)
-    document.getElementById("headervar").style.display = "none";
-    document.getElementById("ListeVariables").style.height = "0%";
-    document.getElementById("TxtVr").value='';
-    //ChargerListVar()
-}
 
 function openNav() {
     document.getElementById("myNav").style.height = "100%";
@@ -3848,9 +3809,7 @@ function DetailsVar() {
 
     if (VarMul[0]==true) {
         document.getElementById('btnEclat').style.display="block"
-
-
-    }
+    } else { document.getElementById('btnAgreg').style.display="block"}
 
     vuDetails=true;
 }

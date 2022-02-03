@@ -135,7 +135,7 @@
                 <input id="TxtVr" onkeyup="FiltrerVars(event)"  type="text" class="form-control pictchrch" placeholder="Chercher..." >
                 <!-- onkeydown="GetClav(event,FLCXR)" !-->
                  
-                <button id ="btnmagnet" class="btn btn-outline-secondary imgbtn imgmagnet d-none"  onclick= "croisetotal()" type="button" style="margin-left: 10px;"></button>
+                <button id ="btnmagnet" class="btn btn-outline-secondary imgbtn imgmagnet d-none "  onclick= "croisetotal()" type="button" style="margin-left: 10px;"></button>
                 <button class="btn btn-outline-secondary imgbtn imgclose selectHide"  onclick= "closeFrmVar()" type="button" style="margin-left: 10px;"></button>
     
             </div>
@@ -164,7 +164,7 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload(true);">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.4.8</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.5.1</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative; " ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content menudrlnt" id = "menubases">
@@ -186,9 +186,10 @@
             <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn txtbtn-bleu '>Variables</label></div>
             <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn txtbtn-bleu'>Explor</label></div>
             <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn txtbtn-bleu'>Tableau</label></div>
-            <div  class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn txtbtn-bleu'>Filtre</label></div>
+            <div class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn txtbtn-bleu'>Filtre</label></div>
+             
             
-            
+ 
 
 
             <div class="btnfonction bouton-froid"  id="btnoptexport"  style="float:right;
@@ -216,7 +217,7 @@
             </div>
             
 
-           <!-- <div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> -->
+           <!--  <div  class="btnfonction" onclick="DefNA()"><label class='txtbtn'>Fonction</label></div>  -->
 
         </div>
 
@@ -276,7 +277,7 @@
 
             <div class="btn-group btn-group-sm" style="float:left">
 
-                <button type="button"  class="btn btn-outline-secondary"style="font-size: 0.75em" disabled>0.###</button>
+                <button type="button"  class="btn btn-outline-secondary"style="font-size: 0.75em" disabled>Décimales</button>
                 <button type="button" class="btn btn-outline-primary" style="font-size: 0.5em" onclick="ChgNbd('-')">-</button>
                 <button type="button" id= "BtnDec" class="btn btn-primary"style="font-size: 0.75em" disabled>1</button>
                 <button type="button" class="btn btn-outline-primary"style="font-size: 0.5em"onclick="ChgNbd('+')">+</button>
@@ -289,7 +290,7 @@
             <button  class="btn btn-outline-secondary btn-sm imgbtn imgclose" onclick="EffacePnd()" type="button" style="display:inline;margin-left:-5px;font-size: 0.75em;height:27px;width:27px;"></button>
 
 
-            <label class="ChkNR" style="display:none;"><input type="checkbox"  id="ChkHis" value="1"  >Conserver historique</label>
+            
 
 
         </div>
@@ -329,10 +330,19 @@
         <div class="selectHide" id='OptVar2' style='float: left; margin-left: 1rem;margin-top: 10px;margin-bottom: 2px;display:none;animation: voiropt 0.10s;'>
 
 
-            <div class="custom-control custom-switch" style='float: left;margin-right: 5px;'>
+            <div class="custom-control custom-switch" style='float: left;margin-right: 15px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkNRY" checked="true">
                 <label class="custom-control-label" for="ChkNRY">Non réponses (0)</label>
             </div>
+
+            <div class="custom-control custom-switch" style='float: left;margin-right: 35px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkHis" >
+                <label class="custom-control-label" for="ChkHis">Historique</label>
+            </div>
+
+
+            
+
 
             <div class="custom-control custom-checkbox" style='float: left;margin-left:20px; margin-right: 5px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkEff" checked onclick='T_C_R()'>
@@ -392,7 +402,7 @@
     <div class="ChoixVar3" id="BlocEXP" >
 
 
-        <div class="input-group-prepend" onkeydown="alert('quille')">
+        <div class="input-group-prepend" >
             <!-- <span class="input-group-text">Lignes    </span> -->
 
 
@@ -458,7 +468,7 @@
 
 
 <div id='accueil' style="position:relative;padding-left: 40px;">
-    <H1 style="font-size:1.5rem;padding-top: 100px;margin-left:3px">Bienvenue sur Trideux.cloud!</H1>
+    <H1 style="font-size:1.5rem;padding-top: 100px;margin-left:3px">Bienvenue sur Trideux.cloud!   </H1>
     
     <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br> Il est totalement gratuit, ne nécessite aucune création de compte ni abonnement et ne dépose aucun cookie sur votre ordinateur.<br> 
     
@@ -469,19 +479,25 @@
 
     <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
 
+    <a href="#" onclick="openFich('/Data/Hvr_0.TR2');closeInfos()" > <label style="cursor: pointer;">  . HVR_0 </label> </a> <a>(Enquête "Hygiène de vie des Rabelaisiens", réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2014) (Extraits)</a> <br>
+    
     <a href="#" onclick="openFich('/Data/Engagement_2015.TR2');closeInfos()" > <label style="cursor: pointer;">  . ENGAGEMENT2015 </label> </a> <a>(Enquête "Engagement des étudiants", réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2015) (Extraits)</a> <br>
 
     <a href="#" onclick="openFich('/Data/Affect_2017.TR2');closeInfos()" > <label style="cursor: pointer;">  . AFFECT2017 </label> </a> <a>(Enquête "Vie affective des étudiants", réalisée par les étudiants du L2 Sociologie de l'Université de Tours en 2017) (Extraits)</a> <br>
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');closeInfos()" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/ETUALIM_2.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/ETUALIM_3.TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 </label> </a> </a> </p> 
+
+    <a href="#" onclick="openFich('/Data/ETUALIM_3(Compact).TR2');closeInfos()" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 (Version compactée) </label> </a> </a> </p> 
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->
     <table id="tabfichs">
 
     </table>
+
+  
          
 </div>
 

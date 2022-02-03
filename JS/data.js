@@ -162,152 +162,81 @@ function ChargerPOS() {
 
 };
 
-function ChargerListVar(){
- 
 
-    
-    var qli= document.getElementById("ChkVqli").checked;
-    var qti= document.getElementById("ChkVqti").checked;
-    encol = document.getElementById("optcols").checked;
-    
-    
 
-    var htmlvariables = ``;
-    larcolvar = window.innerWidth;
 
-    if(encol==true) {
+function preSelectV(sens, filtre) {
 
-        // définition du nombre de colonnes nécessaires
-        // hauteur dispo
-        var ht = window.innerHeight;
-        ht=ht-62;
+    var   ul, a, i;
+    var txtValue="";
+    var varactiv =false;
 
-        
-        var lparc= Math.floor(ht/32) ;
-        
-        
- 
-        var nbcol = Math.floor((Nom.length-1)/lparc)  ;
-        if ((Nom.length-1)%lparc > 0){nbcol++;}
-        
-        
-        larcolvar = window.innerWidth / nbcol;
-        larcolvar=Math.round(larcolvar)
-         
-        
-        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) )">`
+      
+    ul = document.getElementById("ListeVariables");
+    a = ul.getElementsByTagName("a");
+
+
+    if (sens=="+") { // prochaine var active
+
+            Vsrv++;
+
+            i =Vsrv;
+            a = document.getElementById("v" + i);
+            txtValue = a.textContent || a.innerText;
+            
+            while (txtValue.toUpperCase().indexOf(filtre) == -1) {
+            
+            i++
+            a = document.getElementById("v" + i);
+            txtValue = a.textContent || a.innerText;  
+            } 
+
+            Vsrv=i;    
+
     }
 
-    // défilement des variables
-    
-    //nombre de cases du tableau 
-    var nbv=Nom.length
-    if(encol==true) {nbv=nbcol*lparc +1};
+    if (sens=="-") { // prochaine var active
 
-    for (v = 1; v < nbv; v++) {
+        Vsrv--;
 
-        // interversion des modalités (pour la mise en colonne)
-        var v2= v;
-
-        if(encol==true) {
-
-            // dans quelle colonne est-on?
-            var qlcol = v % nbcol;
-            
-            
-            var qllig = Math.floor(v/nbcol) 
-            if (v%nbcol > 0){qllig++;}
-
-            
-            if (qlcol<=0){ // si on est dans la dernières colonne
-                qlcol=nbcol;
-            }  
-            qlcol--;
-
-            
-            v2 =  qlcol  * lparc + qllig  ;
-
-             
-          
-        }
-
+        i =Vsrv;
+        a = document.getElementById("v" + i);
+        txtValue = a.textContent || a.innerText;
         
-        // évitement des types de variables désactivés
-        if (TypVar[v2]=='a' && qli==false || TypVar[v2]!='a' && qti==false) {continue}
-
-
-        // définition du type d'image à afficher en fonction du type de variable
-        var htmlimg = `<img src='Images/\Abc.png'   alt="Abc" height="9" width="18" >`
+        while (txtValue.toUpperCase().indexOf(filtre) == -1) {
         
-        if (TypVar[v2]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123" height="11" width="18"  >` }
+        i--
+        a = document.getElementById("v" + i);
+        txtValue = a.textContent || a.innerText;  
+        } 
+                 
+        Vsrv=i;
+    }
 
-        var htmlmods = ""
 
-        // affichage des 4 premières modalités 
-        for (m=0;m<4;m++){
-            if (TypVar[v2]!='a'&& qti!=false) {
+   
 
-                if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v2] + `, `}
 
+    // mise en forme de la variable retenue
+
+    ul = document.getElementById("ListeVariables");
+    a = ul.getElementsByTagName("a");
+
+    for (i = 0; i < a.length; i++) {
+
+
+
+            if (a[i].id == "v" + Vsrv) {
+           
+            a[i].classList.add("varsel");
             } else {
-
-                if (qli!=false) {
-
-                    if (m<=CdMax[v2] && Moda.length >=v ) {htmlmods+=Moda[v2][m] + `, `} 
-                }
-
-            }
-        }
-        htmlmods += " ... (" + CdMax[v2] + ")"
-        
-        if (encol==true) {htmlmods=''}
-
-        var htmlmagnet = '<div class="magnet" id=\'m' + v2 +  '\' ></div>'
-
-        // Ajout de la variable au menu de sélection
-        var num = Nom.length-1;
-        // htmlvariables = String(htmlvariables) + `<li id='v` + v2 + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
-        //         <table>
-        //             <tr >
-        //                 <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
-        //                 <td style="width:30px" > `+ htmlimg + `</td>
-        //                 <td style="font-weight:bold;"> ` + Nom[v] + ` </td>
-        //                 <td >  | ` + Libellé[v] + ` </td>
-        //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
-        //         </table>
-        //         </li>`
-        if (encol!=true) {
-        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 
-        + '\' onclick="SelVar(' + v2 + ')">'  
-        + htmlmagnet 
-        + '<div class="row"><div class="col-id text-right"><small class="text-secondary">' 
-        + v2 
-        + '</small></div><div class="col-11">' 
-        + htmlimg + ' <strong>' 
-        + Nom[v2] + '</strong> | ' 
-        + Libellé[v2] + ' <small class="text-secondary">' 
-        + htmlmods + '</small></div></div></a>';
-
-        } else { 
-
-            if (v2 <Nom.length) { // évitement des variables hors cadre
-            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')">' + htmlmagnet + '<div class="row"><div class="col-id text-right" style="padding-left:5px">' +  htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
-            else {
-                
-            htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\'></a>';
+            a[i].classList.remove("varsel");
+             
             
-            }    
-        }   
-        
-        
+        }
     }
-
-   document.getElementById("fondvars").innerHTML = htmlvariables;    
 
 }
-
-
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Chargement des lignes d'un fichier TR2 depuis le serveur////////////////////////////////////////
@@ -1392,6 +1321,309 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
 }
 
+
+////////////////////////////////////////////////////////////////////////////////////////////////
+// Fonctions liées à la fenêtre de sélection des variables ////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+function ChargerListVar(){
+ 
+
+    
+    var qli= document.getElementById("ChkVqli").checked;
+    var qti= document.getElementById("ChkVqti").checked;
+    encol = document.getElementById("optcols").checked;
+    
+    
+
+    var htmlvariables = ``;
+    larcolvar = window.innerWidth;
+
+    if(encol==true) {
+
+        // définition du nombre de colonnes nécessaires
+        // hauteur dispo
+        var ht = window.innerHeight;
+        ht=ht-62;
+
+        
+        var lparc= Math.floor(ht/32) ;
+        
+        
+ 
+        var nbcol = Math.floor((Nom.length-1)/lparc)  ;
+        if ((Nom.length-1)%lparc > 0){nbcol++;}
+        
+        
+        larcolvar = window.innerWidth / nbcol;
+        larcolvar=Math.round(larcolvar)
+         
+        
+        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) )">`
+    }
+
+    // défilement des variables
+    
+    //nombre de cases du tableau 
+    var nbv=Nom.length
+    if(encol==true) {nbv=nbcol*lparc +1};
+
+    for (v = 1; v < nbv; v++) {
+
+        // interversion des modalités (pour la mise en colonne)
+        var v2= v;
+
+        if(encol==true) {
+
+            // dans quelle colonne est-on?
+            var qlcol = v % nbcol;
+            
+            
+            var qllig = Math.floor(v/nbcol) 
+            if (v%nbcol > 0){qllig++;}
+
+            
+            if (qlcol<=0){ // si on est dans la dernières colonne
+                qlcol=nbcol;
+            }  
+            qlcol--;
+
+            
+            v2 =  qlcol  * lparc + qllig  ;
+
+             
+          
+        }
+
+        
+        // évitement des types de variables désactivés
+        if (TypVar[v2]=='a' && qli==false || TypVar[v2]!='a' && qti==false) {continue}
+
+
+        // définition du type d'image à afficher en fonction du type de variable
+        var htmlimg = `<img src='Images/\Abc.png'   alt="Abc" height="9" width="18" >`
+        
+        if (TypVar[v2]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123" height="11" width="18"  >` }
+
+        var htmlmods = ""
+
+        // affichage des 4 premières modalités 
+        for (m=0;m<4;m++){
+            if (TypVar[v2]!='a'&& qti!=false) {
+
+                if (m<=BDD.length && m>0) {htmlmods+=BDD[m][v2] + `, `}
+
+            } else {
+
+                if (qli!=false) {
+
+                    if (m<=CdMax[v2] && Moda.length >=v ) {htmlmods+=Moda[v2][m] + `, `} 
+                }
+
+            }
+        }
+        htmlmods += " ... (" + CdMax[v2] + ")"
+        
+        if (encol==true) {htmlmods=''}
+
+        var htmlmagnet = '<div class="magnet" id=\'m' + v2 +  '\' ></div>'
+
+        // Ajout de la variable au menu de sélection
+        var num = Nom.length-1;
+        // htmlvariables = String(htmlvariables) + `<li id='v` + v2 + `' onclick="SelVar(` + v + `)" style="padding:0px;width:200%">
+        //         <table>
+        //             <tr >
+        //                 <td style="width:20px;font-size:0.75rem;color:rgb(120 120 120)" >`+ v + `</td>
+        //                 <td style="width:30px" > `+ htmlimg + `</td>
+        //                 <td style="font-weight:bold;"> ` + Nom[v] + ` </td>
+        //                 <td >  | ` + Libellé[v] + ` </td>
+        //                 <td style="padding-left:10px;font-size:0.85rem;color:rgb(120 120 120);" >`+ htmlmods + `</td>
+        //         </table>
+        //         </li>`
+        if (encol!=true) {
+        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 
+        + '\' onclick="SelVar(' + v2 + ')">'  
+        + htmlmagnet 
+        + '<div class="row"><div class="col-id text-right"><small class="text-secondary">' 
+        + v2 
+        + '</small></div><div class="col-11">' 
+        + htmlimg + ' <strong>' 
+        + Nom[v2] + '</strong> | ' 
+        + Libellé[v2] + ' <small class="text-secondary">' 
+        + htmlmods + '</small></div></div></a>';
+
+        } else { 
+
+            if (v2 <Nom.length) { // évitement des variables hors cadre
+            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')">' + htmlmagnet + '<div class="row"><div class="col-id text-right" style="padding-left:5px">' +  htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
+            else {
+                
+            htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\'></a>';
+            
+            }    
+        }   
+        
+        
+    }
+
+   document.getElementById("fondvars").innerHTML = htmlvariables;    
+
+}
+
+function openFrmvar() {
+
+    var lbl = document.getElementById("lblchoixvar")
+    lbl.innerText = "Choisissez une variable"
+    
+     
+    if (TypTri!="tcr") { $("#btnmagnet").addClass("d-none");}
+    
+    effaceFiltreVar() 
+
+    
+    if (FLCXR == "L" && TypTri=="tcr") {
+        lbl.innerText += " en ligne"
+        if(vC != 0){
+            $("#btnmagnet").removeClass("d-none");
+        }
+         
+        if (VMagnet[1]=="L"){ChargerListVar();}
+
+    }
+    
+    if (FLCXR == "C" && TypTri=="tcr") {
+        lbl.innerText += " en colonne"
+        if(vL != 0){
+            $("#btnmagnet").removeClass("d-none");
+        }
+         
+        if (VMagnet[1]=="C"){ChargerListVar();}
+    }
+
+    document.getElementById("headervar").style.display = "block";
+     
+    document.getElementById("ListeVariables").style.display = "block";
+    document.getElementById("ListeVariables").style.height = "calc(100vh - 70px)";
+    document.getElementById("TxtVr").focus()
+     
+     
+}
+
+function closeFrmVar() { // masque progressif de la fenêtre de sélection des variables (différent de closevar)
+    document.getElementById("headervar").style.display = "none";
+    document.getElementById("ListeVariables").style.height = "0%";
+    document.getElementById("TxtVr").value='';
+    //ChargerListVar()
+}
+
+function effaceFiltreVar() {
+    ul = document.getElementById("ListeVariables");
+    
+     a = ul.getElementsByTagName("a");
+
+ 
+    for (i = 0; i < a.length; i++) {
+
+            a[i].classList.remove("d-none");
+            a[i].style.color = "#495057"; 
+            a[i].classList.remove("varsel");
+             
+        }
+    
+}
+
+function FiltrerVars(event) {
+    
+     
+    var nbli=0;
+    var lastli=0;
+    var key = event.keyCode;
+
+    
+
+    if (key==27){ // sortie par échap
+    closeVars()
+    var nomtxt= "Txt"+FLCXR
+    document.getElementById(nomtxt).focus()
+    return 0;
+    }
+
+ 
+    if (key==13 && Vsrv>0){
+        SelVar(Vsrv)
+    };
+
+ 
+var encol = document.getElementById("optcols").checked
+
+//alert(encol)
+
+    var filtre, ul, a, i, txtValue;
+    //console.log(event.currentTarget.value);
+    filtre = event.currentTarget.value.toUpperCase();
+    ul = document.getElementById("ListeVariables");
+    
+    if (key==38){preSelectV("-",filtre);return 0} //flèche haut
+    if (key==40){preSelectV("+",filtre);return 0} //flèche bas
+    
+    a = ul.getElementsByTagName("a");
+
+    var premv=0 // repérage de la première variable sélectionnée
+
+    for (i = 0; i < a.length; i++) {
+        txtValue = a[i].textContent || a[i].innerText;
+        if (txtValue.toUpperCase().indexOf(filtre) > -1) {
+
+            a[i].classList.remove("d-none");
+            
+            // comportement en cas d'affichage en colonne
+            if (encol==true) {a[i].style.color = "#495057";}
+            nbli++;
+            lastli=i;
+            premv=i
+
+        } else {
+            // comportement en cas d'affichage en colonne
+            if (encol==true) {a[i].style.color = "rgb(220,220,220)"; }
+            else {
+            a[i].classList.add("d-none");
+            }
+
+        }
+    }
+
+   
+
+    // positionnement du focus sur la première variable 
+    //if (filtre =="") {return 0;}
+
+   
+
+           // si la variable présélectionnée est retenue, on ne change rien
+           if (Vsrv>0) { 
+            var b = document.getElementById("v" + Vsrv);
+            txtValue = b.textContent || b.innerText;
+            if (txtValue.toUpperCase().indexOf(filtre) > -1) {return 0;}
+           }
+
+
+    for (i = 1; i < a.length+1; i++) {
+
+        var b = document.getElementById("v" + i);
+        txtValue = b.textContent || b.innerText;
+                      
+        if (txtValue.toUpperCase().indexOf(filtre) > -1) {
+
+             Vsrv=i ;
+             
+             preSelectV("=",filtre)
+             return 0;
+        }
+    }
+
+ 
+}
 
 
 

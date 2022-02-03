@@ -2,7 +2,7 @@ var pas=0
 var timer;
 var pasprog=0
 
-function HistoTcr(){
+function HistoTcr(rg){
 
     
 
@@ -29,7 +29,7 @@ function HistoTcr(){
 
     // détermination du type de graph 
 
-     typgrph = document.getElementById("choixHisto").value;
+     typgrph = document.getElementById("choixHisto"+rg).value;
 
      // Si c'est un tableau graphique
      if (typgrph>4) {
@@ -37,7 +37,7 @@ function HistoTcr(){
         //legendTcr();
         pasprog = 0;
         timer = setInterval(function() {
-            GraphTcr();
+            GraphTcr(rg);
         },7)
 
         
@@ -100,7 +100,7 @@ function HistoTcr(){
     
     // dessin du fond 
 
-    const canvas = document.getElementById("fondTcr");
+    const canvas = document.getElementById("fondTcr"+rg);
 
     if (!canvas.getContext) {
         return;
@@ -291,7 +291,7 @@ function HistoTcr(){
 
     pasprog = 0;
     timer = setInterval(function() {
-        Aff_HistoTcr(typgrph,v1,v2, nbcat1, nbcat2, Mrg1, Mrg2,  RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar);},7)
+        Aff_HistoTcr(typgrph,v1,v2, nbcat1, nbcat2, Mrg1, Mrg2,  RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar,rg);},7)
  
         
 
@@ -915,7 +915,7 @@ function Nuage(cadre, x, y ) {
 
 // GRAPHIQUES EN TIROIR
 
-function GraphTcr(){ 
+function GraphTcr(rg){ 
     // fonctionnalité de dessin des tableaux croisés, permettant l'affichage des cases en relief
 
     // définition du rythme de progression
@@ -939,7 +939,7 @@ function GraphTcr(){
 
     // détermination du type de graph 
 
-     typgrph = document.getElementById("choixHisto").value;
+     typgrph = document.getElementById("choixHisto"+rg).value;
 
      
   
@@ -947,7 +947,7 @@ function GraphTcr(){
     
     // dessin du fond 
 
-    const canvas = document.getElementById("fondTcr");
+    const canvas = document.getElementById("fondTcr"+rg);
 
     if (!canvas.getContext) {
         return;
@@ -969,7 +969,7 @@ function GraphTcr(){
     var margB= 50
 
     var lartot = lartab  // document.getElementById("fondTcr").offsetWidth
-    var hautot =  document.getElementById("fondTcr").offsetHeight
+    var hautot =  document.getElementById("fondTcr"+rg).offsetHeight
     var lardisp = lartot - (margG+margD)
     var haudisp = hautot - (margH+margB)
 
@@ -1109,7 +1109,7 @@ function GraphTcr(){
             lg++;
             topcur+=haulig;
 
-            cnv.font = "12px Arial"
+            cnv.font = "14px Arial"
             cnv.fillStyle = coulligs;
 
             var txtlbl;
@@ -1184,7 +1184,7 @@ function GraphTcr(){
             lcur = lcur + larcol;
              
 
-            cnv.font = "12px Arial"
+            cnv.font = "14px Arial"
             cnv.fillStyle = coulligs;
 
             var txtlbl;
@@ -1301,13 +1301,27 @@ function GraphTcr(){
                     // pourcentage en ligne
                     if (typgrph==6) {
                         
-                          
-                        if (l <=CdMax[vL] && c <= CdMax[vC]  ) {ratio= Tcr[l][c]/MrgX[l] ;valcase = ratio *100  } // case du tableau
+                        coul = "rgba(255,255,255,1)"; // fond de case blanc par défaut
+
+                        if (l <=CdMax[vL] && c <= CdMax[vC]  ) {// case du tableau
+                            ratio= Tcr[l][c]/MrgX[l] ;
+                            valcase = ratio *100 
+                         
+                        // défition de la couleur des cases
+                         var ecmoy = ratio - MrgY[c]/PopTot;
+                         if (ecmoy > 0) {coul = "rgba(20,220,30," + (ecmoy*3) + ")";} 
+                         if (ecmoy < 0) {coul= "rgba(230,20,30," + (ecmoy*-3) + ")";}
+
+                        } 
+                        
                         if (l>CdMax[vL] && c <= CdMax[vC]  ) {ratio= MrgY[c]/PopTot ;valcase = ratio *100  } // total en colonne
                         if (l <= CdMax[vL] && c > CdMax[vC]  ) {ratio= MrgX[l]/PopTot ; valcase = 100  } // total en ligne
                         if (l >CdMax[vL] && c > CdMax[vC]  ) {ratio= 0 ;valcase = 100  } // total 
                          // mise à l'échelle
                          ratio=ratio* hmax * pasprog/100
+
+
+
 
                     }
 
@@ -1342,7 +1356,7 @@ function GraphTcr(){
                             } else {ratio=0;}
 
                                 // définition de la couleur des côtés
-                    
+                                
                                 coul = "rgba(230,230,230,0.5)"
                     
                                 //AffichCase(x1,y1,x2,y2,ratio,coul)
@@ -1350,10 +1364,7 @@ function GraphTcr(){
                                 if (ratio >0) {coul = "rgba(20,220,30,0.3)";} 
                                 if (ratio <0) {coul= "rgba(230,20,30,0.3)";}
                                 
-                                /*x1 -= indrat;
-                                x2 -= indrat;
-                                y1 -= indrat;
-                                y2 -= indrat*/
+  
                            
 
                             
@@ -1387,7 +1398,7 @@ function GraphTcr(){
                     }
                     
                        
-                    AffichCase(x1,y1,x2,y2,ratio,coul,valcase)
+                    AffichCase(x1,y1,x2,y2,ratio,coul,valcase,rg)
 
 
                     lcur =lcur + larcol;
@@ -1417,9 +1428,9 @@ function GraphTcr(){
 
 }
 
-function AffichCase(x1,y1,x2,y2,ratio,coul,valcase) {
+function AffichCase(x1,y1,x2,y2,ratio,coul,valcase,rg) {
 
-    const canvas = document.getElementById("fondTcr");
+    const canvas = document.getElementById("fondTcr"+rg);
     const cnv = canvas.getContext('2d');
 
     
@@ -1529,6 +1540,10 @@ function AffichCase(x1,y1,x2,y2,ratio,coul,valcase) {
                     var opac =  ratio/100
 
                     if (typgrph==5) {coulcase= 'rgba(11, 93, 168,' + opac + `)`} 
+
+                    if (typgrph==6) {coulcase= coul} 
+
+
                     
                     if (typgrph==7) {
 
@@ -1556,7 +1571,7 @@ function AffichCase(x1,y1,x2,y2,ratio,coul,valcase) {
 
 }
 
-function Aff_HistoTcr(typgrph, v1,v2, nbcat1, nbcat2, Mrg1, Mrg2, RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar) {
+function Aff_HistoTcr(typgrph, v1,v2, nbcat1, nbcat2, Mrg1, Mrg2, RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar,rg) {
 if (pasprog<=25) {pasprog = pasprog+5};
 if (pasprog>25 && pasprog<=90 ) {pasprog = pasprog+3};
 if (pasprog>90) {pasprog = pasprog+1};
@@ -1568,7 +1583,7 @@ if (pasprog > 100) {
 
 
 
-    const canvas = document.getElementById("fondTcr");
+    const canvas = document.getElementById("fondTcr"+rg);
 
  
     const cnv = canvas.getContext('2d');

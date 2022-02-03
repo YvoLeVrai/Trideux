@@ -25,10 +25,7 @@ function B_A_S_E() {
     if (document.getElementById('ChkHis').checked ==false ) {
         if (EstVu('BlocVar')!=0) {CacheBloc('BlocVar');}
         if (EstVu('BlocVar2')!=0) {CacheBloc('BlocVar2');}
-
-        if ( document.getElementById("TabTAP")) {Vidage("TabTAP")};
-        if ( document.getElementById("TabTCR")) {Vidage("TabTCR")};
-        if ( document.getElementById("TabBDD")) {Vidage("TabBDD")};
+        Vidage()
     }
 
 
@@ -392,9 +389,11 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
 
     // effacement du précédent tri à plat
-    if (document.getElementById('ChkHis').checked ==false ) {
+    /* if (document.getElementById('ChkHis').checked ==false ) {
         if ( document.getElementById("TabTAP")) {Vidage("TabTAP")};
-    }
+    } */
+    Vidage()
+
 
     var rgl = Reco[x] // règle de recodage
     if (document.getElementById("TxtRglG")) {
@@ -839,6 +838,7 @@ function EnteteVar(x) {
 
 
     Case +=`<button id = "btnEclat" class="btn btn-outline-secondary"  style = "float:right;margin:3px; margin-right:5px;display:none" onclick= "Eclater(`+ vL + `)" type="button">Eclater</button>`
+    Case +=`<button id = "btnAgreg" class="btn btn-outline-secondary"  style = "float:right;margin:3px; margin-right:5px;display:none" onclick= "Agreger()" type="button">Agréger</button>`
 
 
 
@@ -865,7 +865,7 @@ function EnteteVar(x) {
                     <div id="RenomVar" class="input-group-prepend" style="margin-top:7px;">
 
                         <span class="input-group-text">Nom :</span>
-                        <input id= "TxtNom" type="text" class="form-control" value=` + Nom[x] + ` style="width:90px;" onkeyup="LancerRecod(event)">
+                        <input id= "TxtNom" type="text" class="form-control" value=` + Nom[x] + ` style="width:150px;" onkeyup="LancerRecod(event)">
 
 
                         <span class="input-group-text">Libellé :</span>
@@ -1395,170 +1395,6 @@ function closeVars() {
     */
 };
 
-function FiltrerVars(event) {
-    
-     
-    var nbli=0;
-    var lastli=0;
-    var key = event.keyCode;
-
-    
-
-    if (key==27){ // sortie par échap
-    closeVars()
-    var nomtxt= "Txt"+FLCXR
-    document.getElementById(nomtxt).focus()
-    return 0;
-    }
-
- 
-    if (key==13 && Vsrv>0){
-        SelVar(Vsrv)
-    };
-
- 
-var encol = document.getElementById("optcols").checked
-
-//alert(encol)
-
-    var filtre, ul, a, i, txtValue;
-    //console.log(event.currentTarget.value);
-    filtre = event.currentTarget.value.toUpperCase();
-    ul = document.getElementById("ListeVariables");
-    
-    if (key==38){preSelectV("-",filtre);return 0} //flèche haut
-    if (key==40){preSelectV("+",filtre);return 0} //flèche bas
-    
-    a = ul.getElementsByTagName("a");
-
-    var premv=0 // repérage de la première variable sélectionnée
-
-    for (i = 0; i < a.length; i++) {
-        txtValue = a[i].textContent || a[i].innerText;
-        if (txtValue.toUpperCase().indexOf(filtre) > -1) {
-
-            a[i].classList.remove("d-none");
-            
-            // comportement en cas d'affichage en colonne
-            if (encol==true) {a[i].style.color = "#495057";}
-            nbli++;
-            lastli=i;
-            premv=i
-
-        } else {
-            // comportement en cas d'affichage en colonne
-            if (encol==true) {a[i].style.color = "rgb(220,220,220)"; }
-            else {
-            a[i].classList.add("d-none");
-            }
-
-        }
-    }
-
-   
-
-    // positionnement du focus sur la première variable 
-    //if (filtre =="") {return 0;}
-
-   
-
-           // si la variable présélectionnée est retenue, on ne change rien
-           if (Vsrv>0) { 
-            var b = document.getElementById("v" + Vsrv);
-            txtValue = b.textContent || b.innerText;
-            if (txtValue.toUpperCase().indexOf(filtre) > -1) {return 0;}
-           }
-
-
-    for (i = 1; i < a.length+1; i++) {
-
-        var b = document.getElementById("v" + i);
-        txtValue = b.textContent || b.innerText;
-                      
-        if (txtValue.toUpperCase().indexOf(filtre) > -1) {
-
-             Vsrv=i ;
-             
-             preSelectV("=",filtre)
-             return 0;
-        }
-    }
-
- 
-}
-
-function preSelectV(sens, filtre) {
-
-    var   ul, a, i;
-    var txtValue="";
-    var varactiv =false;
-
-      
-    ul = document.getElementById("ListeVariables");
-    a = ul.getElementsByTagName("a");
-
-
-    if (sens=="+") { // prochaine var active
-
-            Vsrv++;
-
-            i =Vsrv;
-            a = document.getElementById("v" + i);
-            txtValue = a.textContent || a.innerText;
-            
-            while (txtValue.toUpperCase().indexOf(filtre) == -1) {
-            
-            i++
-            a = document.getElementById("v" + i);
-            txtValue = a.textContent || a.innerText;  
-            } 
-
-            Vsrv=i;    
-
-    }
-
-    if (sens=="-") { // prochaine var active
-
-        Vsrv--;
-
-        i =Vsrv;
-        a = document.getElementById("v" + i);
-        txtValue = a.textContent || a.innerText;
-        
-        while (txtValue.toUpperCase().indexOf(filtre) == -1) {
-        
-        i--
-        a = document.getElementById("v" + i);
-        txtValue = a.textContent || a.innerText;  
-        } 
-                 
-        Vsrv=i;
-    }
-
-
-   
-
-
-    // mise en forme de la variable retenue
-
-    ul = document.getElementById("ListeVariables");
-    a = ul.getElementsByTagName("a");
-
-    for (i = 0; i < a.length; i++) {
-
-
-
-            if (a[i].id == "v" + Vsrv) {
-           
-            a[i].classList.add("varsel");
-            } else {
-            a[i].classList.remove("varsel");
-             
-            
-        }
-    }
-
-}
 
 function FiltrerModas(event) {
 
@@ -2868,9 +2704,9 @@ function T_C_R(x,y,complet) {
     TypTri="tcr";
 
 
-    // effacement du précédent tri à plat
+    // effacement du précédent tri 
     if (document.getElementById('ChkHis').checked ==false ) {
-        Vidage('TabTAP','TabTCR')
+        Vidage()
 
     }
 
@@ -3361,6 +3197,13 @@ function khi(x,RgDpX,y,RgDpY){
     titre.innerHTML += `</div>`
     
     
+    const nbcnvs = document.querySelectorAll('canvas');
+    
+    var rg = nbcnvs.length +1;
+
+     
+     
+        
     
     var affhist= "none"
     if (vuGrph==true){affhist="block";}
@@ -3368,7 +3211,7 @@ function khi(x,RgDpX,y,RgDpY){
 
         
 
-        <select id="choixHisto" class="custom-select"  style = " margin-bottom: 2px;width:350px;font-size:1rem;" onchange='HistoTcr()'>
+        <select id="choixHisto` + rg + `" class="custom-select"  style = " margin-bottom: 2px;width:350px;font-size:1rem;" onchange='HistoTcr(`+rg+`)'>
         <option value="0" disabled>Histogrammes</option>
         <option value="1">Histogramme des effectifs</option>
         <option value="2">Histogramme % en lignes (par colonnes) </option>s
@@ -3384,7 +3227,7 @@ function khi(x,RgDpX,y,RgDpY){
 
     
 
-    <canvas id="fondTcr" width=1000 height=650 style="border:1px solid #333;display: `+ affhist + `"></canvas>
+    <canvas id="fondTcr` + rg + `" width=1000 height=650 style="border:1px solid #333;display: `+ affhist + `"></canvas>
     </div> 
     
     
@@ -3948,8 +3791,8 @@ function khi(x,RgDpX,y,RgDpY){
 
     // affichage du graphique
     if (typgrph>0) {
-        document.getElementById('choixHisto').value = typgrph
-        HistoTcr()
+        document.getElementById('choixHisto' + rg).value = typgrph
+        HistoTcr(rg)
     }
     ;
 
