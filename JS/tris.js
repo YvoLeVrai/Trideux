@@ -119,12 +119,12 @@ function B_A_S_E() {
     for (x = 1; x < Number(Nom.length); x++) {
 
 
-        Case = `<label style = "cursor:pointer;"  onclick="TriBDD(` + x + `)"> ` + Nom[x] + ` <br> ` + Libellé[x] + `</label>`;
+        Case = `<div style = "cursor:pointer;display: inline-flex;"  onclick="TriBDD(` + x + `)"> ` + Nom[x] + ` <br> ` + Libellé[x] + `  <img src="CSS/\sort_both.png" alt="trier" style="margin: 3px;height:19px;" > </div>`;
         var HCell = document.createElement("th");
         HCell.innerHTML = Case;
         tr.appendChild(HCell);
 
-        //var valmodlig = Number(item.substr(Posi[x]-1,CdMax[x].length));
+        
     }
 
 
@@ -352,8 +352,10 @@ function prepTAP() {
 
 
     if (EstVu('BlocVar2')!=0) {CacheBloc('BlocVar2');}
-    Vidage("TabBDD","TabTCR",'TabEXP');
+    Vidage();
     QuelTri();
+    ChargerListVar();
+
 
 }
 
@@ -395,80 +397,22 @@ function T_A_P() { // Calcule et affiche le tri à plat
     Vidage()
 
 
-    var rgl = Reco[x] // règle de recodage
-    if (document.getElementById("TxtRglG")) {
-        rgl = document.getElementById("TxtRglG").value;
-    }
 
 
 
+     
     // caractérisation de la variable (conditionne l'affichage ou non du tri à plat)
-    if (TypVar[x]=="") {TypVar[x] = QuelTypVar(x);};
+    if (TypVar[x]=="" || TypVar[x]==undefined ) {TypVar[x] = QuelTypVar(x);};
 
     var typv = TypVar[x];
 
 
 
-    EnteteVar(x) ;
-
-
-    // tableau des valeurs
-    TapX= new Array (Number(CdMax[x])+1);
-    for (i = 0; i < TapX.length; i++) {
-        TapX[i]=0;
-    }
-
-
-
-    // Récupération des valeurs dans la base
-    BDD.forEach(LireBDDL);
-
-    function LireBDDL(item, index) {
-
-
-        var valmod = BDD[index][x] //Number(item.substr(Posi[x]-1,CdMax[x].length));
-
-        var vide=false
-        valmod = String(valmod);
-
-        if (valmod == ' ' && typv == "e") {vide=true } // évitement des modalités vides pour les variables numériques
-
-        if (vide==false) {
-
-            valmod = Number(valmod) ;
-
-            // application du recodage
-             
-
-            if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
-
-            // prise en compte de la pondération
-            var coeffp=1;
-
-            if (vP !=0) {
-                coeffp = BDD[index][vP]
-            }
-
-
-            //filtrage
-            if (EstVu('BlocFiltre')==0) {TapX[valmod]+= coeffp; }
-            else
-            {
-            if (Filtrer(index) == true) {TapX[valmod]+= coeffp; }
-            }
-
-        }
-
-
-    };
-
-    // arrondi des valeurs après pondération
-    if (vP!=0) {
-        for (m=0;m<TapX.length;m++){
-            var taparr= Math.round(TapX[m])
-            TapX[m]=taparr
-        }
-    }
+    EnteteVar(x) ; // ajout de l'entête 
+ 
+    CréerTapX(x) ; // extraction des valeurs de la variable 
+    
+    
 
     // Calcul de la population totale
     var RgDp;
@@ -490,6 +434,8 @@ function T_A_P() { // Calcule et affiche le tri à plat
     // Recopiage du tableau des modalités
     ModaM = Moda[x].slice()
 
+     
+
     if (typv != "r") { // le calcul du tri à plat n'est pas réalisé pour les variables contenant des Réels
 
 
@@ -503,7 +449,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
 
 
-            VarMul = EstMulti(x,ModaM);
+            VarMul = EstMulti(x);
 
 
 
@@ -628,7 +574,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
                         var coulPol="black"
 
                         if (VarMul[0]==true) {coulPol='#1a3f55';}
-                        Case = `<label class= 'LibMod' onclick="VoirModas()" style="cursor:pointer;color:`+ coulPol + `;">  `+ ModaM[i] + `</label> <input type="text" class="NvMod" id=mod`+i+ ` value="`+ ModaM[i] + `" onfocus="this.setSelectionRange(0, this.value.length)" onkeydown="MàJMod(event,` + x +`,`+ i + `)">`;
+                        Case = `<label class= 'LibMod' onclick="VoirModas()" style="cursor:pointer;color:`+ coulPol + `;">  `+ ModaM[i] + `</label> <input type="text" class="NvMod" id=mod`+i+ ` value="`+ ModaM[i] + `" onfocus="this.setSelectionRange(0, this.value.length)" onkeyup="MàJMod(event,` + x +`,`+ i + `)" >`;
 
                     }
 
@@ -742,7 +688,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
     strpied += `<div id="regroup" style="display:none; width:1000px;">
                       <div class="btn btn-primary" onclick="regrouper()"> Regrouper </div>
                         <label class= "lblrgl" for="TxtssRgl">Règle:</label>
-                        <input type="text" id="TxtssRgl" name="TxtssRgl" class ="txtrgl" onfocus="this.setSelectionRange(0, this.value.length)" onkeydown="LancerRgl(event)">
+                        <input type="text" id="TxtssRgl" name="TxtssRgl" class ="txtrgl" onkeydown="LancerRgl(event)">
                         <label class= "lblrgl" for="TxtMod">Libellé:</label>
                         <input type="text" id="TxtMod" name="TxtMod" class ="txtrgl" style="width:500px" onfocus="this.setSelectionRange(0, this.value.length)" onkeydown="LancerRgl(event)" >
                       </div> `;
@@ -766,6 +712,72 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
 };
 
+function CréerTapX(x){
+    // tableau des valeurs
+    TapX= new Array (Number(CdMax[x])+1);
+    for (i = 0; i < TapX.length; i++) {
+        TapX[i]=0;
+    }
+
+    var rgl = Reco[x] // règle de recodage
+    if (document.getElementById("TxtRglG")) {
+        rgl = document.getElementById("TxtRglG").value;
+    }
+
+    var typv = TypVar[x];
+
+    // Récupération des valeurs dans la base
+    BDD.forEach(LireBDDL);
+
+    function LireBDDL(item, index) {
+
+
+            var valmod = BDD[index][x]
+
+            var vide=false
+            valmod = String(valmod);
+
+            if (valmod == ' ' && typv == "e") {vide=true } // évitement des modalités vides pour les variables numériques
+
+            if (vide==false) {
+
+                valmod = Number(valmod) ;
+
+                // application du recodage
+                
+
+                if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
+
+                // prise en compte de la pondération
+                var coeffp=1;
+
+                if (vP !=0) {
+                    coeffp = BDD[index][vP]
+                }
+
+
+                //filtrage
+                if (EstVu('BlocFiltre')==0) {TapX[valmod]+= coeffp; }
+                else
+                {
+                if (Filtrer(index) == true) {TapX[valmod]+= coeffp; }
+                }
+
+            }
+
+
+        };
+
+        // arrondi des valeurs après pondération
+        if (vP!=0) {
+            for (m=0;m<TapX.length;m++){
+                var taparr= Math.round(TapX[m])
+                TapX[m]=taparr
+            }
+        }
+
+
+};
 
 function EnteteVar(x) {
     //Création du tableau de résultats
@@ -1313,7 +1325,7 @@ function prepEXP(){
 
     TypTri="exp"
 
-    Vidage('TabBDD','TabTAP','TabTCR');
+    Vidage();
     
     CacheBloc('BlocFiltre') 
 
@@ -1326,6 +1338,7 @@ function prepEXP(){
     ExpRgDp = 0;
 
     CaleSsHead()
+    ChargerListVar();
 
     openVars("X");
 };
@@ -1507,12 +1520,13 @@ function DescDeM(x,i) { // recherche les modalités descendant d'une ligne de va
 
 function SelVar(rang) {
 
+    
 
     //var (document.getElementById(rang).innerText);
     //décalage du contenu vers le bas
     //document.getElementById('contenu').style.marginTop = document.getElementById('hautpage').offsetHeight + 30
 
-    closeVars();
+    
 
     // ajout de la variable choisie dans la zone de sélection
     var prefix = ""
@@ -1522,12 +1536,12 @@ function SelVar(rang) {
     var nomtxt= "Txt"+FLCXR
     
     if (FLCXR=='X' && ExpRgDp==0) {document.getElementById(nomtxt).placeholder = prefix+ Nom[rang] + " | "+ Libellé[rang];}
-    if (FLCXR!='X') {document.getElementById(nomtxt).placeholder = prefix +  Nom[rang] + " | "+ Libellé[rang];document.getElementById(nomtxt).focus()}
+    if (FLCXR!='X' && FLCXR !="AF") {document.getElementById(nomtxt).placeholder = prefix +  Nom[rang] + " | "+ Libellé[rang];document.getElementById(nomtxt).focus()}
 
 
 
     if (FLCXR=="X") { // en cas de variable pour l'explorateur
-
+        closeVars();
         vX = rang;  // variable courante de l'exploration
         E_X_P(vX,ExpRgDp);
 
@@ -1535,21 +1549,22 @@ function SelVar(rang) {
     }
 
     if (FLCXR=="L") { // en cas de variable pour ligne
-
+        closeVars();
         vL = rang; // variable courante en ligne
         QuelTri()
 
     }
 
     if (FLCXR=="C") { // en cas de variable pour colonne
-
+        closeVars();
         vC = rang; // variable courante en colonnes
         QuelTri()
+         
 
     }
 
     if (FLCXR=="P") { // en cas de variable de pondération
-
+        closeVars();
         if (TypVar[rang] =='a'){
             alert("La variable " + Nom[rang] + " - " + Libellé[rang] + " est qualitative. \n Elle ne peut pas servir de variable de pondération.")
             vP=0;
@@ -1562,7 +1577,7 @@ function SelVar(rang) {
     }
 
     if (FLCXR=="F") { // en cas de variable pour filtre
-
+        closeVars();
         vF = rang; // variable courante du filtre
 
         E_X_P(vF,ExpRgDp,"filtre");
@@ -1574,7 +1589,7 @@ function SelVar(rang) {
 
 
     if (FLCXR=="LD") { // en cas de variable pour création de variable par croisement
-
+        closeVars();
         vLd = rang; // variable courante du filtre
          
         if (vCd!=0) {TabRecCrois(vLd, vCd)}
@@ -1583,7 +1598,7 @@ function SelVar(rang) {
     }
 
     if (FLCXR=="CD") { // en cas de variable pour création de variable par croisement
-        
+        closeVars();
         vCd = rang; // variable courante du filtre
          
         if (vLd!=0) {TabRecCrois(vLd, vCd)}
@@ -1592,7 +1607,7 @@ function SelVar(rang) {
 
 
     if (FLCXR=="LS") { // en cas de variable pour création de variable score
-
+        closeVars();
         vS = rang; // variable courante du filtre
          
         if (vS!=0) {ModasScore(vS)}
@@ -1600,6 +1615,27 @@ function SelVar(rang) {
 
     }
 
+    
+    if (FLCXR=="AF") { // en cas de variable pour filtre
+
+      
+        if (VdsAF[rang]==false) {
+            VdsAF[rang]=true; 
+        } else {VdsAF[rang]=false;}
+ 
+        var nomchk = "ChkV" + rang;
+        document.getElementById(nomchk).checked=VdsAF[rang];
+        
+        
+ 
+        // affichage du bouton de validation
+        $("#BtnValidSelVar").removeClass("d-none");
+        
+
+
+       
+
+    }
 
 };
 
@@ -1854,7 +1890,8 @@ function AffE_X_P(fonction) {
 
     // Création d'un tableau reprenant le contenu du tableau Exp
     //Création du tableau de résultats
-    var body = document.body
+    var body = document.getElementById('contenu')
+
     
     if (fonction=="filtre") {
     body = document.getElementById('BlocFiltre')
@@ -1998,8 +2035,8 @@ function AffE_X_P(fonction) {
             </div> `
 
             if (fonction != "filtre") {
-            Case += `<div   style="padding-top:5px;height:30px;position:absolute;left:80%;width:15%;text-align:right;cursor:pointer;" onclick=solo(`+ i +`)>`+  ExpEff[i] + ` </div>
-            <div   style="padding-top:5px;height:30px;position:absolute;left:95%;width:5%;text-align:right;cursor:pointer;">`+    Prct+` % </div> `     
+            Case += `<div   style="padding-top:5px;height:30px;position:absolute;left:1000px;width:150px;text-align:right;cursor:pointer;" onclick=solo(`+ i +`)>`+  ExpEff[i] + ` </div>
+            <div   style="padding-top:5px;height:30px;position:absolute;left:1150px;width:80px;text-align:right;cursor:pointer;">`+    Prct+` % </div> `     
             } else {
                 Case += `<button class="btn btn-outline-secondary btn-sm imgbtn imgfltr flchbout"  onclick= "solo(`+ i +`)" type="button" style="float:right;opacity:0.25;"  ></button>
                 `
@@ -2207,6 +2244,7 @@ function defFiltre(){
                     }
                 }    
 
+
                 ExpFltr.push(chaineFltr)    
                 
         }
@@ -2214,7 +2252,7 @@ function defFiltre(){
     }
  
     
-     
+         
     QuelTri()
  
 }
@@ -2225,10 +2263,30 @@ function SuppFltr() {
 }
 
 function FltrEnTxt() {
-        // inventaire des lignes
+
+    var Fltr = "Filtre : ";
+    var VarsFltr=[];
+
+        // inventaire des variables de niveau 1 
         for (l=0;l<ExpVar.length+1;l++) {
 
+            if (ExpMod[l]=="var"){
             
+                // la variable est-elle déjà prise en compte? 
+                for (l=0;l<ExpVar.length+1;l++) {
+
+
+                } 
+
+                
+                Fltr+= Nom[l]
+
+
+                // si non, inventaire des exclusions
+            }
+        }
+
+            /*
             if (ExpAct[l]==false && ExpMod[l]!="var"){ // la case est désactivée (il y a un filtre à ajouter)
             
                 chaineFltr += ExpVar[l] + "-" + ExpMod[l] + "-" + ExpAct[l] + "/"; // ajout de la ligne
@@ -2255,6 +2313,7 @@ function FltrEnTxt() {
             chaineFltr="";
         }
 
+        */
 }
 
 
@@ -2683,9 +2742,11 @@ function prepTCR() {
     
     VoirBloc('BlocVar2');
 
-    Vidage("TabBDD","TabTAP","TabEXP");
+    Vidage();
     
     CaleSsHead()
+
+    ChargerListVar();
 
     if (vL>0 && vC>0) {QuelTri()};
 
@@ -2702,13 +2763,10 @@ document.getElementById('ChkNRY').onclick = function() {
 function T_C_R(x,y,complet) {
 
     TypTri="tcr";
+ 
 
 
-    // effacement du précédent tri 
-    if (document.getElementById('ChkHis').checked ==false ) {
-        Vidage()
-
-    }
+  
 
     // index de la variable en lignes (si manquant)
     if (x==undefined){x = vL}
@@ -2797,10 +2855,10 @@ function T_C_R(x,y,complet) {
 
     function LireBDDLC(item, index) {
 
-        //var valmodlig = Number(item.substr(Posi[x]-1,CdMax[x].length));
+        
         var valmodlig = Number(BDD[index][x]);
 
-        //var valmodcol = Number(item.substr(Posi[y]-1,CdMax[y].length));
+        
         var valmodcol = Number(BDD[index][y]);
 
         // application du recodage
@@ -2894,7 +2952,7 @@ function T_C_R(x,y,complet) {
 
     // prise en compte des variables multi (COLONNES)
     var multi=false
-    VarMul = EstMulti(y,ModaY);
+    VarMul = EstMulti(y);
 
     // si multiple
     if (VarMul[0]==true ) {
@@ -2978,7 +3036,7 @@ function T_C_R(x,y,complet) {
 
 
     // prise en compte des variables multi (LIGNES)
-    VarMul = EstMulti(x,ModaX);
+    VarMul = EstMulti(x);
 
     // si multiple
     if (VarMul[0]==true ) {
@@ -3000,7 +3058,7 @@ function T_C_R(x,y,complet) {
 
 
         // défilement des modalités
-
+         
         for (m=RgDpX ; m < Moda[x].length ; m++){
 
             if (Moda[x][m] == "" || Moda[x][m] == m ) {continue}
@@ -3114,6 +3172,7 @@ function khi(x,RgDpX,y,RgDpY){
 
                     TcrTh[i][j] = MrgX[i]*MrgY[j]/PopTot
 
+
                     var ContribCase= Contrib(Tcr[i][j],MrgX[i],MrgY[j],PopTot);
 
                     if (isNaN(ContribCase)) {}
@@ -3173,12 +3232,27 @@ function khi(x,RgDpX,y,RgDpY){
 
     function Aff_T_C_R(x, RgDpX, y, RgDpY, multi) {
 
-    //Création du tableau de résultats
-    var body = document.body,
+    // effacement du ou des précédents tris 
+    
+        if (document.getElementById('ChkHis').checked ==false) {
+            Vidage()
 
-        // Titre
-        titre  = document.createElement('p');
-    titre.id='Titre';
+        }
+     
+
+
+    // définition du rang d'index (nécessaire du fait de la conservation de l'historique)    
+    var rg = lastTCR()
+
+    var VarMulX = EstMulti(x);
+    var VarMulY = EstMulti(y);
+
+    //Création du tableau de résultats
+    var body = document.body;
+
+    // Titre
+    titre  = document.createElement('p');
+    titre.id='Titre'+rg;
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
     titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[vC] + ` en fonction de ` + Nom[vL] + `
@@ -3197,9 +3271,7 @@ function khi(x,RgDpX,y,RgDpY){
     titre.innerHTML += `</div>`
     
     
-    const nbcnvs = document.querySelectorAll('canvas');
-    
-    var rg = nbcnvs.length +1;
+
 
      
      
@@ -3292,6 +3364,7 @@ function khi(x,RgDpX,y,RgDpY){
         if (MrgY[j]>0) {
             var HCell = document.createElement("th");
             HCell.innerHTML = caseMod 
+            if (VarMulY[0]==true) {HCell.style.backgroundColor='#1a3f55';}
 
             if (j==0){ HCell.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.45em;float: right;margin-right: 3px;margin-top:-15px;"  onclick="SsNr('Y')"></button>`}
 
@@ -3303,6 +3376,7 @@ function khi(x,RgDpX,y,RgDpY){
 
     var HCell = document.createElement("th");
     HCell.innerHTML = "Total";
+    if (VarMulY[0]==true) {HCell.style.backgroundColor='#1a3f55';}
     tr.appendChild(HCell);
 
 
@@ -3321,8 +3395,10 @@ function khi(x,RgDpX,y,RgDpY){
 
             var td = tr.insertCell();
             td.innerHTML =  caseMod  
+            
 
             if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
+            if (VarMulX[0]==true) {td.style.backgroundColor='#1a3f55';}
 
             //td.appendChild(document.createTextNode(Moda[x][i]));
 
@@ -3507,6 +3583,7 @@ function khi(x,RgDpX,y,RgDpY){
 
                     var HCell = document.createElement("td");
                     HCell.innerHTML = Case ;
+                    
 
 
                     //coloration des cases selon sens de la liaison
@@ -3606,6 +3683,7 @@ function khi(x,RgDpX,y,RgDpY){
     var tr = tbl.insertRow();
     var td = tr.insertCell();
     td.appendChild(document.createTextNode("Total"));
+    if (VarMulX[0]==true) {td.style.backgroundColor='#1a3f55';}
     for (j=RgDpY;j<Number(CdMax[y])+1;j++) {
 
         if (MrgY[j]>0) {  //n'affiche la colonne que si elle contient des valeurs
@@ -3723,7 +3801,7 @@ function khi(x,RgDpX,y,RgDpY){
     //body.appendChild(tbl);
 
     Pied  = document.createElement('p');
-    Pied.id='Pied';
+    Pied.id='Pied'+rg;
     var champ = "Population totale (n=" + PopTot + ")";
 
     if (EstVu("BlocFiltre")==true) {
@@ -3799,12 +3877,34 @@ function khi(x,RgDpX,y,RgDpY){
      document.getElementById("fondpage").style.width=window.innerWidth
      // définition de la largeur du tableau
     var lartab=document.getElementById("TabTCR").offsetWidth
-    // ajustement du titre
-    document.getElementById("Titre").style.width=lartab
+    // ajustement du titre et du pied
+    document.getElementById("Titre"+rg).style.width=lartab
+    document.getElementById("Pied"+rg).style.width=lartab
+
+
+     scrollBas()
 
 
 
 };
+
+function lastTCR() {
+
+        // définition du rang d'index (nécessaire du fait de la conservation de l'historique)    
+        const nbcnvs = document.querySelectorAll('canvas'); // on s'appuie sur le nombre de graphiques (un par TCR) pour connaître le nombre de tableaux déjà créés
+        var rg = nbcnvs.length +1;
+        return rg;
+
+
+}
+
+function scrollBas() {
+        // Calage sur le graphique le plus avancé (en cas d'historique)
+        var rg = lastTCR()
+        rg--;
+        var scrollDiv = document.getElementById("Titre"+rg).offsetTop;
+        window.scrollTo({ top: scrollDiv, behavior: 'smooth'});
+}
 
 function SsNr(sens) {
 
@@ -3828,6 +3928,10 @@ QuelTri()
 
 // croisement d'une variable qualitative et d'une variable quanti
 function QtiQli(x,y) {
+
+        // définition du rang d'index (nécessaire du fait de la conservation de l'historique)    
+    const nbcnvs = document.querySelectorAll('canvas'); // on s'appuie sur le nombre de graphiques (un par TCR) pour connaître le nombre de tableaux déjà créés
+    var rg = nbcnvs.length +1;
 
 
     // tableau des valeurs
@@ -3911,7 +4015,7 @@ function QtiQli(x,y) {
 
     // Titre
     titre  = document.createElement('p');
-    titre.id='Titre';
+    titre.id='Titre'+rg;
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
     titre.innerHTML = ` <div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[y] + ` en fonction de `+ Nom[x] +`
@@ -3943,12 +4047,14 @@ function QtiQli(x,y) {
     //}
 
 
-    document.body.appendChild(titre);
+    var cnt = document.getElementById("contenu")    
+    //document.body.appendChild(titre);
+    cnt.appendChild(titre)  
 
 
 
     tbl  = document.createElement('table');
-    tbl.id = 'TabTCR';
+    tbl.id = 'TabTCR'+rg;
     tbl.className= 'TabTri';
     var larcol= (11)*120 +"px";
     tbl.style.width  = larcol;
@@ -4128,13 +4234,13 @@ function QtiQli(x,y) {
 
 
 
-    document.body.appendChild(tbl);
+    cnt.appendChild(tbl);
 
     // affichage de la boite à moustaches
     Moustaches("fondMoustaches",  x , y , nbc)
 
     Pied  = document.createElement('p');
-    Pied.id='Pied';
+    Pied.id='Pied'+rg;
     var champ = "Population totale (n=" + PopTot + ")";
 
     if (EstVu("BlocFiltre")==true) {
@@ -4235,7 +4341,7 @@ function QtiQli(x,y) {
     Pied.innerHTML = strpied
 
 
-    document.body.appendChild(Pied);
+    cnt.appendChild(Pied);
 
 
 
@@ -4345,8 +4451,8 @@ function QtiQti(x,y) {
     //titre.innerHTML = "";
     //}
 
-
-    document.body.appendChild(titre);
+    var cnt = document.getElementById("contenu")    
+    cnt.appendChild(titre);
 
 
 
@@ -4392,7 +4498,7 @@ function QtiQti(x,y) {
 
 
 
-    document.body.appendChild(tbl);
+   cnt.appendChild(tbl);
 
     // affichage de la boite à moustaches
     Nuage("fondNuage",  x , y  )
@@ -4434,7 +4540,7 @@ function QtiQti(x,y) {
     Pied.innerHTML = strpied
 
 
-    document.body.appendChild(Pied);
+    cnt.appendChild(Pied);
 
 
 
@@ -4544,8 +4650,8 @@ function CopieTCR(){
         for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
             if (MrgY[m]>0) {
-                tabPlain += Moda[vC][m] + '\t';
-                tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
+                tabPlain += ModaY[m] + '\t';
+                tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th> `
             }
 
         }
@@ -4562,9 +4668,9 @@ function CopieTCR(){
         for (l=rgstartx ; l<MrgX.length;l++){
 
             if (MrgX[l]>0) {
-                tabPlain +=  Moda[vL][l] + '\t';
+                tabPlain +=  ModaX[l] + '\t';
                 tabhtml += `<tr>`
-                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
+                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + ModaX[l] + `</td> `
 
                 for (c=rgstarty ; c<MrgY.length;c++){
 
@@ -4623,8 +4729,8 @@ function CopieTCR(){
         for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
             if (MrgY[m]>0) {
-                tabPlain += Moda[vC][m] + '\t';
-                tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
+                tabPlain += ModaY[m] + '\t';
+                tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th> `
             }
 
         }
@@ -4639,9 +4745,9 @@ function CopieTCR(){
         for (l=rgstartx ; l<MrgX.length;l++){
 
             if (MrgX[l]>0) {
-                tabPlain +=  Moda[vL][l] + '\t';
+                tabPlain +=  ModaX[l] + '\t';
                 tabhtml += `<tr>`
-                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
+                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + ModaX[l] + `</td> `
 
                 for (c=rgstarty ; c<MrgY.length;c++){
 
@@ -4703,8 +4809,8 @@ function CopieTCR(){
         for (m=rgstarty ; m<CdMax[vC]+1;m++){
 
             if (MrgY[m]>0) {
-                tabPlain += Moda[vC][m] + '\t';
-                tabhtml += `<th style="background-color: #3b8dbd;"> ` + Moda[vC][m] + `</th> `
+                tabPlain += ModaY[m] + '\t';
+                tabhtml += `<th style="background-color: #3b8dbd;"> ` + ModaY[m] + `</th> `
             }
 
         }
@@ -4720,9 +4826,9 @@ function CopieTCR(){
         for (l=rgstartx ; l<MrgX.length;l++){
 
             if (MrgX[l]>0) {
-                tabPlain +=  Moda[vL][l] + '\t';
+                tabPlain +=  ModaX[l] + '\t';
                 tabhtml += `<tr>`
-                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + Moda[vL][l] + `</td> `
+                tabhtml += `<td style="background-color: #3b8dbd;color:'white';"> ` + ModaX[l] + `</td> `
 
                 for (c=rgstarty ; c<MrgY.length;c++){
 
@@ -4832,7 +4938,14 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
 
         if (v2> 0) {
 
-            if (Number(BDD[l][v2]!=m2)){continue;}// prise en compte d'une seconde variable
+            var rglv2=Reco[v2];
+
+            valmod2= Number(BDD[l][v2]);
+            
+                        // application du recodage éventuel de la variable quali
+                     if (rglv2.trim() !='') {valmod2=ValApRec(valmod2,rglv2)}
+
+            if (valmod2!=m2){continue;}// prise en compte d'une seconde variable
         }
 
         var valmod = Number(BDD[l][c]); // récupération de la valeur dans la base
@@ -4840,13 +4953,14 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
         // application du recodage éventuel
         if (rgl.trim() !='') {valmod=ValApRec(valmod,rgl)}
 
-        // prise en compte de la pondération
-        var coeffp=1;
+        // prise en compte de la pondération ==> pas là
+        /*var coeffp=1;
 
         if (vP !=0) {
             coeffp = BDD[l][vP]
             valmod=valmod*coeffp
         }
+        */
 
 
         
@@ -5250,7 +5364,7 @@ function Vidage() { // Effacement des tris précédents
 
     if (arguments.length==0) {
     document.getElementById("contenu").innerHTML="";
-    return 0;
+    return ;
     }
 
 
@@ -5316,12 +5430,15 @@ function Filtrer(ligne) {
     
     if (ExpFltr=="0") {return true} // s'il n'y a pas de filtre, on valide sans chercher
 
+     
+
     var out=false; // par défaut la ligne n'est pas filtrée
      
     for (f=0;f<ExpFltr.length;f++) {
             
          
         var rgl=ExpFltr[f]
+         
          
 
         if(rgl!=undefined && rgl!=0) { // s'il y a une règle
@@ -5338,17 +5455,22 @@ function Filtrer(ligne) {
                 var crit=sstab[f2].split("-")
                 
                 
-                var varf = crit[0] ;
+                var varf = Number(crit[0]) ;
                 var modf = crit[1] ;
                 var actf=true;
                 actf = crit[2] ;
                 
 
                 var valmod = BDD[ligne][varf] ;
+                var valmod2 = valmod;
 
+                var rglreco= Reco[varf] // prise en compte du filtre
+
+                // application du recodage
+                if (rglreco != "" ) {  valmod2=ValApRec(valmod,rglreco)}
                 
                 
-                if(valmod!=modf) { // la ligne est-elle concernée par le filtre (si la valeur )
+                if(valmod2!=modf) { // la ligne est-elle concernée par le filtre (si la valeur )
                     nonc=true // si oui, non concernée
                 }
 
@@ -5371,29 +5493,118 @@ function Filtrer(ligne) {
 
 function ChampFiltre(){
 
-    if (ExpFltr!=[]) {
-        return "filtre actif";
+
+
+    if (ExpFltr!=[]) { // il y a un filtre
+
+        var vcur=0
+        var fltr = ""
+         
+
+        for (m=0;m<ExpMod.length;m++) { // boucle sur les lignes du filtre
+
+             
+            if (ExpVar[m]!=vcur && ExpMod[m] =="var") { // en cas de changement de variable courante
+                vcur=ExpVar[m]
+                 
+                fltr +=   bilanVF(m,ExpVar[m],ExpMum[m])  
+
+            }
+        
+        }
+
+ 
+
+
+        return fltr;
     } else {
         return "population totale";
     }
 
-/*
-    var z = vF;
 
-    var champ =
-        champ= "Filtre : " + Libellé[z].substr(0,Libellé[z].length-2) + " ( ";
-
-    var select = document.getElementById( 'Combo4' );
-
-    for (l=0; l<=CdMax[z]; l++) {
-        if (select.options[l].selected) {champ = champ + " " + select.options[l].text + "/" ; }
-    }
-    champ=champ.substr(0,champ.length-1) + " ) ";
-
-    return champ;
-
-    */
 }
+
+
+
+function bilanVF(md, v,mum){ // statut de la variable filtrée. Retourne, pour une variable à un niveau donné, et descendant d'une variable donnée les modalités actives 
+
+    var nbm =0;
+    var nbact = 0;
+    var nbinact =0;
+    var parmi="";
+    var m2 =0;
+
+    if (mum>0){ // création du préfixe
+        // parmi = "<br>  + dans [" + Nom[ExpVar[mum]] + " = " +  Moda[v][ExpMod[mum]] +"] > "    
+    
+        var rg= ExpRng[md] // nombre d'itérations
+            
+
+                if (rg>0) { // s'il y a une ascendance à ajouter
+                    parmi="<br> + dans ";
+
+                    var mumc = ExpMum[md]
+                    
+                    for (r=1;r<rg+1;r++) {
+                        
+                        if (r>1) {parmi +=" + "}
+                        parmi += " [" + Nom[ExpVar[mumc]] + "] = " +  Moda[ExpVar[mumc]][ExpMod[mumc]] +" "   
+
+                            if (r=rg+1){
+                                parmi += " --> ";
+                            } else {
+                                parmi += " & ";
+                            }
+                     
+                        mumc = ExpMum[mumc]
+                    }
+                }    
+
+                
+    }
+
+     
+    var chaineact= parmi + "[" + Nom[v] + "] = "
+    var chaineinact= parmi + "[" + Nom[v] + "] ≠ "
+    
+// analyse du statut majoritaire (inclus ou exclus)    
+for (m2=0;m2<ExpMod.length;m2++) {
+
+ 
+
+    if(ExpMod[m2]!="var" && ExpVar[m2]==v && ExpMum[m2]==mum ){ // Il s'agit d'une des modalités de la variable analysée
+        
+        nbm++;
+
+
+        if (ExpAct[m2]==true) {
+
+            nbact++;
+            chaineact+= "'" + Moda[v][ExpMod[m2]] + "' | ";
+            
+        } else {
+
+            nbinact++;
+            chaineinact+= "'" + Moda[v][ExpMod[m2]] + "' & ";
+        }
+    }
+}
+
+// retrait du dernier caractère de la chaine de filtrage
+chaineact = chaineact.substring(0,chaineact.length-2)
+chaineinact = chaineinact.substring(0,chaineinact.length-2)
+
+// La chaine est-elle inclusive ou exclusive? 
+ 
+if (nbinact==0) {return "";}
+if (nbact >= nbinact) {return chaineinact;} 
+if (nbact < nbinact) {return chaineact;}
+
+
+
+
+}
+
 
 /* Détermination du type de tri en fonction des éléments affichés*/
 function QuelTri() {
@@ -5474,7 +5685,13 @@ function VoirPann() {
     }
 }
 
-async function croisetotal() {
+function lancerCroiseTot(){
+    wait("Croisements en cours. Merci de patienter...");
+
+    setTimeout(croisetotal,500);
+
+}
+function croisetotal() {
 
     wait("Analyse en cours. Merci de patienter "); // affichage de l'indicateur de chargement
 
@@ -5497,23 +5714,25 @@ async function croisetotal() {
 
        //if (v=vO){continue;}
 
-        /*
-       var  VarMul = EstMulti(v,ModaM);
+        
+       var  VarMul = EstMulti(v);
 
        if (VarMul[0]==true) {continue;}
-*/
 
 
-       if(TypVar[v]=="a" && v != vO && CdMax[v] <= 20 ){
+       if(TypVar[v]=="a" && v != vO && CdMax[v] <= 50 ){
            
         T_C_R(vO,v,false);
         khi(vO,0,v,0);
 
         if (proba<0.1) {
 
-            document.getElementById("m"+ v ).style.backgroundColor = "#0066ff36"
+            document.getElementById("m"+ v ).style.background = "linear-gradient(to left, rgb(195, 202, 255),rgba(195, 202, 255,0.3))" ; // 
              
-            var larcram = vcram * larcolvar; 
+            if (theoinf5 > 0) { document.getElementById("m"+ v ).style.borderLeft = (2 + theoinf5) + "px solid red" ; }
+
+
+            var larcram = vcram * 2 * larcolvar; 
             larcram=Math.round(larcram)
             
             larcram +="px";

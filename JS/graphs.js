@@ -515,7 +515,7 @@ function Moustaches(cadre, x, y,nbc) {
         // extraction de la colonne
         Colonne = ExtractCol(y,NRC, x,c)
 
-        // if (Colonne.length<1) {continue}
+         if (Colonne.length<1) {continue}
 
 
         // légende en X
@@ -922,9 +922,14 @@ function GraphTcr(rg){
     if (typgrph != 7) { // pour tous les styles hors écarts à l'indépendance
         if (pasprog<=25) {pasprog = pasprog+5};
         if (pasprog>25 && pasprog<=50 ) {pasprog = pasprog+3};
+        
         if (pasprog>50 && pasprog<=90 ) {pasprog = pasprog+2};
         if (pasprog>90) {pasprog = pasprog+0.5};
-    } else { pasprog++;}
+    } else { 
+
+        if (pasprog==50 ) {alert("Effectifs sous l'hypothèse d'indépendance")}
+        pasprog++;
+    }
 
      
     if (pasprog > 100 || pasprog<0) {
@@ -973,8 +978,11 @@ function GraphTcr(rg){
     var lardisp = lartot - (margG+margD)
     var haudisp = hautot - (margH+margB)
 
+    // cas général
     var larcol = lardisp/(cnonvide+2);
     var haulig = haudisp/(lnonvide+2);
+    
+ 
 
 
     var coulligs= "rgb(120,120,130)"
@@ -1329,10 +1337,20 @@ function GraphTcr(rg){
                     if (typgrph==7) {
                         
                         var indep = MrgX[l]*MrgY[c]/PopTot/MrgX[l];
+                        var effth = MrgX[l]*MrgY[c]/PopTot  ;
                           
                         if (l <=CdMax[vL] && c <= CdMax[vC]  ) { // case du tableau
                             ratio= Tcr[l][c]/MrgX[l] - indep; 
-                            valcase= Tcr[l][c] - MrgX[l]*MrgY[c]/PopTot   ; 
+                            if (pasprog<51) { 
+                                valcase=effth * pasprog/50;
+                            } 
+                            if (pasprog >50 & pasprog< 99) {
+                                valcase= effth +  (Tcr[l][c] - effth)   * (pasprog-50)/50 ; 
+                            }
+                            if (pasprog >98) {
+                                valcase= Tcr[l][c] - MrgX[l]*MrgY[c]/PopTot  * (pasprog-50)/50 ; 
+                            }
+
                             ratio=ratio*3;  
 
                         }  
@@ -1392,7 +1410,7 @@ function GraphTcr(rg){
                     valcase=valcase.toFixed(NbDec);
                    
                     if (typgrph==7  ){
-                        if ( ratio > 0) {valcase = "+" + valcase}
+                        if ( ratio > 0 && pasprog>99) {valcase = "+" + valcase}
                     } else {  
                         valcase = valcase + "%" 
                     }

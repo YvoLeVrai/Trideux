@@ -93,6 +93,7 @@ function ChargerPOS() {
     Reco = [0];
     TypVar = [0];
     Libellé = [0];
+    VdsAF = [0];
 
 
 
@@ -144,7 +145,8 @@ function ChargerPOS() {
         LibPropre = LibPropre.replace(/\r?\n|\r/,"") // retrait des sauts de ligne
         Libellé.push(LibPropre);
 
-
+        //Ana Fac
+        VdsAF.push(false);
 
 
 
@@ -633,6 +635,9 @@ var LireZip = function(event) {
 
 var LireTR2 = function(event,obj) {
 
+ 
+  
+
     wait("Chargement en cours. Merci de patienter ") // affichage de l'indicateur de chargement
     reinit();
 
@@ -651,14 +656,16 @@ var LireTR2 = function(event,obj) {
         ficheàlire = obj.files[0];
         nomBase1= obj[0].name;
 
+
     }
 
+   
 
     ///ajoutCookie(nomBase1,input.files[0]) // permettrait d'ajouter en mémoire les infos
 
 
 
-    nomBase= nomBase1.substr(0,nomBase1.length-4);
+    nomBase= nomBase1.substring(0,nomBase1.length-4);
     document.title= nomBase;
 
 
@@ -727,7 +734,7 @@ function TR2versBDD(lignesTR2) {
         var col = lignesTR2[l].split(sep)
 
 
-        if (l==0) {//ligne des en-têtes
+        if (l==0) {//ligne des identifiants
 
             NbVar = col.length;
 
@@ -739,12 +746,13 @@ function TR2versBDD(lignesTR2) {
 
                 Nom.push(col[c]);
                 Posi.push(0)
+                VdsAF.push(false);
 
             }
 
         }
 
-        if (l==1) {//ligne des en-têtes
+        if (l==1) {//ligne des libellés
 
 
             for (c=1;c<col.length;c++) {
@@ -1269,6 +1277,7 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
         Reco.push('');
         TypVar.push(typv);
         Libellé.push(libvar.trim());
+        VdsAF.push(false);
 
 
         //ajout des modalités au dictionnaire
@@ -1335,10 +1344,14 @@ function ChargerListVar(){
     var qti= document.getElementById("ChkVqti").checked;
     encol = document.getElementById("optcols").checked;
     
-    
+    $("#BtnValidSelVar").addClass("d-none");
 
+     
     var htmlvariables = ``;
     larcolvar = window.innerWidth;
+
+    var chk = "" 
+
 
     if(encol==true) {
 
@@ -1400,12 +1413,25 @@ function ChargerListVar(){
         // évitement des types de variables désactivés
         if (TypVar[v2]=='a' && qli==false || TypVar[v2]!='a' && qti==false) {continue}
 
+        
 
         // définition du type d'image à afficher en fonction du type de variable
         var htmlimg = `<img src='Images/\Abc.png'   alt="Abc" height="9" width="18" >`
         
         if (TypVar[v2]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123" height="11" width="18"  >` }
 
+
+        // ajout éventuel d'une case à cocher
+        if (FLCXR=="AF") {
+            var coché = ""
+            if (VdsAF[v2]==true) {coché="checked"} // mémorisation des sélections passées
+            chk = ` <div class="custom-control custom-checkbox" style='float: left;margin-left:2px; margin-right: 5px;margin-top: -4px;z-index:0 !important;'>
+        <input type="checkbox" class="custom-control-input" id="ChkV` + v2 + `" ` + coché + ` disabled  >
+        <label class="custom-control-label" for="ChkV` + v2 + `"> </label>
+        </div>`;
+        htmlimg=""; // on écase l'image pour mettre la case à cocher à la place
+        }
+        
         var htmlmods = ""
 
         // affichage des 4 premières modalités 
@@ -1442,24 +1468,32 @@ function ChargerListVar(){
         //         </table>
         //         </li>`
         if (encol!=true) {
-        htmlvariables += '<a class="list-group-item list-group-item-action casevar" href="#" id=\'v' + v2 
-        + '\' onclick="SelVar(' + v2 + ')">'  
-        + htmlmagnet 
-        + '<div class="row"><div class="col-id text-right"><small class="text-secondary">' 
-        + v2 
-        + '</small></div><div class="col-11">' 
-        + htmlimg + ' <strong>' 
-        + Nom[v2] + '</strong> | ' 
-        + Libellé[v2] + ' <small class="text-secondary">' 
-        + htmlmods + '</small></div></div></a>';
+
+            htmlvariables +=  '<a class="list-group-item list-group-item-action casevar "  id=\'v' + v2 
+            + '\' onclick="SelVar(' + v2 + ')" >'   
+            + chk
+            + htmlmagnet 
+            + '<div class="row"><div class="col-id text-right"><small class="text-secondary">' 
+            + v2 
+            + '</small></div><div class="col-11">' 
+            + htmlimg + ' <strong>' 
+            + Nom[v2] + '</strong> | ' 
+            + Libellé[v2] + ' <small class="text-secondary">' 
+            + htmlmods + '</small></div></div></a>';
 
         } else { 
 
             if (v2 <Nom.length) { // évitement des variables hors cadre
-            htmlvariables += '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\' onclick="SelVar(' + v2 + ')">' + htmlmagnet + '<div class="row"><div class="col-id text-right" style="padding-left:5px">' +  htmlimg + ' </div><div class="col-10"> <strong>' + Nom[v2] + '</strong> | ' + Libellé[v2] + '</div></div></a>';}
+            htmlvariables +=  '<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;"   id=\'v' + v2 
+            + '\' onclick="SelVar(' + v2 + ');">'
+            + htmlmagnet + '<div class="row"><div class="col-id text-right" style="padding-left:5px">' 
+            + chk
+            +  htmlimg + ' </div><div class="col-10"> <strong>' 
+            + Nom[v2] + '</strong> | ' 
+            + Libellé[v2] + '</div></div></a>';}
             else {
                 
-            htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;" href="#" id=\'v' + v2 + '\'></a>';
+            htmlvariables +='<a class="list-group-item list-group-item-action casevar" style="padding:0.5rem 1rem;white-space:nowrap;width:max-content;min-width:100%;max-height:32px;"   id=\'v' + v2 + '\'></a>';
             
             }    
         }   
@@ -1499,6 +1533,11 @@ function openFrmvar() {
         }
          
         if (VMagnet[1]=="C"){ChargerListVar();}
+    }
+
+    if (FLCXR == "AF" && TypTri=="af") {
+        lbl.innerText = " Choisissez les variables à intégrer"
+        ChargerListVar();
     }
 
     document.getElementById("headervar").style.display = "block";
@@ -1641,6 +1680,7 @@ function reinit(){
     Reco = [0];
     TypVar = [0];
     Libellé = [0];
+    VdsAF = [0];
 
     // vidage des variables mémorisées
     vL=0

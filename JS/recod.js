@@ -432,8 +432,9 @@ function regrouperLC() { //gestion du regroupement des lignes et/ou colonnes
     //calcul du nouveau khi2
     Vidage('TabTCR')
 
-    var VarMul1 = EstMulti(vLd,ModaX);
-    var VarMul2 = EstMulti(vCd,ModaY);
+    
+    var VarMul1 = EstMulti(vL);
+    var VarMul2 = EstMulti(vC);
 
     if (VarMul1[0]==true || VarMul2[0]==true) {
         var multi=true;
@@ -649,6 +650,9 @@ function Eclater(v) {
     }
 
 
+    // décalage à droite du rang de la variable de pondération 
+    if(vP !=0 && vP!= undefined) {vP+=(nbNv-1)}
+
     alert("Les variables ont bien été créées à la suite.")
     fautSauver()
 
@@ -659,21 +663,23 @@ function Agreger() {
 
     // définition du nombre de colonnes à agréger
     var nbcol = prompt("Combien de colonnes souhaitez vous agréger (en comptant celle-ci)?")
-    if (nbcol<2 || isNaN(nbcol)==true) {return 0}
+    if (nbcol<2 || isNaN(nbcol)==true) {alert("Saisissez un nombre. \n Merci. ") ; return 0}
 
-    var nomvar = prompt("Quel est le libellé de la variable créée ?")
-
+    var nomvar = prompt("Quel est le NOM de la variable créée ?")
+    if (nomvar.trim()=="") {alert("Saisissez un nom . \n Merci.") ;return 0}
+    var libvar = prompt("Quel est le LIBELLE de la variable créée ?")
+    if (libvar.trim()=="") {libvar=nomvar}
     var col = v
 
 
     // création de la variable au rang -1
-    Nom.splice(col,0,Nom[col] + "_(multi)");
+    Nom.splice(col,0,nomvar + "_(multi)");
     Posi.splice(col,0,'');
     CdMax.splice(col,0,10);
     Reco.splice(col,0,'');
     TypVar.splice(col,0,'a');
-    Libellé.splice(col,0,nomvar);
-
+    Libellé.splice(col,0,libvar);
+    VdsAF.splice(col,0,false)
     NbVar++;
 
     // agrandissement du tableau des modalités
@@ -681,6 +687,8 @@ function Agreger() {
     ModaO.splice(col,0,"0")
     Moda[col]=new Array(1)
     ModaO[col]=new Array(1)
+    Moda[col][0]="NA"
+    ModaO[col][0]="NA"
 
     // ajout de la colonne
     for (l=0; l<BDD.length; l++) {
@@ -708,7 +716,7 @@ function Agreger() {
 
                 // la chaine de modalité est allongée du nom de la colonne
                 // retrait de la partie commune
-                var libssttr= Libellé[c].replace(nomvar,"")
+                var libssttr= Libellé[c].replace(libvar,"")
                 libssttr= libssttr.replace("/"," ") // évitement de la présence des slashs dans la modalité ajoutée
                 strlig +=  libssttr + "/"
 
@@ -732,9 +740,8 @@ function Agreger() {
         }
 
 
-        if (nvval=="") {
+        if (nvval=="" && strlig!="" ) {
             nvval= Moda[col].length
-
             Moda[col].push(strlig)
             ModaO[col].push(strlig)
             //alert(nvval + " "  + strlig)
@@ -747,7 +754,7 @@ function Agreger() {
     }
 
 
-    CdMax[col] = Moda[col].length
+    CdMax[col] = Moda[col].length-1
 
 
 
@@ -755,7 +762,12 @@ function Agreger() {
 
     T_A_P();
 
+    // décalage à droite du rang de la variable de pondération 
+    if(vP !=0 && vP!= undefined) {vP++}
+
     fautSauver()
+
+
 
 
 
@@ -1120,13 +1132,13 @@ function VoirModas() {
 function MàJMod(event,variable,modalité) {
     var key = event.keyCode;
 
-    if (key===13) {
+     
 
         var idTxt = 'mod' + modalité;
         var nvTxt = document.getElementById(idTxt).value
         nvTxt = nvTxt.trim()
 
-        VarMul = EstMulti(vL,ModaM);
+        VarMul = EstMulti(vL);
 
         if (VarMul[0]==false) {
 
@@ -1155,6 +1167,7 @@ function MàJMod(event,variable,modalité) {
 
         }
 
+        if (key===13) {
         // passage à la modalité suivante (si elle existe)
         var Msuiv= 'mod' + (modalité+1);
 
@@ -1349,6 +1362,7 @@ function dupliCol(v,col,recod) {
     Reco.splice(col,0,valrec);
     TypVar.splice(col,0,TypVar[v]);
     Libellé.splice(col,0,Libellé[v]);
+    VdsAF.splice(col,0,false);
 
     NbVar++;
 
@@ -1382,6 +1396,8 @@ function dupliCol(v,col,recod) {
 
     ChargerListVar()
     chargerREC()
+    // décalage à droite du rang de la variable de pondération 
+    if(vP !=0 && vP!= undefined) {vP++}
     vL++;
     T_A_P();
     fautSauver()
@@ -1403,6 +1419,7 @@ function SupprCol(col) {
     Reco.splice(col,1);
     TypVar.splice(col,1);
     Libellé.splice(col,1);
+    VdsAF.splice(col,1);
 
     NbVar--;
 
@@ -1420,6 +1437,8 @@ function SupprCol(col) {
     ChargerListVar()
     chargerREC()
 //if (vL > 1){vL--};
+    // décalage à gauche du rang de la variable de pondération 
+    if(vP !=0 && vP!= undefined) {vP--}
     Vidage("TabTAP")
     T_A_P();
     fautSauver()
@@ -1547,8 +1566,8 @@ function SauvPOS(reco) {
         if (CdMax[v]>999 || TypVar[v] == "r") {CodeMax = "1"; libl += "  !! Format non compatible !! "}
 
 
-        LibPropre= libl.substr(0, Number(libl.length));
-        TxtFile = TxtFile + TxtMef(Nom[v],3," ") + TxtMef(Posi[v],4,"0") + TxtMef(CodeMax,2," ") +  " "
+        LibPropre= libl.substring(0, Number(libl.length));
+        TxtFile = TxtFile + TxtMef(v,3,"0") + TxtMef(Posi[v],4,"0") + TxtMef(CodeMax,2," ") +  " "
 
         if (reco == true) {TxtFile = TxtFile + Reco[v];}
         TxtFile=TxtFile +  "$" + LibPropre + '\$' + "\r\n"
@@ -1573,7 +1592,7 @@ function SauvDIC() {
 
             if (Moda[v][m] !=m) {
 
-                TxtFile = TxtFile + TxtMef(Nom[v],3," ") + TxtMef(m,3,"0") + " " + Moda[v][m] + "\r\n"
+                TxtFile = TxtFile + TxtMef(v,3,"0") + TxtMef(m,3,"0") + " " + Moda[v][m] + "\r\n"
 
             }
 
@@ -2081,15 +2100,7 @@ function closeFiltre() {
 }
 
 
-function openInfos() {
-    document.getElementById("infostrideux").style.zIndex = "101";
-    document.getElementById("infostrideux").style.height = "100%";
-
-}
-
-function closeInfos() {
-    document.getElementById("infostrideux").style.height = "0%";
-}
+ 
 
 
 function dossfichext(fich) { // renvoie le dossier, le nom de fichier sans extension, et l'extension d'un fichier
@@ -2103,22 +2114,22 @@ function dossfichext(fich) { // renvoie le dossier, le nom de fichier sans exten
     return [dossier,fichier, extens];
 }
 
-function EstMulti(vm,tabmod) { //permet de déterminer si une variable est à choix multiples
+function EstMulti(vm) { //permet de déterminer si une variable est à choix multiples
 
     var mo;
     var delimit = "";
     var ptv =0
     var slh =0
     var bar = 0
-    var nbm = Number(tabmod.length)
-    var seuil = nbm/2 // le seuil de déclenchement de la var multiple est la moitié du nombre des modalités
+    var nbm = Number(Moda[vm].length)
+    var seuil = nbm/4 // le seuil de déclenchement de la var multiple est la moitié du nombre des modalités
 
     for (mo=1 ;mo<nbm-1;mo++){
 
-        var mx = tabmod[mo];
+        var mx = Moda[vm][mo];
 
-        //if (isNaN(mx)!=false) {continue;}
-        if (mx==mo) {continue;}//évitement des modalités numériques
+        //if (isNaN(mx)!=false) {continue;}//évitement des modalités numériques
+        if (mx==mo) {continue;}
 
 
 
@@ -2249,9 +2260,11 @@ function AjoutVarCrois() {
     tr.appendChild(HCell);
      
 
-     
+    
 
 }
+
+
 
 var coulMods= ['rgba(200, 200, 200, 0.3)', 
     'rgba(0, 54, 202, 0.3)',
@@ -2263,7 +2276,47 @@ var coulMods= ['rgba(200, 200, 200, 0.3)',
     'rgba(189, 14, 101, 0.42)', 
     'rgba(89, 131, 245, 0.5)', 
     'rgba(89, 245, 224, 0.3)', 
-    'rgba(89, 245, 224, 0.5)']
+    'rgba(60, 191, 173, 0.5)',
+    'rgba(0, 54, 202, 0.4)',
+    'rgba(36, 189, 14, 0.52)',
+    'rgba(255, 131, 0, 0.65)',
+    'rgba(255, 233, 55, 0.65)', 
+    'rgba(213, 71, 71, 0.69)', 
+    'rgba(236, 105, 54, 0.6)',
+    'rgba(189, 14, 101, 0.52)', 
+    'rgba(89, 131, 245, 0.6)', 
+    'rgba(89, 245, 224, 0.4)', 
+    'rgba(60, 191, 173, 0.6)',
+    'rgba(0, 54, 202, 0.5)',
+    'rgba(36, 189, 14, 0.62)',
+    'rgba(255, 131, 0, 0.75)',
+    'rgba(255, 233, 55, 0.75)', 
+    'rgba(213, 71, 71, 0.79)', 
+    'rgba(236, 105, 54, 0.7)',
+    'rgba(189, 14, 101, 0.62)', 
+    'rgba(89, 131, 245, 0.7)', 
+    'rgba(89, 245, 224, 0.5)', 
+    'rgba(60, 191, 173, 0.7)',
+    'rgba(0, 54, 202, 0.6)',
+    'rgba(36, 189, 14, 0.72)',
+    'rgba(255, 131, 0, 0.85)',
+    'rgba(255, 233, 55, 0.85)', 
+    'rgba(213, 71, 71, 0.89)', 
+    'rgba(236, 105, 54, 0.8)',
+    'rgba(189, 14, 101, 0.72)', 
+    'rgba(89, 131, 245, 0.8)', 
+    'rgba(89, 245, 224, 0.6)', 
+    'rgba(60, 191, 173, 0.8)',
+    'rgba(0, 54, 202, 1)',
+    'rgba(36, 189, 14, 1)',
+    'rgba(255, 131, 0, 1)',
+    'rgba(255, 233, 55, 1)', 
+    'rgba(213, 71, 71, 1)', 
+    'rgba(236, 105, 54, 1)',
+    'rgba(189, 14, 101, 1)', 
+    'rgba(89, 131, 245, 1)', 
+    'rgba(89, 245, 224, 1)', 
+    'rgba(60, 191, 173, 1)']
 
 function TabRecCrois(vLd, vCd){ // fonction permettant d'afficher le croisement de deux variables en vue de les combiner pour en créer une troisième
 
@@ -2272,12 +2325,12 @@ function TabRecCrois(vLd, vCd){ // fonction permettant d'afficher le croisement 
 
         if (TypVar[vLd] != 'a'){alert("La variable " + Nom[vLd] + " n'est pas qualitative. Croisement impossible");return 0}
         // évitement des variables multiples
-        VarMul = EstMulti(vLd,Moda[vLd]);
+        VarMul = EstMulti(vLd);
         if (VarMul[0]==true){alert("La variable " + Nom[vLd] + " est multiple. Croisement impossible");return 0}
 
         if (TypVar[vCd] != 'a'){alert("La variable " + Nom[vCd] + " n'est pas qualitative. Croisement impossible");return 0}
         // évitement des variables multiples
-        VarMul = EstMulti(vCd,Moda[vCd]);
+        VarMul = EstMulti(vCd);
         if (VarMul[0]==true){alert("La variable " + Nom[vCd] + " est multiple. Croisement impossible");return 0}
 
 //
@@ -2352,7 +2405,12 @@ function Aff_TcrC() {
 
     </div> `
 
+    if (ModCur <10) {
     var couleur = `background-color:`+ coulMods[ModCur]
+    } else {
+    var couleur = `background-color: white; color:black`
+    }
+
 
     Case += `<h4> Définir modalité n° ` + ModCur+ `</h4>
     
@@ -2780,7 +2838,7 @@ function AjoutVarScore() {
     <div class="input-group-prepend" >
                        
 
-            <span class="input-group-text" onclick="openVars('LD')"> Variable </span>
+            <span class="input-group-text" onclick="openVars('LS')"> Variable </span>
 
             <input onclick="openVars('LS')" onkeyup="FiltrerVars(event)" id= "TxtLS" type="text" class="form-control picthb" placeholder="Choisissez une variable" onkeydown="GetClav(event,'LS')">
 
@@ -3809,6 +3867,8 @@ function DetailsVar() {
 
     if (VarMul[0]==true) {
         document.getElementById('btnEclat').style.display="block"
+        document.getElementById('TxtRglG').disabled=true; 
+        document.getElementById('TxtRglG').placeholder="Variable multiple : recodages impossibles"; 
     } else { document.getElementById('btnAgreg').style.display="block"}
 
     vuDetails=true;
@@ -3826,6 +3886,7 @@ function CacheDetails() {
 
 function CaleSsHead() {
 
+    
     var hpage = document.getElementById("hautpage");
     var Pos = hpage.getBoundingClientRect();
     var PosY = Number(Pos.height)  + 10
@@ -3879,11 +3940,22 @@ function lireCookies(){
 
 
 function wait(message) {
+
+    document.body.style.cursor = "wait";
+   // document.getElementById("contenu").style.display="none"
     document.getElementById("processing").style.display="block"
+    document.getElementById("processing").style.zIndex="1000";
     document.getElementById("lblwait").innerText = message
+    
+     
+
 }
 
-function endWait() { document.getElementById("processing").style.display="none"}
+function endWait() {
+     document.getElementById("processing").style.display="none"
+     document.body.style.cursor = "default";    
+     //document.getElementById("contenu").style.display="block"
+}
 
 function redefModaO() {
 

@@ -356,7 +356,7 @@ select:invalid { color: gray; }
 
 
 .btnfonction{
-
+   
     border-radius: 2px;
     float:left;
     padding-top: 8px;
@@ -396,7 +396,7 @@ select:invalid { color: gray; }
 }
 
 
-.ChoixVar, .ChoixVar2 {
+.ChoixVar  {
     display: none;
     border-radius: 5px;
     background-color: #ffffff;
@@ -407,16 +407,6 @@ select:invalid { color: gray; }
 
 }
 
-.ChoixVar3 { /* il faut une classe à part pour l'explorateur ?? */
-    display: none;
-    border-radius: 5px;
-    background-color: #ffffff;
-    top : 150px;
-    margin-left: initial;
-    border-top : 1px solid rgb(212, 212, 212);
-    margin-top: 5px;
-
-}
 
 
 #Pied {
@@ -479,19 +469,21 @@ select:invalid { color: gray; }
     padding-top: 0px;
     line-height: 1.5em;
     margin-bottom: 5px;
+    min-width:1000px;
 }
 
 .piedtab{
-
+    font-size: 0.80em;
     margin-left: 37px;
     padding-top: 2px;
+    min-width: 1000px;
+    line-height: 1;
 
 }
 
 .TabTri, .TabTitre {
 
     border-collapse: collapse;
-     
     empty-cells: hide;
     margin-left:37px;
     margin-top: 10px;
@@ -504,6 +496,7 @@ select:invalid { color: gray; }
     padding-bottom: 2px;
 
 }
+
 
  
 
@@ -989,6 +982,15 @@ select:invalid { color: gray; }
     
 }
 
+.imgbtn-xs {
+    height:12px;
+    width:12px;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
+    
+}
+
 .imgplus {
      background-image: url("plus.png");
 }
@@ -1022,10 +1024,18 @@ select:invalid { color: gray; }
     background-image: url("filtre-ico.png");
 }
 
+.imgpen {
+    background-image: url("pen.svg");
+}
+
+
 .bi-caret-up-fill {
     background-image: url("caret-up-fill.svg");
-    height:38px;
-    width:38px;
+    height:12px !important;
+    width:12px!important;
+    background-repeat: no-repeat;
+    background-position-x: center;
+    background-position-y: center;
 }
 
 .imgtrash {
@@ -1062,15 +1072,22 @@ select:invalid { color: gray; }
     width:38px;
 }
 
+.imghaut {
+    background-image: url("haut.png");
+}
+
+.imgbas {
+    background-image: url("bas.png");
+}
+
 .process {
     float:left;
     height: 100%;
     width: 100%;
     position: fixed;
-    z-index: 100;
+    z-index: 9999;
     top: 0;
     left: 0;
-    
     background-color: rgba(255, 255, 255, 0.7);
     overflow-x: hidden;
     transition: 0.25s;
@@ -1335,3 +1352,47 @@ select:invalid { color: gray; }
     color: #0066ff36;
 
   }
+
+  .panneauAF{
+    border: 0 0 0 2px solid rgba(80, 80, 80, 0.979);
+    background-color: #9393930a;
+    margin-top: -0.5rem;
+    margin-left:-1rem;
+    color: #0066ff36;
+
+  }
+
+  .chkvar{
+    float: left;
+    margin-left:2px;
+    margin-right: 5px;
+    margin-top: -4px;
+    z-index:1;
+
+  }
+
+  .lgvar{
+      z-index: 1000;
+
+  }
+
+ .chkvaraf{
+     margin-left: 2px;
+      
+     margin-bottom: 10px;
+     border-top: 1px solid rgb(230,230,230);
+ }
+
+ .lngmodaf{
+    margin-top: -3px;
+    margin-left: 18px;
+}
+
+.barrepctaf{
+position: absolute;
+top: 5px;
+height: 20px;
+left: 20px;
+z-index: -1;
+opacity: 0.5;
+}

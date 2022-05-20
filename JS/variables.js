@@ -18,7 +18,8 @@ var CdMax=[0]; // tableau des Codes max de variable
 var Reco=[0]; // tableau des recodages de variable
 var Libellé=[0]; // tableau des Libellés de variable
 var TypVar=[0]; // tableau des types de variable : (a)lpha par défaut dans trideux (n)=numérique (m) = alpha multiple
- 
+var VdsAF=[0]; // la variable est-elle prise en compte dans l'Analyse factorielle 
+
 var vL=0; //variable en lignes
 var vC=0; //variable en colonnes
 var vF=0; //variable filtre
