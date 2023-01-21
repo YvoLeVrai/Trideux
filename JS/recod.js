@@ -497,7 +497,7 @@ function Eclater(v) {
     // Recopiage du tableau des modalités
     ModaM = Moda[v].slice()
 
-    //VarMul = EstMulti(v);
+    VarMul = EstMulti(v);
 
 
 
@@ -521,7 +521,8 @@ function Eclater(v) {
 
         for (m2=0;m2<sstab.length;m2++){
 
-            sstab[m2] = sstab[m2].replace(/\r?\n|\r/,"") // retrait des sauts de ligne
+            sstab[m2] = sstab[m2].replace(/\r?\n|\r/,""); // retrait des sauts de ligne
+            sstab[m2] = sstab[m2].trim();
 
             function ValSousMod(valmod) {
                 return valmod == sstab[m2];
@@ -604,10 +605,21 @@ function Eclater(v) {
     for (l=0; l<BDD.length; l++) {
 
         var valmod = 0;
-        if (BDD[l][v]!=null){valmod=BDD[l][v]}
 
-        if (valmod=='' || valmod=='0' || valmod==undefined) {
+        
 
+        if (BDD[l][v]!=null) {valmod=BDD[l][v]} ;
+        
+                 
+        valmod=Number(valmod);
+         
+        
+         
+        
+
+        if (valmod=='' || valmod=='0' || valmod==undefined || isNaN(valmod)==true) {
+
+             
             // mise en non réponse de toutes les variables
             for (nv=1;nv<nbNv;nv++) {
                 BDD[l][v + nv] = '0';
@@ -617,9 +629,10 @@ function Eclater(v) {
 
         }
 
+         
         var txtmod = Moda[v][valmod]
 
-        //alert("ligne " + l + " = " + txtmod )
+        
 
 
 
@@ -630,13 +643,13 @@ function Eclater(v) {
         for (m2=0;m2<sstab.length;m2++){
 
             sstab[m2] = sstab[m2].replace(/\r?\n|\r/,"") // retrait des sauts de ligne
+            sstab[m2]= sstab[m2].trim()
 
             function ValSousMod2(valmod) {
                 return valmod == sstab[m2];
             }
 
             var idx=ModaM.findIndex(ValSousMod2);
-
 
 
             // la modalité est-elle trouvée?
@@ -650,7 +663,7 @@ function Eclater(v) {
     }
 
 
-    // décalage à droite du rang de la variable de pondération 
+    // décalage à droite du rang de la variable de pondération en cours d'utilisation (si en cours)
     if(vP !=0 && vP!= undefined) {vP+=(nbNv-1)}
 
     alert("Les variables ont bien été créées à la suite.")
@@ -1138,9 +1151,10 @@ function MàJMod(event,variable,modalité) {
         var nvTxt = document.getElementById(idTxt).value
         nvTxt = nvTxt.trim()
 
-        VarMul = EstMulti(vL);
+        //VarMul = EstMulti(vL);
+        var multiples = document.getElementById("ChkMul").checked;
 
-        if (VarMul[0]==false) {
+        if (VarMul[0]==false || multiples==false) {
 
 
             if (nvTxt!='') {
@@ -1151,7 +1165,7 @@ function MàJMod(event,variable,modalité) {
                 Moda[variable][modalité] = ModaO[variable][modalité]
             } ;
 
-        } else { // si la variable est multiple
+        } else if(multiples==true) { // si la variable est multiple
 
             for (m=0;m<Moda[vL].length;m++) {
 
@@ -1969,6 +1983,7 @@ function DicoVars() {
 
     txt+=" \n"
 
+    
 
     for (v=1;v<NbVar;v++){
 
@@ -1982,6 +1997,7 @@ function DicoVars() {
             if (CdMax[v]>99) {
                 txt+= "\n (Question ouverte)"
             } else {
+
 
                 for (m=0;m<=CdMax[v];m++){
                     txt+= "\n" + m + " - " + Moda[v][m]
@@ -1997,6 +2013,69 @@ function DicoVars() {
     SauvegarderSurDisque(txt,"Dictionnaire des variables.txt", "ANSI")
 
 }
+
+function TapComplet() {
+
+    var sep= String.fromCharCode(9)
+
+    var txt="Tri à plat complet des variables de la base : " + nomBase;
+    let date = new Date();
+
+
+    txt+=" \nEdité par trideux le " + date;
+
+    txt+=" \nNombre de variables : " + NbVar
+
+    txt+=" \nNombre d'individus : " + PopTot
+
+    txt+=" \n"
+
+
+    for (v=1;v<NbVar;v++){
+
+        txt+="\n\n" + Nom[v] + sep + Libellé[v]
+
+        if (TypVar[v]!='a') {
+            txt+= "\n (Variable numérique)"
+
+        } else {
+
+            if (CdMax[v]>99) {
+                txt+= "\n (Question ouverte)"
+            } else {
+
+                CréerTapX(v) ; // extraction des valeurs de la variable 
+                
+                txt+= "\n" + "code" + sep + "libellé " + sep + " n " + sep + " % " + sep + "% hors NR"
+
+                for (m=0;m<=CdMax[v];m++){
+
+                    var eff = TapX[m];
+                    var pct = TapX[m] / PopTot * 100;
+                    pct = pct.toFixed(NbDec);
+
+                    var pctxprm = TapX[m]/ (PopTot- TapX[0]) * 100;
+                    pctxprm = pctxprm.toFixed(NbDec);
+                    if (pctxprm<0) {pctxprm=0};
+                    if (m==0){pctxprm=0}; 
+
+                    txt+= "\n" + m + sep + Moda[v][m] + sep + TapX[m] + sep +  pct + " % " + sep +  pctxprm + " % "
+
+                }
+            }
+
+
+        }
+
+    }
+
+
+    SauvegarderSurDisque(txt,"TAP complet.txt", "ANSI")
+
+}
+
+
+
 
 //////////////////////////////////////////////////////////////
 // télécharger sur le disque
@@ -2116,22 +2195,27 @@ function dossfichext(fich) { // renvoie le dossier, le nom de fichier sans exten
 
 function EstMulti(vm) { //permet de déterminer si une variable est à choix multiples
 
+    if (vm < 1  || vm > Nom.length-1) {return [false,""];}
+
+    // les variables sont vues comme non multi par défaut si la gestion des var. multiples est désactivée
+    var GereMul = document.getElementById('ChkMul').checked
+    if (GereMul==false) {return [false,""];}
+
+
     var mo;
     var delimit = "";
     var ptv =0
     var slh =0
     var bar = 0
     var nbm = Number(Moda[vm].length)
-    var seuil = nbm/4 // le seuil de déclenchement de la var multiple est la moitié du nombre des modalités
+    var seuil = nbm/3; // seuil de déclenchement de la var multiple 
 
-    for (mo=1 ;mo<nbm-1;mo++){
+    for (mo=1 ;mo<nbm-1;mo++){ // décompte des différents séparateurs possbiles (;/|)
 
         var mx = Moda[vm][mo];
 
         //if (isNaN(mx)!=false) {continue;}//évitement des modalités numériques
         if (mx==mo) {continue;}
-
-
 
         var posptv = mx.indexOf(";");
         var posslsh = mx.indexOf("/");
@@ -2148,14 +2232,64 @@ function EstMulti(vm) { //permet de déterminer si une variable est à choix mul
 
     //alert("seuil :" + seuil + "ptv : " + ptv + " slh : " + slh + " bar : " + bar )
 
+    // si le nombre de séparateurs dépasse un certain seuil
     if (ptv>seuil || slh > seuil || bar > seuil) {
 
         if (ptv > slh && ptv > bar) {delimit = ";"}
         if (slh > ptv && slh > bar) {delimit = "/"}
         if (bar > ptv && bar > slh) {delimit = "|"}
 
+       // alert("le délimiteur " + delimit + " passe le seuil : " + seuil)
 
-        return [true,delimit];
+        // test du délimiteur 
+        // y a-t-il répétition des modalités avec ce délimiteurs ? 
+        var nbrep=0;
+        for (mo=1 ;mo<nbm;mo++){ // défilement des modalités
+
+            var mx = Moda[vm][mo];
+     
+            var tabmod1 = mx.split(delimit); // division des libelles de modalités avec le séparateur
+            
+            for(sm1=0;sm1<tabmod1.length;sm1++) {
+                
+                var smod1=tabmod1[sm1];
+                smod1=smod1.trim();
+
+                for (mo2=mo+1;mo2<nbm;mo2++){ // comparaison avec les sous-modalités des autres modalités
+
+                    var mx2 = Moda[vm][mo2];
+                    var tabmod2 = mx2.split(delimit);
+
+                    
+                        for(sm2=0;sm2<tabmod2.length;sm2++) {
+
+
+                            var smod2=tabmod2[sm2];
+                            smod2=smod2.trim();
+
+                            //alert(smod1 + " - "  + smod2)
+                            if (smod1==smod2 && smod1 !="") {nbrep++} // nombre de répétition
+
+                           
+                            
+                            
+                        
+                        }
+
+                    
+
+
+                }
+             }
+    
+
+    
+        }
+
+         
+        if(nbrep>3) { return [true,delimit]; }
+
+        return [false,delimit];
 
     } else {
 
@@ -2163,6 +2297,8 @@ function EstMulti(vm) { //permet de déterminer si une variable est à choix mul
 
     }
 }
+
+ 
 
 /*
 function EstDansMulti(Tab, Txt,spl){

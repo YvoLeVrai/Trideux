@@ -1409,17 +1409,24 @@ function ChargerListVar(){
           
         }
 
+
         
         // évitement des types de variables désactivés
         if (TypVar[v2]=='a' && qli==false || TypVar[v2]!='a' && qti==false) {continue}
-
         
 
         // définition du type d'image à afficher en fonction du type de variable
+        // quali
         var htmlimg = `<img src='Images/\Abc.png'   alt="Abc" height="9" width="18" >`
         
+         //multi
+        //var VarMul = EstMulti(v2);
+        //if (VarMul[0]==true) {htmlimg = `<img src="Images/\multi.png"   alt="Mul" height="24" width="25"  >` }
+
+        //quanti
         if (TypVar[v2]!='a') { htmlimg = `<img src="Images/\Num.png"   alt="123" height="11" width="18"  >` }
 
+         
 
         // ajout éventuel d'une case à cocher
         if (FLCXR=="AF") {
@@ -1503,6 +1510,7 @@ function ChargerListVar(){
 
    document.getElementById("fondvars").innerHTML = htmlvariables;    
 
+   
 }
 
 function openFrmvar() {

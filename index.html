@@ -170,7 +170,7 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload();">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.5.9</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.6.1</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative; " ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase" >Ouvrir base</label>
             <div class="dropdown-content menudrlnt" id = "menubases">
@@ -188,13 +188,15 @@
         <div id="cadreboutons" class = "greyed"  style=" position: relative;">
 
 
-            <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn txtbtn-bleu'>Base</label></div>
+            <div class="btnfonction" onclick="Vidage('TabBDD'); closeVars();B_A_S_E()" style= "border-left: 1px solid rgb(142 142 142 / 31%);"><img src="Images\DAT.png"  alt="voir base"><label class='txtbtn txtbtn-bleu'>Base</label></div>
+            
             
             <div class="btnfonction" onclick="prepTAP()"><img src="Images\TAP.png" alt="Tri à plat"><label class='txtbtn txtbtn-bleu '>Variables</label></div>
             <div class="btnfonction" onclick="prepEXP()"><img src="Images\EXP.png" alt="Explorateur"><label class='txtbtn txtbtn-bleu'>Explor</label></div>
             <div class="btnfonction" onclick="prepTCR()"><img src="Images\TCR.png"   alt="Tri croisé"><label class='txtbtn txtbtn-bleu'>Tableau</label></div>
-            <div class="btnfonction" onclick="VoirPann()"><img src="Images\filtre.png"   alt="filtre"><label class='txtbtn txtbtn-bleu'>Filtre</label></div>
-            <div class="btnfonction" onclick="prepA_F()"><img src="Images\ACM.png"   alt="ACM"><label class='txtbtn txtbtn-bleu'>ACM</label></div> 
+            <div class="btnfonction" onclick="prepA_F()" style="margin-right: 12px;"><img src="Images\ACM.png"   alt="ACM"><label class='txtbtn txtbtn-bleu'>ACM</label></div> 
+            <div class="btnfonction" onclick="VoirPann()" style= "border-left: 1px solid rgb(142 142 142 / 31%);"><img src="Images\filtre.png"   alt="filtre" style="margin-left: 6px;"><label class='txtbtn txtbtn-bleu'>Filtre</label></div>
+            
              
              
             
@@ -212,6 +214,7 @@
                     <a> <label id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Convertir au format trideux (DAT/POS/DIC)</label></a>
                     <a> <label  id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Convertir en format CSV</label></a>
                     <a> <label  id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Exporter dictionnaire des variables</label></a>
+                    <a> <label  id="btnexport4" onclick="TapComplet()" style="cursor: pointer;">  Exporter tri à plat complet</label></a>
                 </div>
 
             </div>
@@ -226,7 +229,7 @@
             </div>
             
 
-            <!-- <div  class="btnfonction" onclick="prepA_F()"><label class='txtbtn'>Fonction</label></div>  -->
+             <!--<div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div>  !-->
 
         </div>
 
@@ -283,6 +286,11 @@
                 <label class="custom-control-label" for="ChkNRX">Non réponses (0)</label>
             </div>
 
+            <div class="custom-control custom-switch" style='float: left; margin-right: 25px; '>
+                <input type="checkbox" class="custom-control-input" id="ChkMul" checked="true">
+                <label class="custom-control-label" for="ChkMul" > Multiples</label>
+            </div>
+
 
             <div class="btn-group btn-group-sm" style="float:left">
 
@@ -294,12 +302,16 @@
 
             </div>
 
-            <button  class="btn btn-outline-secondary btn-sm" onclick="openVars('P')" type="button" style="float:left;margin-left:20px;margin-top:0px;font-size: 0.75em;">Pond.</button>
-            <input onclick="openVars('P')" id= "TxtP" type="text" class="form-control" placeholder="Pas de pondération" onkeydown="GetClav(event,'P')" style="display:inline;font-size: 0.66rem;width:150px;height:27px;background-color: rgb(240,240,240);">
-            <button  class="btn btn-outline-secondary btn-sm imgbtn imgclose" onclick="EffacePnd()" type="button" style="display:inline;margin-left:-5px;font-size: 0.75em;height:27px;width:27px;"></button>
+            <div style="float:left">
 
-
+                <button  class="btn btn-outline-secondary btn-sm" onclick="openVars('P')" type="button" style="float:left;margin-left:20px;margin-top:0px;font-size: 0.75em;">Pond.</button>
+                <input onclick="openVars('P')" id= "TxtP" type="text" class="form-control" placeholder="Pas de pondération" onkeydown="GetClav(event,'P')" style="display:inline;font-size: 0.66rem;width:150px;height:27px;background-color: rgb(240,240,240);">
+                <button  class="btn btn-outline-secondary btn-sm imgbtn imgclose" onclick="EffacePnd()" type="button" style="display:inline;margin-left:-5px;font-size: 0.75em;height:27px;width:27px;"></button>
             
+            </div>
+
+
+                       
 
 
         </div>
@@ -390,12 +402,12 @@
                 <label class="custom-control-label" for="ChkTH">Eff. théo</label>
             </div>
 
-
-            <div class="custom-control custom-switch" style='float: right;margin-right: 15px;display:none'>
+            
+            <div class="custom-control custom-switch" style='float: right;margin-right: 15px;'>
                 <input type="checkbox" class="custom-control-input" id="ChkHis" >
-                <label class="custom-control-label" for="ChkHis">Conserver historique</label>
+                <!--<label class="custom-control-label" for="ChkHis">Conserver historique</label>-->
             </div>
-
+            
 
 
         </div>
@@ -479,9 +491,9 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/ETUALIM_5.TR2');" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/ETUSOC_0.TR2');" > <label style="cursor: pointer;color:white">  . ETUSOC_2022 </label> </a> </a> </p> 
 
-    <a href="#" onclick="openFich('/Data/ETUALIM_5(Compact).TR2');" > <label style="cursor: pointer;color:white">  . ETUALIM_2021 (Version compactée) </label> </a> </a> </p> 
+     
 
 
     <!-- <h2 style="font-size: 20px"> Bases récemment ouvertes : <br> </h2> -->

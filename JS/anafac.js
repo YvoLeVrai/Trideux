@@ -14,7 +14,7 @@ var BURT=[]; // tableau de Burt
 var T1=[] ; // tableau des restes (calculs intermédiaires - même structure que le burt)
 var V1=[] ; // vecteur des lignes
 var V2=[] ; // vecteur des colonnes
-var tabcoulsAF = ['#225979', '#225979','rgba(103, 189, 124, 0.829)','rgba(255, 166, 83, 0.918)', 'rgba(148, 67, 111, 0.685)', '#34376f', '#4b50a2a8','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1','#225979','#4b82a2','#3a9ed9', '#4fbeff', '#34376f', '#4b50a2a8','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1']
+var tabcoulsAF = ['#225979', '#225979','rgb(39, 138, 63)','rgb(253, 122, 0)', 'rgba(148, 67, 111, 0.685)', '#b91a1a', '#34376f', '#0441f9','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1','#225979','#4b82a2','#3a9ed9', '#4fbeff', '#34376f', '#4b50a2a8','#8287ff', '#c1baf0', '#409355',' #72c687', '#adfbc1']
 var FautBURT=true; // faut-il recharger le tableau de BURT? 
 
 var OrigX0, OrigX1 // coordonnées du centre du repère (précédentes 0 et actuelles 1)
@@ -37,6 +37,12 @@ var OrigXs=0;
 var OrigYs=0;
 var x0s, y0s; 
  
+// pour le déplacement des points
+var mouvAF=false;
+var TabPtDplAf=[] // tableau des points DEPLACES sur le plan
+
+// pour le filtrage par CPF
+var CPFMin=0;
 
 //var CDG=[]; // Tableau disjonctif complet ("codage logique")
 
@@ -74,7 +80,7 @@ function prepA_F() {
     tbl.id = 'TabAF';
     var lrg = window.innerWidth-80;
     lrg +="px"
-    var ht= window.innerHeight-120;
+    var ht= window.innerHeight-130;
     ht+="px"
     tbl.style.width  = lrg; 
     tbl.style.top="120px"
@@ -85,11 +91,11 @@ function prepA_F() {
         <div class="col-sm-3" id="listvaraf" class="panneauAF">
 
 
-        <div class="ChoixVar" id="BlocAF" style="display:block;" >
+        <div class="ChoixVar" id="BlocAF" style="display:block;margin-top:0px;!important" >
 
         <div class="input-group-prepend">
             
-            <span class="input-group-text"><img src='Images/\Lig.png'  alt="var" onclick="openVars('AF');"></span>
+            <span class="input-group-text"><img src='Images/\Lig.PNG'  alt="var" onclick="openVars('AF');"></span>
 
             <input onclick="openVars('AF');ExpRgDp=0" id= "TxtAF" type="text" class="form-control" placeholder="Choisissez les variables" >
 
@@ -105,7 +111,7 @@ function prepA_F() {
 
 
             <div class="custom-control custom-switch" style='float: left;margin-left: 0px;;margin-right: 15px;'>
-                <input type="checkbox" class="custom-control-input" id="ChkNRAF" checked="true" onclick="AF_listM=[0];LancerListMod()"> 
+                <input type="checkbox" class="custom-control-input" id="ChkNRAF"  onclick="AF_listM=[0];LancerListMod()"> 
                 <label class="custom-control-label" for="ChkNRAF" style="padding-top:0px; !important">Non réponses (0)</label>
             </div>
 
@@ -154,25 +160,95 @@ function prepA_F() {
 
          
 
-           <button class="btn btn-outline-primary"  style = "float:left;width:100%;margin-top:20px" onclick= "LancerAF()" type="button">Lancer</button>
+           <button class="btn btn-outline-primary"  style = "float:left;width:100%;margin-top:15px" onclick= "LancerAF(true)" type="button">Lancer</button>
        
     </div>
 
         
 
 
-    <div class="col-sm-9" id = "contenuAF">
+    <div class="col-sm-9" id = "contenuAF" style="padding:0px">
     
-    <canvas id="planFac"  width="` + lrg  + `"  height="` + ht + `" style="" onwheel = "zoomAF(event)" onmousedown="Af_drag0(event)" onmousemove = "Af_drag(event)" onmouseup="Af_drag1()" onmouseleave = ""  onclic = ""></canvas>
-    
-    <div id="detailfacteurs"> </div>
+        <div id = "fondplanFac"  style = "width:` + lrg  + `; height:` + ht + `">
 
-    </div>
+            <canvas id="planFac"  width="` + lrg  + `"  height="` + ht + `" style=""  onmousedown="Af_drag0(event)" onmousemove = "Af_drag(event)" onmouseup="Af_drag1()" onmouseleave = ""  ondblclick = "FullScreen()"></canvas>
+
+            <button id = "ZoomAFP" class="btn btn-outline-secondary btn-sm imgbtn imgplus"  onclick= "zoomAF('1')" type="button" style="position: absolute; top: 15px; left: 20px;";  ></button>
+
+            <button id = "ZommAFM" class="btn btn-outline-secondary btn-sm imgbtn imgminus"  onclick= "zoomAF('-1')" type="button" style="position: absolute; top: 50px; left: 20px;";  ></button>
+
+            <button id="BtnOpPlF" class="btn btn-outline-secondary btn-sm imgbtn imgcog selectHide" onclick="VoirOpt('OptplanFac')"  type="button" style="position: absolute; top: 85px; left: 20px;width:32px;height:32px";></button>
+
+
+            <div  class="selectHide" id='OptplanFac' style='position: absolute; top: 130px; left: 20px; width: 240px !important; height:auto; background-color:rgba(255,255,255,0.7); display: none;animation: voiropt 0.10s;width:100%'>
+
+
+            <div class="custom-control custom-switch" style='margin-left: 0px;;margin-right: 15px;'>
+                <input type="checkbox" class="custom-control-input" id="ChkContrib" checked="true" onclick="AffPlanFac(99)"> 
+                <label class="custom-control-label" for="ChkContrib" style="padding-top:0px; !important"> Contribs.</label>
+           
+
+            <div class="btn-group btn-group-sm" style="float:right">
+
+            <button type="button"  class="btn btn-outline-secondary"style="font-size: 0.75em;margin-left:5px" disabled>Min.</button>
+            <button type="button" class="btn btn-outline-primary" style="font-size: 0.75em" onclick="ChgCPFMin('-');AffPlanFac(99)">-</button>
+            <button type="button" id= "BtnCPFmin" class="btn btn-primary"style="font-size: 0.75em" disabled>0</button>
+            <button type="button" class="btn btn-outline-primary"style="font-size: 0.75em"onclick="ChgCPFMin('+');AffPlanFac(99)">+</button>
+
+
+            </div>
+
+            </div>
+
+            <div class="custom-control custom-switch" style='margin-left: 0px;;margin-right: 15px;'>
+            <input type="checkbox" class="custom-control-input" id="ChkPrefix"   onclick="AffPlanFac(99)"> 
+            <label class="custom-control-label" for="ChkPrefix" style="padding-top:0px; !important"> Nom var. </label>
+            </div>
+
+            <div class="custom-control custom-switch" style='margin-left: 0px;;margin-right: 15px;'>
+            <input type="checkbox" class="custom-control-input" id="ChkPrefixL" onclick="AffPlanFac(99)"> 
+            <label class="custom-control-label" for="ChkPrefixL" style="padding-top:0px; !important; margin-bottom: 10px"> Lib. var. </label>
+            </div>
+
+            <div>
+            <label style="float:left; padding:5px;margin-right:2px"> X : </label>
+            <select id="choixAxeX" class="custom-select"  style = "float:left;margin-bottom: 2px;width:80px;font-size:1rem;" onchange='ExtremasAF();AffPlanFac(0)'>
+            <option value="0" selected>fac. 1</option>
+            <option value="1">fac. 2</option>
+            <option value="2">fac. 3</option>s
+            <option value="3">fac. 4</option> 
+            <option value="4">fac. 5</option>
+                       
+            </select>  
+
+            </div>
+
+            <div>
+            <label style="  float:left; padding:5px;margin-right:2px"> Y : </label>
+            <select id="choixAxeY" class="custom-select"  style = "float:left;margin-bottom: 2px;width:80px;font-size:1rem;" onchange='ExtremasAF();AffPlanFac(0)'>
+            <option value="0">fac. 1</option>
+            <option value="1" selected >fac. 2</option>
+            <option value="2">fac. 3</option>s
+            <option value="3">fac. 4</option> 
+            <option value="4">fac. 5</option>
+                       
+            </select>  
+
+            </div>
+
+        </div>
+
+
+        <div id="detailfacteurs"> </div>
+
+        </div>
      
      </div> 
     
     `
      
+    // onwheel = "zoomAF(event)"
+
 
     document.getElementById('contenu').appendChild(tbl);
 
@@ -267,7 +343,7 @@ function ListMods() {
                 var VarMul = EstMulti(v);
                 if (VarMul[0]==true){alert("La variable " + Nom[v] + " est multiple. Elle ne peut pas être ajoutée à l'ACM"); VdsAF[v]==false; continue}
 
-                AF_nbv++;
+                //AF_nbv++;
 
                
                 // tri à plat de la variable
@@ -342,7 +418,7 @@ function AffListMods() {
                         
     </div>
 
-    <button id="BtnEditM" class="btn btn-outline-secondary imgbtn imgpen " onclick="EditModAF()"  type="button" style ="float:right;margin:5px; "></button>`
+    <button id="BtnEditM" class="btn btn-outline-secondary imgbtn imgpen " onclick="ChngVisible(0); EditModAF();";   type="button" style ="float:right;margin:5px; "></button>`
 
 
     nbm=0; // nombre de modas
@@ -409,7 +485,7 @@ function AffListMods() {
 
                         chn += `<div id="ligModAf` + l + `" class="custom-control custom-checkbox lngmodaf d-none"  onmouseover = "selPtAf(` + v + `,`+ m + `)" onmouseleave = "videPtAf()">
                             <input type="checkbox" class="custom-control-input chkmodaf" id="ChkMAf` + l + `" ` + chkd + ` >
-                            <label class="custom-control-label" for="ChkMAf` +l+ `"  onmouseup = "AF_StatutM(` + l + `)" style="white-space:nowrap;" >` + AF_listM[l][0]  + ` </label>
+                            <label  id="LblMAf` + l + `" class="custom-control-label" for="ChkMAf` +l+ `"  onmouseup = "AF_StatutM(` + l + `)" style="white-space:nowrap;" >` + AF_listM[l][0]  + ` </label>
                             <label class = "barrepctaf" id="pctMAf` + l + `" style="`+ chnstyle + `"> </label>
                             <input type="text" class="TxtModAF d-none" id="TxtModAF` +  l + `" onkeyup="MàJModAF(event,`+ l +`)" placeholder ="` + AF_listM[l][0] + `"
                                 style= "position:fixed;
@@ -456,23 +532,37 @@ function VdslistAF(v) {
 
 function ChngVisible(v) { // affiche ou masque les modalités
 
+    
+
     var voir=false;
    
     for (l=1;l<AF_listM.length; l++){
        
         var vl= AF_listM[l][1];
 
-        if (vl==v){
+        if (vl==v || v==0){
             var nomlig="ligModAf"+l;
             var ctrlig= document.getElementById(nomlig);
 
-            if (ctrlig.classList.contains("d-none")){
-                $("#"+nomlig).removeClass("d-none");
-                voir=true;
+            // variable par variable
+            if (v>0) {
+
+                if (ctrlig.classList.contains("d-none")){
+                    $("#"+nomlig).removeClass("d-none");
+                    voir=true;
+                } else {
+                    
+                    $("#"+nomlig).addClass("d-none");
+                    voir=false;
+                }
             } else {
-                
-                $("#"+nomlig).addClass("d-none");
-                voir=false;
+
+            // toutes les variables  (ouverture forcée)   
+                if (ctrlig.classList.contains("d-none")){
+                    $("#"+nomlig).removeClass("d-none");
+                    voir=true;
+                } 
+
             }
 
         }
@@ -514,7 +604,7 @@ function compteModsAf() {
  
      }
 
-     document.getElementById("infoAF").innerText = AF_nbv + " variables | " + NbmAct + " moda. actives | " + NbmSup + " suppl. ";
+     document.getElementById("infoAF").innerText = AF_nbv + " variables | " + NbmAct + " moda. actives | " + NbmSup + " suppl. " ;
     // alert("il y a " + )
 
 }
@@ -577,7 +667,7 @@ function AF_StatutV(v) {
 
 
 }
-function LancerAF(){
+function LancerAF(bouton){
     
    
     
@@ -585,7 +675,7 @@ function LancerAF(){
     
     
 
-    if (FautBURT==true) {
+   if (FautBURT==true || bouton==true) {
 
         setTimeout(ChargerBurt,500);
         setTimeout(Facteurs,500);
@@ -695,7 +785,7 @@ function ChargerBurt(){ // Chargement du tableau de BURT
                     if (EstVu('BlocFiltre')==0) { BURT[l][c]+=coeffp;  }
                     else
                     {
-                        if (Filtrer(index) == true) {BURT[l][c]+=coeffp;  }
+                    if (Filtrer(index) == true) {BURT[l][c]+=coeffp;  }
                     }
 
                 }
@@ -774,8 +864,7 @@ function Facteurs(){ // Calcul des facteurs
         type="ACP";
     }
 
-     
-
+    
     var nmods = AF_listM.length; 
     
     // création du tableau des calculs intérmédiaires (copie du BURT)
@@ -1508,9 +1597,9 @@ function Facteurs(){ // Calcul des facteurs
                 // 
                 
                 var HCell = document.createElement("th");  
-                HCell.innerHTML = `<label style="cursor:pointer;" > `+  Nom[AF_listM[l][1]] + " - " +  Moda[AF_listM[l][1]][AF_listM[l][2]] + ` </label>` ;
+                HCell.innerHTML = `<label style="cursor:pointer;color:` + tabcoulsAF[nbv] + `" > `+  Nom[AF_listM[l][1]] + " - " +  Moda[AF_listM[l][1]][AF_listM[l][2]] + ` </label>` ;
                 HCell.colSpan=1;
-                HCell.style.backgroundColor = tabcoulsAF[nbv]
+                HCell.style.backgroundColor= "rgb(255,255,255)" // tabcoulsAF[nbv]
                 tr.appendChild(HCell);
         
     
@@ -1555,7 +1644,7 @@ function Facteurs(){ // Calcul des facteurs
                 tr.appendChild(HCell);
                 
                 var HCell = document.createElement("th");
-                HCell.innerHTML = `<div style="cursor:pointer;display: inline-flex;" onclick = "triTabAF('TabResAF',`+ ( 1+(c-1)*2) + `,` + (5 + NbmAct) + `,` + (5 + NbmAct+NbmSup) + `,'desc')">  Coord. <img src="CSS/\sort_both.png" alt="trier" style="margin: 3px;" > </div>` ; ;
+                HCell.innerHTML = `<div style="cursor:pointer;display: inline-flex;" onclick = "triTabAF('TabResAF',`+ ( 1+(c-1)*2) + `,` + (5 + NbmAct) + `,` + (5 + NbmAct+NbmSup) + `,'desc')">  Contrib. <img src="CSS/\sort_both.png" alt="trier" style="margin: 3px;" > </div>` ; ;
                 HCell.colSpan=1;
                 tr.appendChild(HCell);
             }
@@ -1579,9 +1668,9 @@ function Facteurs(){ // Calcul des facteurs
                     // 
                     
                     var HCell = document.createElement("th");  
-                    HCell.innerHTML = `<label style="cursor:pointer;" > ` + Nom[AF_listM[l][1]] + " - " +  Moda[AF_listM[l][1]][AF_listM[l][2]] + ` </label>` ;
+                    HCell.innerHTML = `<label style="cursor:pointer;color:` + tabcoulsAF[nbv] + `" > ` + Nom[AF_listM[l][1]] + " - " +  Moda[AF_listM[l][1]][AF_listM[l][2]] + ` </label>` ;
                     HCell.colSpan=1;
-                    HCell.style.backgroundColor = tabcoulsAF[nbv]
+                    HCell.style.backgroundColor= "rgb(255,255,255)" //tabcoulsAF[nbv]
                     tr.appendChild(HCell);
             
 
@@ -1611,6 +1700,7 @@ function Facteurs(){ // Calcul des facteurs
         endWait();
 
         ExtremasAF() // calcul des extrêmas
+        TabDepl() // initialisation du tableau des déplacements
         AffPlanFac(0); // affichage du plan
 }
 
@@ -1665,7 +1755,7 @@ first, which contains table headers):*/
     }
 }
 
-function ExtremasAF() {
+function ExtremasAF() { // définit les positions extrêmes des points
 
     const nmods = AF_listM.length; 
     var xmd=0;
@@ -1710,8 +1800,15 @@ function ExtremasAF() {
         for (mx=1;mx<nmods;mx++){ //recherche des extremas
 
             // calcul de la position des points
-            xmd= Number(AF_listM[mx][7]);
-            ymd= Number(AF_listM[mx][9]);
+            
+            // facteurs demandés
+            var fX = document.getElementById("choixAxeX").value
+            var fY = document.getElementById("choixAxeY").value
+            var pX= 7 + fX * 2; 
+            var pY= 7 + fY * 2; 
+
+            xmd= Number(AF_listM[mx][pX]);
+            ymd= Number(AF_listM[mx][pY]);
 
 
 
@@ -1813,9 +1910,9 @@ function AffPlanFac(pas) {
     cnv.font = "12px Arial"
     
     var margG= 0;
-    var margD= 40;
-    var margH= 10;
-    var margB= 10;
+    var margD= 3;
+    var margH= 0;
+    var margB= 0;
 
     var lartot =  document.getElementById("planFac").offsetWidth;
     var hautot =  document.getElementById("planFac").offsetHeight;
@@ -1828,21 +1925,32 @@ function AffPlanFac(pas) {
 
     var nmods= AF_listM.length;
 
-    // définition des coordonnées des points
-    TabPtAf1 = new Array(nmods)
-    for (l=1;l<nmods;l++){
-
-                // calcul de la position des points
-                x= AF_listM[l][7];
-                y= AF_listM[l][9];
-
-                TabPtAf1[l] = new Array(5);
-
-                TabPtAf1[l][1] = OrigX1 +  x * PixParPt
-                TabPtAf1[l][2] = OrigY1 - y * PixParPt
-    }
+            if (TabPtDplAf.length!=nmods) {TabDepl();} // création du tableau des déplacements 
     
+            // définition des coordonnées des points
+            TabPtAf1 = new Array(nmods)
+            for (l=1;l<nmods;l++){
 
+                        // calcul de la position des points
+
+
+                        // facteurs demandés
+                        var fX = Number(document.getElementById("choixAxeX").value)
+                        var fY = Number(document.getElementById("choixAxeY").value)
+                        var pX= 7 + fX * 2; 
+                        var pY= 7 + fY * 2; 
+                        
+                        x= AF_listM[l][pX] ;
+                        y= AF_listM[l][pY] ;
+
+                        TabPtAf1[l] = new Array(5);
+                        //alert(fX + " " + fY + " " + TabPtDplAf[l][fY+1])
+                        TabPtAf1[l][1] = (OrigX1 +  x * PixParPt)  + TabPtDplAf[l][fX+1];
+                        TabPtAf1[l][2] = (OrigY1 - y * PixParPt ) + TabPtDplAf[l][fY+1];
+            }
+            
+
+    
     // Définition du point d'origine
     
     
@@ -1873,6 +1981,8 @@ function AffPlanFac(pas) {
     //OrigY1= margH+(haudisp/2)
      
     pasprog=pas;
+
+    
     timer = setInterval(function() {
        RepereAF(canvas, 1, 2, OrigX1,OrigY1, margG, lardisp, margH, haudisp,xmin, xmax, ymin, ymax);},10)
 
@@ -1892,6 +2002,10 @@ function AffPlanFac(pas) {
 
 function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudisp,xmin, xmax, ymin, ymax ) { // dessin du repère
  
+    var abs=document.getElementById("choixAxeX").value 
+    var ord=document.getElementById("choixAxeY").value 
+    abs++;ord++;
+
     if (pasprog<=25) {pasprog = pasprog+5};
     if (pasprog>25 && pasprog<=90 ) {pasprog = pasprog+3};
     if (pasprog>90) {pasprog = pasprog+1};
@@ -2064,6 +2178,7 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
     //cnv.stroke();
 
 
+    
 
     // défilement des points à afficher 
   
@@ -2088,8 +2203,15 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
                 }
 
 
+                // évitement des points à la contribution trop faible
+                // contrib
+                var pX= 8 + (abs-1) * 2; 
+                var pY= 8 + (ord-1) * 2; 
+                var ctb1 = Number(AF_listM[l][pX])
+                var ctb2 = Number (AF_listM[l][pY])
 
-
+              // if (pasprog >98) {alert(ctb1 + " " + ctb2)}
+                 if (ctb1<CPFMin && ctb2<CPFMin) {continue}
  
                 
                 /*var taillepol = 12;
@@ -2118,23 +2240,48 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
 
 
                
+
+               
                 cnv.fillStyle = tabcoulsAF[nbv];
 
 
                 if (AF_listM[l][3]==false) {cnv.fillStyle= "rgb(120,120,120)";}
 
 
-                // petite croix de positionnement précis
-                cnv.fillRect(x-2, y+1, 5,1 );
-                cnv.fillRect(x+1, y-2, 1,5 );
+                // petit point de positionnement précis
+                cnv.fillRect(x, y, 1,1 );
+                
+
+                // marque de déplacement
+                var fX = Number(document.getElementById("choixAxeX").value)
+                var fY = Number(document.getElementById("choixAxeY").value)
+
+                cnv.strokeStyle = cnv.fillStyle; 
+                cnv.beginPath(); 
+                cnv.moveTo(x,y);
+                cnv.lineTo(x+TabPtDplAf[l][fX+1]*-1,y+TabPtDplAf[l][fY+1]*-1);
+                cnv.stroke();
+
+                //cnv.stroke(x, y, TabPtDplAf[l][1]*-1,TabPtDplAf[l][2]*-1);
+
+
 
                 // affichage du texte
                 
                 // mise en italique en cas de supplémentaire
                 if (AF_listM[l][3]==false){cnv.font="italic 14px Arial"} else {cnv.font=" 14px Arial"}; 
 
-                var txtmoda =  AF_listM[l][0];
+                var txtmoda = "";
+
+                // Ajout d'un préfixe
+                var Pfx = document.getElementById('ChkPrefix').checked
+                if (Pfx==true) {txtmoda = Nom[AF_listM[l][1]] + " | "};
+
+                Pfx = document.getElementById('ChkPrefixL').checked
+                if (Pfx==true) {txtmoda += Libellé[AF_listM[l][1]] + " | " };
                  
+                txtmoda +=  AF_listM[l][0];
+
                 if (isNaN(txtmoda)==false) {txtmoda=String(AF_listM[l][2])}
 
                 var tlignes = splitchaine(txtmoda,150,cnv.font) // découpage (éventuel) de l'étiquette en plusieurs lignes
@@ -2165,15 +2312,18 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
                      */
 
                      // cadre 
+                     
                      cnv.strokeStyle = "rgb(255,0,0)"
                      cnv.beginPath();
                      cnv.rect(x -20 , y - 20, maxw + 40, TabPtAf1[l][4] );
                      cnv.stroke();
 
                      // intérieur du cadre
+                      
                      cnv.fillStyle = "rgb(255,255,255)"
                      cnv.fillRect(x-10 , y - 22, maxw+20, TabPtAf1[l][4] +10 );
                      cnv.fillRect(x-22 , y -10  , maxw + 44, TabPtAf1[l][4] -20 );
+                      
 
                      
  
@@ -2192,42 +2342,45 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
 
                 //cnv.fillText(Moda[AF_listM[l][1]][AF_listM[l][2]],x+2,y-2);
 
+                // affichage de la contribution (cercle)
+                Ctb = document.getElementById('ChkContrib').checked
+                if (Ctb==true){
+                        //taille du cercle 
+                        var cx = AF_listM[l][8];
+                        var cy = AF_listM[l][10];
 
-
-                //taille du cercle 
-                var cx = AF_listM[l][8];
-                var cy = AF_listM[l][10];
-
-                var radius = Number(cx) + Number(cy);
-                /*if (cy>=cx){
-                    radius = cy
-                } */
-
-
-
-                cnv.beginPath();
-                cnv.arc(x, y, radius , 0, 2 * Math.PI, false);
-                //cnv.fillStyle = 'green';
-                cnv.globalAlpha = 0.1;
-                cnv.fill();
-                cnv.globalAlpha = 0.5;
-                cnv.beginPath();
-                cnv.arc(x, y, radius  , 0, 1.5   * Math.PI, false);
-                cnv.lineWidth = 4;
-                cnv.strokeStyle = cnv.fillStyle //'rgba(1,1,250,0.3)';
-                cnv.stroke();
-                cnv.globalAlpha = 1;
-                cnv.lineWidth = 1;
+                        var radius = Number(cx) + Number(cy);
+                        /*if (cy>=cx){
+                            radius = cy
+                        } */
 
 
 
+                        cnv.beginPath();
+                        cnv.arc(x, y, radius , 0, 2 * Math.PI, false);
+                        //cnv.fillStyle = 'green';
+                        cnv.globalAlpha = 0.1;
+                        cnv.fill();
+                        cnv.globalAlpha = 0.5;
+                        cnv.beginPath();
+                        cnv.arc(x, y, radius  , 0, 1.5   * Math.PI, false);
+                        cnv.lineWidth = 4;
+                        cnv.strokeStyle = cnv.fillStyle //'rgba(1,1,250,0.3)';
+                        cnv.stroke();
+                        cnv.globalAlpha = 1;
+                        cnv.lineWidth = 1;
 
-                 /*
-                 cnv.fillText("amplX " + amplX + " min : " + xmin + " max : " + xmax, 15,15 );
-                 cnv.fillText("amplY " + amplY + " min : " + ymin + " max : " + ymax, 15,40 );
-                 cnv.fillText("lardisp " + lardisp + " haudisp : " + haudisp, 15,70 );
-                 cnv.fillText("pix par pt " + PixParPt, 15, 100 );
-                 */
+
+
+
+                        /*
+                        cnv.fillText("amplX " + amplX + " min : " + xmin + " max : " + xmax, 15,15 );
+                        cnv.fillText("amplY " + amplY + " min : " + ymin + " max : " + ymax, 15,40 );
+                        cnv.fillText("lardisp " + lardisp + " haudisp : " + haudisp, 15,70 );
+                        cnv.fillText("pix par pt " + PixParPt, 15, 100 );
+                        */
+                 }
+
             }
             //window.scroll(0, 0)
 
@@ -2235,10 +2388,13 @@ function RepereAF(canvas, abs, ord, OrigX1,OrigY1, margG, lardisp, margH, haudis
 
 function trouvePtAf(x,y) { //recherche d'un point par ses coordonnées
 
+
+    //return 0;
+    
     // prise en compte de la position du planfac
 
      
-
+    var trouvé=false ;
     var pln = document.getElementById("planFac");
     
     var Pos = pln.getBoundingClientRect();
@@ -2268,15 +2424,18 @@ function trouvePtAf(x,y) { //recherche d'un point par ses coordonnées
             if (y >= y1 && y <= y2 ) {
 
                 TabPtSelAf[pt]=true;
+                trouvé=true
+                AffPlanFac(99); 
+                return trouvé;
 
             }
 
         }
         
     }
-     
-    AffPlanFac(99);
-
+    
+    AffPlanFac(99); 
+    return trouvé;
 }
 
 function selPtAf(v,m) { // recherche de points à partir de la variable
@@ -2317,7 +2476,6 @@ AffPlanFac(99);
 
 function videPtAf() {// annulation des tous les points suvolés
     
-    //alert("vide")
     for (pt=0;pt<TabPtSelAf.length;pt++) {
         TabPtSelAf[pt]=false;
     }
@@ -2325,17 +2483,17 @@ function videPtAf() {// annulation des tous les points suvolés
     AffPlanFac(99);
 }
 
-function zoomAF(event) {
+function zoomAF(sens) {
 
      
 
-    if (event.wheelDelta > 0) {
+    if (sens > 0) {
 
-        PixParPt = PixParPt*1.1;
+        PixParPt = PixParPt*1.25;
 
      } else {
 
-        PixParPt = PixParPt*0.909090909;
+        PixParPt = PixParPt*0.8;
         
 
     }
@@ -2354,14 +2512,26 @@ function zoomAF(event) {
 /// fonctions de déplacement du graphique
 
 function Af_drag0(event){
+
+    
     var x = event.clientX;
     var y = event.clientY;
 
+
+    var trv = trouvePtAf(x,y);
+
+    if (trv==false) {
     dragAF=true; // mode drag
+    } else {
+    mouvAF=true; // mode déplacement de point 
+    }
+
+
     OrigXs = OrigX1; // mémorisation de la position du centre au départ
     OrigYs = OrigY1; 
     x0s = x; // mémorisation de la position de départ du drag 
     y0s = y;
+    
 
 }
 
@@ -2376,9 +2546,29 @@ function Af_drag(event) {
     OrigY1 = OrigYs + (y- y0s)    
 
     AffPlanFac(99)
-    }  else {
+    } 
+    
+    
+    
+    if (mouvAF==true) {
+    
+        var fX = Number(document.getElementById("choixAxeX").value)
+        var fY = Number(document.getElementById("choixAxeY").value)
 
-        trouvePtAf(x,y)
+        for (l=1;l<TabPtDplAf.length-1;l++){
+
+            // recalcul de la position des points
+        
+            if (TabPtSelAf[l]==true) {
+                
+            TabPtDplAf[l][fX+1] =  (x - x0s)
+            TabPtDplAf[l][fY+1] =  (y - y0s)
+
+            }
+
+        }
+    
+        AffPlanFac(99)
 
     }
 
@@ -2386,6 +2576,8 @@ function Af_drag(event) {
 
 function Af_drag1(){
     dragAF=false;
+    mouvAF=false;
+    videPtAf();
 }
 
 function EditModAF() {
@@ -2415,14 +2607,17 @@ function EditModAF() {
         };
     }
 
-    /* if (cacher==true) {
+     if (cacher==true) {
 
-        AffListMods()
+        //AffListMods()
+     }
         
         
-    }*/
+    
 
 }
+
+ 
 
 function MàJModAF(event,lg) {
 
@@ -2433,10 +2628,73 @@ function MàJModAF(event,lg) {
     var nvTxt = document.getElementById(idTxt).value;
     nvTxt = nvTxt.trim();
 
+    if (nvTxt=="") {nvTxt=Moda[AF_listM[lg][1]][AF_listM[lg][2]] }
+    
+    var idLbl = 'LblMAf' + lg;
+    var cible = document.getElementById(idLbl);
+    cible.innerText=nvTxt;
+
     AF_listM[lg][0] = nvTxt;
+
 
     AffPlanFac(99)
 
      
+
+}
+
+
+function FullScreen() {
+
+
+//var fond = document.getElementById(cnv).value;
+
+//$(fond).addClass("fscreen");
+ 
+
+var divObj = document.getElementById("planFac");
+
+
+       //Use the specification method before using prefixed versions
+      if (divObj.requestFullscreen) {
+        divObj.requestFullscreen();
+      }
+      else if (divObj.msRequestFullscreen) {
+        divObj.msRequestFullscreen();               
+      }
+      else if (divObj.mozRequestFullScreen) {
+        divObj.mozRequestFullScreen();      
+      }
+      else if (divObj.webkitRequestFullscreen) {
+        divObj.webkitRequestFullscreen();       
+      } else {
+        console.log("Fullscreen API is not supported");
+      } 
+
+}
+
+function TabDepl() {
+
+
+     // création du tableau des déplacements 
+     TabPtDplAf=new Array (AF_listM.length);
+     for (l=1;l<AF_listM.length; l++){
+         TabPtDplAf[l]=new Array (10)
+
+         for (l2=0;l2<10; l2++){
+            TabPtDplAf[l][l2] = 0; // initialisation
+         }
+
+     }
+
+
+}
+
+function ChgCPFMin(sens) {
+
+    if(sens=="+") {CPFMin++} else {CPFMin--}
+    if (CPFMin<0){CPFMin=0;}
+
+    document.getElementById("BtnCPFmin").textContent=CPFMin;
 
 }

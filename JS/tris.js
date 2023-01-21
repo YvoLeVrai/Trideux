@@ -68,7 +68,7 @@ function B_A_S_E() {
     
     <button class="btn btn-outline-primary"  style = "float:right;margin-top:-5px; margin-left:3px; margin-right:5px;display:none" onclick= "AjoutVarCrois()" type="button">Suppr. lignes</button>
 
-    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" style = "margin-top:-5px; width:175px;float:right">
+    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" style = "margin-top:-10px; width:175px;float:right">
     Créer une variable... 
     </button>
 
@@ -207,6 +207,7 @@ function B_A_S_E() {
 
 function Lprec(){ // lignes précédentes dans la base
 
+    
     if (DebAff>50) {DebAff = DebAff-50;} else {DebAff=0;}
     FinAff=DebAff+49;
     Vidage('TabBDD');
@@ -214,6 +215,7 @@ function Lprec(){ // lignes précédentes dans la base
 }
 
 function Lsuiv(){ // lignes suivantes dans la base
+    if (BDD.length<50) {return 0;}
     if (DebAff<(BDD.length-50)) {DebAff = DebAff+50;} else {DebAff=BDD.length-49;}
     FinAff=DebAff+49;
     Vidage('TabBDD');
@@ -370,6 +372,18 @@ document.getElementById('ChkNRX').onclick = function() {
 
 };
 
+
+// gestion des réponses multiples dans les tris
+document.getElementById('ChkMul').onclick = function() {
+
+    // calage sous le titre
+    CaleSsHead()
+
+    QuelTri();
+
+
+};
+
 function T_A_P() { // Calcule et affiche le tri à plat
 
 
@@ -444,17 +458,13 @@ function T_A_P() { // Calcule et affiche le tri à plat
         var multi=false;
 
         if (typv != "e") {
-            // gestion des variables à choix multiple
-
-
-
+            
 
             VarMul = EstMulti(x);
 
+            if (VarMul[0]==true)  {
 
-
-
-            if (VarMul[0]==true) {
+  
 
                 multi=true;
                 ModaM=[0];
@@ -470,6 +480,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
                     for (m2=0;m2<sstab.length;m2++){
 
                         sstab[m2] = sstab[m2].replace(/\r?\n|\r/,"") // retrait des sauts de ligne
+                        sstab[m2] = sstab[m2].trim()
 
                         function ValSousMod(valmod) {
                             return valmod == sstab[m2];
@@ -539,7 +550,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
             var HCell = document.createElement("th");
             HCell.innerHTML = Case;
-            if (VarMul[0]==true) {HCell.style.backgroundColor='#1a3f55';}
+            if (VarMul[0]==true ) {HCell.style.backgroundColor='#1a3f55';}
             tr.appendChild(HCell);
 
         }
@@ -573,7 +584,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
                         var coulPol="black"
 
-                        if (VarMul[0]==true) {coulPol='#1a3f55';}
+                        if (VarMul[0]==true ) {coulPol='#1a3f55';}
                         Case = `<label class= 'LibMod' onclick="VoirModas()" style="cursor:pointer;color:`+ coulPol + `;">  `+ ModaM[i] + `</label> <input type="text" class="NvMod" id=mod`+i+ ` value="`+ ModaM[i] + `" onfocus="this.setSelectionRange(0, this.value.length)" onkeyup="MàJMod(event,` + x +`,`+ i + `)" >`;
 
                     }
@@ -590,10 +601,11 @@ function T_A_P() { // Calcule et affiche le tri à plat
                         var r = document.querySelector(':root');
                         r.style.setProperty('--pct', nomb);
 
-                        if (VarMul[0]!=true) {
-                        Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;}">`+Prct+`% </div>  `;
+                        if (VarMul[0]==true ) {
+                            Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;background-color:#1a3f55bd;">`+Prct+`% </div>  `;
+                        
                         } else { 
-                        Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;background-color:#1a3f55bd;">`+Prct+`% </div>  `;
+                            Case = `<div  class='Prct' style="width:`+ nomb  + `%;animation: elarg 1s;}">`+Prct+`% </div>  `;
                         }    
 
                     };
@@ -793,19 +805,21 @@ function EnteteVar(x) {
     var tr = titre.insertRow();
     var HCell = document.createElement("th");
     HCell.colSpan=2;
-    var Case = `<div id= 'ligneNom' class='titretab'>` + Nom[x] + ` | ` + Libellé[x]
+    var Case = `<div id= 'ligneNom' class='titretab'> <label style="margin-bottom:3px;max-width:700px">` + Nom[x] + `</label>` 
 
     //Case += `<button  class="btn btn-outline-primary btn-sm imgbtn imgright" onclick="vL++;QuelTri()" type="button" style="float:right";></button>`
     // ajout du bouton copier
 
-    Case += `<button id = "BtnPlusVar" class="btn btn-outline-primary btn-sm imgbtn imgplus"  onclick= "DetailsVar()" type="button" style="float:right";  ></button>`
-    Case += `<button id = "BtnMoinsVar" class="btn btn-outline-primary btn-sm imgbtn imgminus"  onclick= "CacheDetails()" type="button" style="float:right;display:none";  ></button>`
+    Case += `<button id = "BtnPlusVar" class="btn btn-outline-primary btn-sm imgbtn imgplus"  onclick= "DetailsVar()" type="button" style="float:right;margin-top:10px;";  ></button>`
+    Case += `<button id = "BtnMoinsVar" class="btn btn-outline-primary btn-sm imgbtn imgminus"  onclick= "CacheDetails()" type="button" style="float:right;margin-top:10px;display:none";  ></button>`
 
-    Case +=  ` <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTAP()" style="float:right;margin-right:3px;" ></div>`;
+    Case +=  ` <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTAP()" style="float:right;margin-right:3px;margin-top:10px;" ></div>`;
 
 
-    Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgright" onclick="vL++;QuelTri()" type="button" style="float:right;margin-right:3px;"></button> `
-    Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgleft" onclick="vL--;QuelTri()" type="button" style="float:right;"></button> `
+    Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgright" onclick="vL++;QuelTri()" type="button" style="float:right;margin-right:3px;margin-top:10px;"></button> `
+    Case +=` <button  class="btn btn-outline-primary btn-sm imgbtn imgleft" onclick="vL--;QuelTri()" type="button" style="float:right;margin-top:10px;"></button> `
+
+    Case +=`<br> <label style="max-width: 860px;">` + Libellé[x] + `</label>`
 
     Case += ` </div>`
 
@@ -2031,7 +2045,7 @@ function AffE_X_P(fonction) {
 
             Case += `<div onclick = "SousTri(`+ l + `,'` + fonction + `')"> 
             <div  class="PrctExp ` + balise + ` " style="height:30px;position:absolute;cursor:pointer;width:`+ nomb  + `%;` + prg + `"></div>
-            <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:10px;cursor:pointer;">`+  ExpLib[i] + `  </div>   
+            <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:10px;cursor:pointer;pointer-events: none;">`+  ExpLib[i] + `  </div>   
             </div> `
 
             if (fonction != "filtre") {
@@ -2765,9 +2779,6 @@ function T_C_R(x,y,complet) {
     TypTri="tcr";
  
 
-
-  
-
     // index de la variable en lignes (si manquant)
     if (x==undefined){x = vL}
 
@@ -2818,13 +2829,15 @@ function T_C_R(x,y,complet) {
      
     // 1 var quali 1 var quanti
     if (typvx=='a' && typvy!='a') {
-        QtiQli(x,y)
+        Vidage();
+        QtiQli(x,y);
         return 0
     }
 
     // 2 vars quanti
     if (typvx!='a' && typvy!='a') {
-        QtiQti(x,y)
+        Vidage();
+        QtiQti(x,y);
         return 0
     }
     
@@ -2954,6 +2967,9 @@ function T_C_R(x,y,complet) {
     var multi=false
     VarMul = EstMulti(y);
 
+                
+    
+
     // si multiple
     if (VarMul[0]==true ) {
 
@@ -3039,7 +3055,7 @@ function T_C_R(x,y,complet) {
     VarMul = EstMulti(x);
 
     // si multiple
-    if (VarMul[0]==true ) {
+    if (VarMul[0]==true  ) {
 
         multi=true;
 
@@ -3246,6 +3262,8 @@ function khi(x,RgDpX,y,RgDpY){
 
     var VarMulX = EstMulti(x);
     var VarMulY = EstMulti(y);
+     
+
 
     //Création du tableau de résultats
     var body = document.body;
@@ -3255,7 +3273,7 @@ function khi(x,RgDpX,y,RgDpY){
     titre.id='Titre'+rg;
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
-    titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[vC] + ` en fonction de ` + Nom[vL] + `
+    titre.innerHTML = `<div class=titretab style="font-size:18px;color:#3b8dbd;padding-bottom:15px" > ` + Nom[vC] + ` en fonction de ` + Nom[vL] + `
      
     <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right; margin-left:3px" ></div> 
     <div class="btn btn-outline-primary btn-sm imgbtn imggrph" onclick="if(vuGrph==true){vuGrph=false} else {vuGrph=true};typgrph=2;QuelTri()" style="float:right" ></div>        
@@ -3376,7 +3394,7 @@ function khi(x,RgDpX,y,RgDpY){
 
     var HCell = document.createElement("th");
     HCell.innerHTML = "Total";
-    if (VarMulY[0]==true) {HCell.style.backgroundColor='#1a3f55';}
+    if (VarMulY[0]==true ) {HCell.style.backgroundColor='#1a3f55';}
     tr.appendChild(HCell);
 
 
@@ -3398,7 +3416,7 @@ function khi(x,RgDpX,y,RgDpY){
             
 
             if (i==0){ td.innerHTML +=`<button type="button" class="btn btn-outline-alarm btn-sm imgbtn imgclose" style="font-size: 0.5em;float: right;margin-right: 3px;margin-top: -18px;" onclick="SsNr('X')" ></button>`}
-            if (VarMulX[0]==true) {td.style.backgroundColor='#1a3f55';}
+            if (VarMulX[0]==true ) {td.style.backgroundColor='#1a3f55';}
 
             //td.appendChild(document.createTextNode(Moda[x][i]));
 
@@ -4019,7 +4037,7 @@ function QtiQli(x,y) {
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
     titre.innerHTML = ` <div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[y] + ` en fonction de `+ Nom[x] +`
-            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> 
+            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right;padding:10px;margin-top:-10px" ></div> 
                         
   
 
@@ -4035,7 +4053,7 @@ function QtiQli(x,y) {
     titre.innerHTML += `</div>
   
         <div>
-                 <canvas id="fondMoustaches" width="1000" height="500" style="border: 1px solid #333; margin-top: 30px ; margin-left: 100px; margin-right: auto"></canvas>
+                 <canvas id="fondMoustaches" width="1000" height="500" style="border: 1px solid #333; margin-top: 30px ; margin-left: 0px; margin-right: auto"></canvas>
             </div>  
         
         `;
@@ -4431,7 +4449,7 @@ function QtiQti(x,y) {
     titre.className= 'TabTitre';
     //if (document.getElementById('ChkHis').checked ==true ) {
     titre.innerHTML = ` <div class=titretab style="font-size:18px;color:#3b8dbd;" > ` + Nom[y] + ` en fonction de `+ Nom[x] +`
-            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right" ></div> 
+            <div class="btn btn-outline-primary btn-sm imgbtn imgcopy" onclick="CopieTCR()" style="float:right; padding:10px;margin-top:-10px" ></div> 
                         
   
 
@@ -5394,21 +5412,7 @@ document.getElementsByClassName('ChkNR').onclick = function() {
 
 
 
-function ChargerFiltre() {
 
-    var z = vF ;
-
-    VoirBloc('OptFiltre')
-
-    document.getElementById("Combo4").options.length = 0;
-
-    for (m=0;m<= CdMax[z];m++) {
-        document.getElementById("Combo4").options[m]=new Option( Moda[z][m] , m , true, false);
-    }
-
-    document.getElementById("Combo4").size = 5;
-
-}
 
 
 function Filtrer(ligne) {
@@ -5568,11 +5572,11 @@ function bilanVF(md, v,mum){ // statut de la variable filtrée. Retourne, pour u
     var chaineinact= parmi + "[" + Nom[v] + "] ≠ "
     
 // analyse du statut majoritaire (inclus ou exclus)    
-for (m2=0;m2<ExpMod.length;m2++) {
+    for (m2=0;m2<ExpMod.length;m2++) {
 
  
 
-    if(ExpMod[m2]!="var" && ExpVar[m2]==v && ExpMum[m2]==mum ){ // Il s'agit d'une des modalités de la variable analysée
+       if(ExpMod[m2]!="var" && ExpVar[m2]==v && ExpMum[m2]==mum ){ // Il s'agit d'une des modalités de la variable analysée
         
         nbm++;
 
@@ -5706,8 +5710,8 @@ function croisetotal() {
    VMagnet = [vO,sensVO];
      
     
-    document.getElementById('ChkNRX').checked=false;
-    document.getElementById('ChkNRY').checked=false;
+    //document.getElementById('ChkNRX').checked=false;
+    //document.getElementById('ChkNRY').checked=false;
 
 
     for (v=1;v<Nom.length;v++) {

@@ -2,6 +2,10 @@ var pas=0
 var timer;
 var pasprog=0
 
+
+////////////////////////////////////////////////////////////////////////////////
+// histogrammes tirés des tableaux croisés
+///////////////////////////////////////////////////////////////////////////////
 function HistoTcr(rg){
 
     
@@ -339,6 +343,75 @@ function HistoTcr(rg){
 
 }
 
+function Aff_HistoTcr(typgrph, v1,v2, nbcat1, nbcat2, Mrg1, Mrg2, RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar,rg) {
+    if (pasprog<=25) {pasprog = pasprog+5};
+    if (pasprog>25 && pasprog<=90 ) {pasprog = pasprog+3};
+    if (pasprog>90) {pasprog = pasprog+1};
+    
+    
+    if (pasprog > 100) {
+        clearInterval(timer)
+        return 0}   
+    
+    
+    
+        const canvas = document.getElementById("fondTcr"+rg);
+    
+     
+        const cnv = canvas.getContext('2d');
+    
+        var rangl=0;
+        var rangc=0;
+    
+        // ajout des catégories
+        for (c=RgDpY;c<nbcat2 +1;c++) {
+    
+                if (Mrg2[c] >0) {
+                    rangc=0;
+    
+                    for (l=RgDpX;l<nbcat1+1;l++) {
+                        
+                        if (Mrg1[l]>0) {
+    
+                        
+                        if (typgrph == 2){ var valcat = TcrH[l][c] * pasprog/100}
+                        if (typgrph == 1 || typgrph == 3){ var valcat = TcrH[c][l] * pasprog/100 }
+    
+                        var haubar = valcat/echymax * haudisp
+    
+                        cnv.fillStyle = tabcouls[l];
+
+                        //cnv.globalAlpha=0.25; // opacité
+                        cnv.fillRect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, haubar );
+                                                
+                       
+                        // cadre    
+                        var coul = 180 - pasprog
+                        var fill = 'rgb(' + coul + ',' + coul + ','+ coul + ')'  
+                        cnv.strokeStyle = fill
+                         
+                        cnv.beginPath();
+                        cnv.rect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, haubar  );
+                        cnv.stroke();
+                         
+    
+                       rangc++;
+                        }
+                
+                    }
+        
+      
+    
+    
+                    rangl++;
+                }
+    
+        }
+    
+    
+    }
+    
+
 function legendTcr(){
 
     
@@ -375,6 +448,7 @@ function legendTcr(){
 
 
 }
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 // Boites à moustaches
@@ -1589,73 +1663,6 @@ function AffichCase(x1,y1,x2,y2,ratio,coul,valcase,rg) {
 
 }
 
-function Aff_HistoTcr(typgrph, v1,v2, nbcat1, nbcat2, Mrg1, Mrg2, RgDpX,RgDpY,margG,margH,echymax,haudisp,larcat,larbar,rg) {
-if (pasprog<=25) {pasprog = pasprog+5};
-if (pasprog>25 && pasprog<=90 ) {pasprog = pasprog+3};
-if (pasprog>90) {pasprog = pasprog+1};
-
-
-if (pasprog > 100) {
-    clearInterval(timer)
-    return 0}   
-
-
-
-    const canvas = document.getElementById("fondTcr"+rg);
-
- 
-    const cnv = canvas.getContext('2d');
-
-    var rangl=0;
-    var rangc=0;
-
-    // ajout des catégories
-    for (c=RgDpY;c<nbcat2 +1;c++) {
-
-            if (Mrg2[c] >0) {
-                rangc=0;
-
-                for (l=RgDpX;l<nbcat1+1;l++) {
-                    
-                    if (Mrg1[l]>0) {
-
-                    
-                    if (typgrph == 2){ var valcat = TcrH[l][c] * pasprog/100}
-                    if (typgrph == 1 || typgrph == 3){ var valcat = TcrH[c][l] * pasprog/100 }
-
-                    var haubar = valcat/echymax * haudisp
-
-                    cnv.fillStyle = tabcouls[l];
-                    //cnv.globalAlpha=0.25; // opacité
-                    cnv.fillRect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, haubar );
-                    
-                    
-                   
-                    // cadre    
-                    var coul = 180 - pasprog
-                    var fill = 'rgb(' + coul + ',' + coul + ','+ coul + ')'  
-                    cnv.strokeStyle = fill
-                     
-                    cnv.beginPath();
-                    cnv.rect(margG + 15 + rangl*larcat + rangc*larbar , margH + haudisp - haubar, larbar - 5, haubar  );
-                    cnv.stroke();
-                     
-
-                   rangc++;
-                    }
-            
-                }
-    
-  
-
-
-                rangl++;
-            }
-
-    }
-
-
-}
 
  
 function splitchaine(chaine,largeur,font) { // fonction permettant de gérer les sauts de lignes lors de l'impression de texte dans les canvas
