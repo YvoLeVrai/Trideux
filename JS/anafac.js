@@ -180,7 +180,7 @@ function prepA_F() {
             <button id="BtnOpPlF" class="btn btn-outline-secondary btn-sm imgbtn imgcog selectHide" onclick="VoirOpt('OptplanFac')"  type="button" style="position: absolute; top: 85px; left: 20px;width:32px;height:32px";></button>
 
 
-            <div  class="selectHide" id='OptplanFac' style='position: absolute; top: 130px; left: 20px; width: 240px !important; height:auto; background-color:rgba(255,255,255,0.7); display: none;animation: voiropt 0.10s;width:100%'>
+            <div  class="selectHide" id='OptplanFac' style='position: absolute; top: 130px; left: 20px; width: auto !important; height:auto; background-color:rgba(255,255,255,0.7); display: none;animation: voiropt 0.10s;width:100%'>
 
 
             <div class="custom-control custom-switch" style='margin-left: 0px;;margin-right: 15px;'>

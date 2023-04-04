@@ -68,7 +68,7 @@ function B_A_S_E() {
     
     <button class="btn btn-outline-primary"  style = "float:right;margin-top:-5px; margin-left:3px; margin-right:5px;display:none" onclick= "AjoutVarCrois()" type="button">Suppr. lignes</button>
 
-    <button type="button" class="btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" style = "margin-top:-10px; width:175px;float:right">
+    <button type="button" class=" btn btn-outline-primary dropdown-toggle" data-toggle="dropdown" style = "margin-top:-10px; width:215px;float:right">
     Créer une variable... 
     </button>
 
@@ -467,6 +467,10 @@ function T_A_P() { // Calcule et affiche le tri à plat
   
 
                 multi=true;
+
+                // modification de la couleur du titre 
+                document.getElementById("ligneNom").style.color = "#1a3f55bd"
+
                 ModaM=[0];
                 var TapX2 = [];
 
@@ -658,7 +662,7 @@ function T_A_P() { // Calcule et affiche le tri à plat
 
 
     //désactivation des déplacements et recodages si variable multiple
-    if (VarMul[0]==true) {
+    if (VarMul[0]==true && typv == "a" ) {
         document.getElementById('ChkAll').style.display='none'
         var listchk= document.getElementsByClassName("ChkMod")
 
@@ -749,7 +753,7 @@ function CréerTapX(x){
             var vide=false
             valmod = String(valmod);
 
-            if (valmod == ' ' && typv == "e") {vide=true } // évitement des modalités vides pour les variables numériques
+            if (valmod ==  " " && typv == "e" || valmod == " " && typv == "r" ) {vide=true } // évitement des modalités vides pour les variables numériques
 
             if (vide==false) {
 
@@ -924,13 +928,13 @@ function EnteteVar(x) {
 
 
         if (Reco[x].trim() != ''){
-            Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:38px;width:38px" onclick= "SuppRecod(`+ vL + `)" type="button"></button></div>`
+            Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:40px;width:40px" onclick= "SuppRecod(`+ vL + `)" type="button"></button></div>`
         } else {Case += `</div>`}
 
 
     } else {
 
-        if (Reco[x].trim() != ''){Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:38px;width:38px" onclick= "SuppRecod(`+ vL + `)" type="button"></button>`
+        if (Reco[x].trim() != ''){Case += `<button class="btn btn-warning imgbtn imgtrash"  style = "float:left;height:40px;width:40px" onclick= "SuppRecod(`+ vL + `)" type="button"></button>`
         }
 
     }
@@ -1017,10 +1021,10 @@ function EnteteVar(x) {
                 <a class="dropdown-item" href="#" onclick="TriGnrModas(2,'d')">effectifs    + -</a>
                 </div>
 
-                <button type="button" class="btn btn-outline-primary imgbtn imgcopy" style = "margin-top:9px; height:40px"  style="float:left;background-repeat: no-repeat;"  onclick="PrepCopie(` + vL + `)">
+                <button type="button" class="btn btn-outline-primary imgbtn imgcopy" style = "margin-top:9px; height:40px;float:left;background-repeat: no-repeat;"  onclick="PrepCopie(` + vL + `)">
                 </button>
 
-                <button type="button" class="btn btn-outline-primary imgbtn  imgpaste" style = "margin-top:9px; height:40px"; "  style="float:left;background-repeat: no-repeat;" onclick="CollMods(` + vL + `)">
+                <button type="button" id = "btncoller" class="btn btn-outline-primary imgbtn  imgpaste" style = "margin-top:9px; height:40px;float:left;background-repeat: no-repeat;" onclick="CollMods(` + vL + `)">
                 </button>
 
 
@@ -1181,7 +1185,7 @@ function PrepCopie(v) {
 
 function CollMods(vColle) {
 
-
+   
     if (vCopy==0) { return 0}
 
     if (Moda[vCopy].length!=Moda[vColle].length) { alert("Les deux variables n'ont pas le même nombre de modalités"); return 0}
@@ -4951,7 +4955,7 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
     // défilement des lignes
     for (l=0 ;l < nblig; l++) {
 
-        if (String(BDD[l][c]) ==' '){continue;}// évitement des valeurs nulles
+        if (BDD[l][c] ==' '){continue;}// évitement des valeurs nulles
         if (Number(BDD[l][c])==0 && NRC==false ){continue;}// évitement des zéros (si choisi)
 
         if (v2> 0) {

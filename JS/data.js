@@ -39,7 +39,7 @@ var openDAT = function(event) {
     reader.onload = function(){
         var text = reader.result;
 
-        text = text.replace(/\r?\n|\r/,'\n') // retrait des sauts de ligne
+        text = text.replace(/\r?\n|\r/,'\n') // remplacement des sauts de ligne
         // split du texte par lignes \n
         lignesDAT = text.split("\n");
 
@@ -269,7 +269,7 @@ function openFich(fich) {
 
         reader.onload =  function(e){
             var text = reader.result;
-            text = text.replace(/\r?\n|\r/,'\n') // retrait des sauts de ligne
+            text = text.replace(/\r?\n|\r/,'\n') // remplacement des sauts de ligne
             // split du texte par lignes \n
             lignesTR2 = text.split("\n");
             TR2versBDD(lignesTR2)
@@ -1162,7 +1162,8 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
 
             // retrait des sauts de ligne
-            valcase=valcase.replace(/\r?\n|\r/,"");
+         
+            valcase=valcase.replace(/[\r\n]+/gm," ") // retrait des sauts de ligne
 
             // en cas de valeur décimale
             valcase=valcase.replace( /,/g,".")
@@ -1195,7 +1196,7 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
             var valcol=TabXLS[l][c] //récupération de la valeur de la "case" du tableau
 
-
+            valcol=valcol.replace(/[\r\n]+/gm," ") // retrait des sauts de ligne
 
             if (typv == "a") { // comportement en cas de variable alphanumérique (ou multiple)
 
@@ -1221,16 +1222,23 @@ function TABversBDD(TabXLS) { // création de la base de données à partir du c
 
             if (typv == "e" || typv == "r" ) { // comportement en cas de variable numérique (entier ou réel)
                 var valcase=TabXLS[l][c]
-                // en cas de valeur décimale
-                valcase=valcase.replace( /,/g,".")
 
-                if (valcase!='') {
-                    colDAT[l-1] = Number(valcase);
+                
+                // en cas de valeur décimale
+                valcase=valcase.replace( /,/g,".");
+                
+                var vide= valcase.charCodeAt(0); // recherhe de case vide (char = 32) 
+                 
+                if (vide==32) {
+                    
+                    colDAT[l-1] = " ";
+
                 } else {
-                    colDAT[l-1] = ' ' ; //toString('---');
+                    colDAT[l-1] = Number(valcase);  ; //toString('---');
 
                 }
 
+                 
             }
 
 
@@ -1373,7 +1381,7 @@ function ChargerListVar(){
         larcolvar=Math.round(larcolvar)
          
         
-        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) )">`
+        htmlvariables = `<div style="display:grid; grid-template-columns: repeat(`+ nbcol + `, minmax(150px, 1fr) );font-family: 'Arial', sans-serif;">`
     }
 
     // défilement des variables
@@ -1525,7 +1533,7 @@ function openFrmvar() {
 
     
     if (FLCXR == "L" && TypTri=="tcr") {
-        lbl.innerText += " en ligne"
+        lbl.innerText += " en lignes"
         if(vC != 0){
             $("#btnmagnet").removeClass("d-none");
         }
@@ -1535,7 +1543,7 @@ function openFrmvar() {
     }
     
     if (FLCXR == "C" && TypTri=="tcr") {
-        lbl.innerText += " en colonne"
+        lbl.innerText += " en colonnes"
         if(vL != 0){
             $("#btnmagnet").removeClass("d-none");
         }
@@ -1766,5 +1774,21 @@ function MàJNomBase(event) {
         
 
     }
+
+}
+
+function SelFormatBase(event) {
+
+var input = event.target;
+fichBase = event.target.files;
+
+var nomBase1= fichBase[0].name;
+var extens =  nomBase1.split('.').pop();
+extens = extens.toUpperCase();
+
+if (extens=="TR2"){ LireTR2(event) } ;
+if (extens=="XLSX" || extens=="XLS"){ LireXLSX(event) } ;
+if (extens=="CSV" || extens=="TXT"){ LireCSV(event) } ;
+
 
 }

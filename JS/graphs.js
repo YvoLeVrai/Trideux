@@ -1001,7 +1001,7 @@ function GraphTcr(rg){
         if (pasprog>90) {pasprog = pasprog+0.5};
     } else { 
 
-        if (pasprog==50 ) {alert("Effectifs sous l'hypothèse d'indépendance")}
+       // if (pasprog==50 ) {alert("Effectifs sous l'hypothèse d'indépendance")}
         pasprog++;
     }
 

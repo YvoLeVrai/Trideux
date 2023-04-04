@@ -1821,6 +1821,10 @@ function SauvTR2() { //écriture de la base au format CSV
 
         var lib = Nom[v];
 
+       
+        lib = lib.replace(/[\r\n]+/gm," ") // retrait des sauts de ligne
+       
+
         if (lib == "") {lib=v};
 
         if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
@@ -1842,7 +1846,9 @@ function SauvTR2() { //écriture de la base au format CSV
 
         if (lib == "") {lib=Nom[v]};
 
-        if (isNaN(lib)) {lib = lib.replaceAll(sep," ")}
+        lib = lib.replace(/[\r\n]+/gm," ") // retrait des sauts de ligne
+
+        if (isNaN(lib)) {lib = lib.replaceAll(sep," ")} // retrait des séparateurs 
 
         Ligne = Ligne + lib;
         if (v<nv) {Ligne +=  sep;}
@@ -1918,9 +1924,9 @@ function SauvTR2() { //écriture de la base au format CSV
 
             if (TypVar[v]=='a' && m<=CdMax[v]) {
 
-
-
+ 
                 if (Moda[v][m]== ModaO[v][m]) {
+
                     Ligne += Moda[v][m];} else {Ligne += Moda[v][m] + "||" + ModaO[v][m] }
 
             } else {Ligne += " "}
@@ -2196,6 +2202,7 @@ function dossfichext(fich) { // renvoie le dossier, le nom de fichier sans exten
 function EstMulti(vm) { //permet de déterminer si une variable est à choix multiples
 
     if (vm < 1  || vm > Nom.length-1) {return [false,""];}
+    if (TypVar[vm]!="a") {return [false,""];}
 
     // les variables sont vues comme non multi par défaut si la gestion des var. multiples est désactivée
     var GereMul = document.getElementById('ChkMul').checked
@@ -2213,6 +2220,8 @@ function EstMulti(vm) { //permet de déterminer si une variable est à choix mul
     for (mo=1 ;mo<nbm-1;mo++){ // décompte des différents séparateurs possbiles (;/|)
 
         var mx = Moda[vm][mo];
+
+        if (isNaN(mx)==true) { if (mx.trim()=="") {continue} }; // évitement des modalités (quali) vides
 
         //if (isNaN(mx)!=false) {continue;}//évitement des modalités numériques
         if (mx==mo) {continue;}
@@ -4000,7 +4009,7 @@ function DetailsVar() {
     document.getElementById('TxtNom').value = Nom[vL];
     document.getElementById('TxtLib').value = Libellé[vL];
 
-
+    VarMul = EstMulti(vL);
     if (VarMul[0]==true) {
         document.getElementById('btnEclat').style.display="block"
         document.getElementById('TxtRglG').disabled=true; 
@@ -4106,7 +4115,17 @@ function redefModaO() {
 
     }
 
-     
-    
+        
+}
+
+function trimModa(){
+
+    for (m=0;m<Moda[vL].length;m++) {
+
+        Moda[vL][m] = Moda[vL][m].replace(/^\s+|\s+$/gm,'');
+        ModaO[vL][m] = Moda[vL][m]
+
+    }
+
 }
 

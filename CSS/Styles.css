@@ -1,6 +1,6 @@
 body {
     background-color: rgb(255, 255, 255);
-    font-family: 'Lato', sans-serif;
+     
     font-size: 15px;
     line-height: 1;
     position: absolute;
@@ -9,7 +9,7 @@ body {
 
 .header {
     float:left;
-    font-family: 'Lato', sans-serif;
+    font-family: 'Bahnschrift', sans-serif;
     font-size: 15px;
     line-height: 1;
     border-bottom: 2px solid rgb(160, 157, 157);
@@ -29,17 +29,20 @@ body {
 
 h1 {
     color: rgb(0,102,166);
+    font-family: 'Bahnschrift', sans-serif;
     font-size: 1.60rem;
 }
 
 h2{
     color: rgb(0,102,166);
+    font-family: 'Bahnschrift', sans-serif;
     margin-bottom: 20px; 
     font-size: 1.5rem;
 }
 
 h3{
     color: rgb(0,169,155);
+    font-family: 'Bahnschrift', sans-serif;
     font-size :1.35rem !important;
     margin-left: 30px;  
 }
@@ -381,8 +384,9 @@ select:invalid { color: gray; }
     top: 12px;
     margin-left: 10px;
     margin-right: 15px;
-    font-weight: bold;
-    
+   /* font-weight: bold;*/
+    font-size: 1rem;
+
 }
 
 .txtbtn-bleu{
@@ -462,6 +466,7 @@ select:invalid { color: gray; }
     /*background: linear-gradient(to top, rgb(219, 222, 255) 0% , white 10%,white 90%, rgb(219, 222, 255) 100%);
     border: 1px solid rgb(209, 209, 209);
     border-radius: 10px; */
+    font-family: 'Bahnschrift', sans-serif;
     font-size: 1.25em;
     padding-left: 0px;
     padding-bottom: 5px;
@@ -490,10 +495,15 @@ select:invalid { color: gray; }
 
 }
 
+.TabTri th {
+ font-family: 'Bahnschrift', sans-serif;
+}
+
 .TabTri td, .TabTri th {
     border: 1px solid #ddd;
     padding-top: 2px;
     padding-bottom: 2px;
+   
 
 }
 
@@ -1437,5 +1447,9 @@ height: auto !important;
     height: auto !important;
     margin:auto !important;
 }   
+
+.txtopt{
+    padding-top: 5px !important;
+}
 
 
