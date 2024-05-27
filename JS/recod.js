@@ -1,3 +1,25 @@
+    /*
+    Trideux.cloud, logiciel d'analyse statistique gratuit en ligne
+    Copyright (C) 2023  A. Alber
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    contact : alber@univ-tours.fr
+    */
+
+
+
 
 ///////
 //   //  ///////   //////  ///////   //////
@@ -1276,7 +1298,7 @@ function Interv(mod1,mod2) {
     var modswap = ModaO[v][mod1]
 
     ModaO[v][mod1] = ModaO[v][mod2]
-    ModaO[v][mod2] =modswap 
+    ModaO[v][mod2] = modswap 
 
 
 
@@ -1794,12 +1816,18 @@ function SauvCSV() { //écriture de la base au format CSV
 }
 
 
-function ExportTR2() {
-    SauvegarderSurDisque(SauvTR2(),nomBase + ".TR2", "UTF-8")
+function ExportTR2(filtre) {
+    
+    
+    var baseexport = nomBase;
+    
+    if (filtre=='true') {baseexport += "[filtre]"};
+
+    SauvegarderSurDisque(SauvTR2(filtre),baseexport + ".TR2", "UTF-8")
     sauvOk();
 }
 
-function SauvTR2() { //écriture de la base au format CSV
+function SauvTR2(filtre) { //écriture de la base au format CSV
 
 
 // séparateur = tabulation (chr9)
@@ -1819,8 +1847,7 @@ function SauvTR2() { //écriture de la base au format CSV
     Ligne = "";
     for (v=1; v<= nv; v++) { // défilement des variables
 
-        var lib = Nom[v];
-
+        var lib = String(Nom[v]);
        
         lib = lib.replace(/[\r\n]+/gm," ") // retrait des sauts de ligne
        
@@ -1862,7 +1889,7 @@ function SauvTR2() { //écriture de la base au format CSV
 
 
     //Ajout du type de variable
-    Ligne = "Type Var (a=alphanum, e=entier, r=réel" + sep;
+    Ligne = "Type Var (a=alphanum, e=entier, r=réel)" + sep;
     for (v=1; v<= nv; v++) { // défilement des variables
 
         if (TypVar[v]=="") {TypVar[v]=QuelTypVar(v)}
@@ -1947,7 +1974,13 @@ function SauvTR2() { //écriture de la base au format CSV
 
     for (l=0;l<=nl;l++){ // défilement des lignes
 
+
+
         Ligne = l + 1 + sep;
+
+        if (filtre=='true' && Filtrer(l) == false) {
+        continue;
+        }
 
 
         for (v=1; v<= nv; v++) { // défilement des variables

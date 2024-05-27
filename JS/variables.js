@@ -1,3 +1,25 @@
+    /*
+    Trideux.cloud, logiciel d'analyse statistique gratuit en ligne
+    Copyright (C) 2023  A. Alber
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    
+    contact : alber@univ-tours.fr
+    
+    */
+
+
 var nomBase;
 var lignesDAT=[]; // lignes du fichier de données
 var lignesPOS=[]; // lignes du dictionnaire des variables
@@ -17,7 +39,7 @@ var Posi=[0]; // tableau des POSITIONS de variable
 var CdMax=[0]; // tableau des Codes max de variable
 var Reco=[0]; // tableau des recodages de variable
 var Libellé=[0]; // tableau des Libellés de variable
-var TypVar=[0]; // tableau des types de variable : (a)lpha par défaut dans trideux (n)=numérique (m) = alpha multiple
+var TypVar=[0]; // tableau des types de variable : (a)lpha par défaut dans trideux (e)=entier (r)= réel (m) = alpha multiple
 var VdsAF=[0]; // la variable est-elle prise en compte dans l'Analyse factorielle 
 
 var vL=0; //variable en lignes

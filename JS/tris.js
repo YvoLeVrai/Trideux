@@ -1,3 +1,25 @@
+    /*
+    Trideux.cloud, logiciel d'analyse statistique gratuit en ligne
+    Copyright (C) 2023  A. Alber
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    contact : alber@univ-tours.fr
+    */
+
+
+
 
 ////////   ///////////     ///      ///////////
 ///        ///       //    ///     ///
@@ -76,13 +98,14 @@ function B_A_S_E() {
       <div class="dropdown-item" onclick= "AjoutVarCrois()" style="cursor:pointer;" > Par croisement </div>
       <div class="dropdown-item"  onclick= "AjoutVarScore()" style="cursor:pointer"> Par score </div>
       
+      
        
 
       
       </div>`  
 
       
-//<div class="dropdown-item"  onclick= "AjoutVarCalc()" style="cursor:pointer;"> Par calcul </div>
+// <div class="dropdown-item"  onclick= "AjoutVarCalc()" style="cursor:pointer;"> Par calcul </div>
 
 
     Case += ` </div>
@@ -685,8 +708,8 @@ function T_A_P() { // Calcule et affiche le tri à plat
     strPiedPlain = 'Source : ' + nomBase + '\r\n\vChamp : ' + champ + '\r\n';
     strpied = `<div style="margin-left:37px;margin-top:10px;float:left'">Source : `+ nomBase + ` <br> Champ : `+ champ + ` <br> `
     if (vP!=0){
-        strPiedPlain = ' Var. Pond. : ' + Libellé[vP] + '\r\n';
-        strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
+        strPiedPlain += ' \r\n\v Var. Pond. : ' + Libellé[vP] + '\r\n';
+        strpied+=` \n Var. Pond. : ` + Libellé[vP]  + `<br>`
     }
     strpied+=`</div>`
 
@@ -867,7 +890,7 @@ function EnteteVar(x) {
 
 
 
-    Case +=`<button id = "btnEclat" class="btn btn-outline-secondary"  style = "float:right;margin:3px; margin-right:5px;display:none" onclick= "Eclater(`+ vL + `)" type="button">Eclater</button>`
+    Case +=`<button id = "btnEclat" class="btn btn-outline-secondary"  style = "float:right;margin:3px; margin-right:5px;display:none" onclick= "Eclater(`+ vL + `)" type="button">Disjoindre</button>`
     Case +=`<button id = "btnAgreg" class="btn btn-outline-secondary"  style = "float:right;margin:3px; margin-right:5px;display:none" onclick= "Agreger()" type="button">Agréger</button>`
 
 
@@ -1094,6 +1117,7 @@ function EnteteVar(x) {
 
 
         var nblig = Colonne.length
+    
         var nbmiss = BDD.length - Colonne.length
         Moy=  Moyenne(Colonne);
 
@@ -1688,13 +1712,19 @@ function E_X_P(x,RgDp,fonction) {
     if (x==0) {return 0;}
 
     // inclusion ou non des non-réponses
-
+     
     // tableau des valeurs
-    TapX= new Array (Number(CdMax[x])+1);
-    for (i = 0; i < TapX.length; i++) {
-        TapX[i]=0;
-    }
+    var valmax = Number(CdMax[x])+1;
+    
+    if (TypVar[x]=='e'||TypVar[x]=='r') {valmax=1}; 
 
+    TapX= new Array (valmax);
+
+    for (i = 0; i < TapX.length; i++) {
+         TapX[i]=0;
+        }
+
+    
     var rgl = Reco[x] // règle de recodage
 
 // 1- Tri à plat de la variable
@@ -1793,7 +1823,10 @@ function E_X_P(x,RgDp,fonction) {
 
 
 
-        if (filtré==false) {TapX[valmod]+= coeffp};
+        if (filtré==false ) {
+            if (TypVar[x]=='a') {TapX[valmod]+= coeffp}
+            else {TapX[0]+= coeffp }; // en cas de var numérique  - pas de tap
+        }
 
     };
 
@@ -1869,21 +1902,7 @@ function E_X_P(x,RgDp,fonction) {
 
     }
 
-
-
-    // affichage des résultats
-    /*
-var tbl = "";
-for (i = 0; i < ExpVar.length; i++) {
-tbl=tbl+ ExpVar[i] + "|";
-tbl=tbl+ ExpMod[i]+ "|";
-tbl=tbl+ ExpLib[i]+ "|";
-tbl=tbl+ ExpEff[i]+ "| niveau";
-tbl=tbl+ ExpRng[i];
-
-tbl=tbl+ "\n";
-};
-*/
+ 
 
 
 
@@ -1974,6 +1993,7 @@ function AffE_X_P(fonction) {
         var caseCoch = "";
         
         if (ExpAct[i]==true){caseCoch="checked"}
+               
 
         if (ExpMod[i] == "var") {
 
@@ -2011,6 +2031,7 @@ function AffE_X_P(fonction) {
             // =  `<tr onclick = "SousTri(this)">`;
 
             
+
             Prct = ExpPct[i]*100;
             Prct= Prct.toFixed(NbDec);
 
@@ -2047,19 +2068,37 @@ function AffE_X_P(fonction) {
                 Case += `<input type="checkbox"  `+ caseCoch +` class= "chkexp" id="ChkExpl` + i + `" value="1" onclick="seltronc(`+ i + `);selbranches(`+ i + `,false);defFiltre(); " >`
             }
 
-            Case += `<div onclick = "SousTri(`+ l + `,'` + fonction + `')"> 
-            <div  class="PrctExp ` + balise + ` " style="height:30px;position:absolute;cursor:pointer;width:`+ nomb  + `%;` + prg + `"></div>
-            <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:10px;cursor:pointer;pointer-events: none;">`+  ExpLib[i] + `  </div>   
-            </div> `
+            
+            
+            if (TypVar[ExpVar[i]] =='a'){ // variable quali
+                    Case += `<div onclick = "SousTri(`+ l + `,'` + fonction + `')"> `
+                    Case += `<div  class="PrctExp ` + balise + ` " style="height:30px;position:absolute;cursor:pointer;width:`+ nomb  + `%;` + prg + `"></div>
+                    <div  class="` + balise + `" style="padding-top:5px;height:30px;position:absolute;padding-left:10px;cursor:pointer;pointer-events: none;">`+  ExpLib[i] + `  </div>   
+                    </div> `
 
-            if (fonction != "filtre") {
-            Case += `<div   style="padding-top:5px;height:30px;position:absolute;left:1000px;width:150px;text-align:right;cursor:pointer;" onclick=solo(`+ i +`)>`+  ExpEff[i] + ` </div>
-            <div   style="padding-top:5px;height:30px;position:absolute;left:1150px;width:80px;text-align:right;cursor:pointer;">`+    Prct+` % </div> `     
-            } else {
-                Case += `<button class="btn btn-outline-secondary btn-sm imgbtn imgfltr flchbout"  onclick= "solo(`+ i +`)" type="button" style="float:right;opacity:0.25;"  ></button>
-                `
-            }
+                    if (fonction != "filtre") {
+                    Case += `<div   style="padding-top:5px;height:30px;position:absolute;left:1000px;width:150px;text-align:right;cursor:pointer;" onclick=solo(`+ i +`)>`+  ExpEff[i] + ` </div>
+                    <div   style="padding-top:5px;height:30px;position:absolute;left:1150px;width:80px;text-align:right;cursor:pointer;">`+    Prct+` % </div> `     
+                    } else {
+                        Case += `<button class="btn btn-outline-secondary btn-sm imgbtn imgfltr flchbout"  onclick= "solo(`+ i +`)" type="button" style="float:right;opacity:0.25;"  ></button>
+                        `
+                    }
 
+            } else {  // variable quanti
+
+                if (fonction=="filtre") {
+
+                    Case += `<div  style = "display: inline-flex;width:410px;"> 
+                    <div><input type="text" id="txtFiltreMin` + i + `" style= "width:80px;"  onfocus="this.setSelectionRange(0, this.value.length)" value="` + 0  +  `" onkeydown="MàJFiltreQti(event)"  >
+                    <label> <</label> </div>
+                    <div class="PrctExp" style="width:40%;height:30px!" onclick = "SousTri(`+ l + `,'` + fonction + `')" >   </div>
+                    <div><input type="text" id="txtFiltreMax` + i + `" style= "float:right;width:80px;" onfocus="this.setSelectionRange(0, this.value.length)" value="` + CdMax[ExpVar[i]] +  `" onkeydown="MàJFiltreQti(event)" >
+                    <label style= "float:right">></label></div></div>
+                    
+                    `
+                } else { Case += `<div>  Affichage impossible pour les variables quantitatives  </div>`}
+
+            } ;
         
             Case += `</div> `;
 
@@ -2244,8 +2283,22 @@ function defFiltre(){
 
         if (ExpAct[l]==false && ExpMod[l]!="var"){ // la case est désactivée (il y a un filtre à ajouter)
         
-            chaineFltr += ExpVar[l] + "-" + ExpMod[l] + "-" + ExpAct[l] + "/"; // ajout de la ligne
+            if (TypVar[ExpVar[l]] == 'a'){
+            chaineFltr += ExpVar[l] + "-" + ExpMod[l] + "-" + ExpAct[l] + "-=-./"; // ajout de la ligne
+            } else {
 
+                var bornMin;
+                if (document.getElementById("txtFiltreMin"+l)!=null) { bornMin = Number(document.getElementById("txtFiltreMin"+l).value)}
+
+               var bornMax;
+               if (document.getElementById("txtFiltreMax"+l)!=null) {bornMax = Number(document.getElementById("txtFiltreMax"+l).value)}
+
+               chaineFltr += ExpVar[l] + "-" + bornMin + "-" + ExpAct[l] + "-<>-" +  bornMax + "/"; 
+                
+
+            }
+            
+            
             var rg= ExpRng[l] // nombre d'itérations
             
 
@@ -2269,11 +2322,13 @@ function defFiltre(){
         chaineFltr="";
     }
  
-    
+    //alert(ExpFltr)
          
     QuelTri()
  
 }
+
+
 
 function SuppFltr() {
 
@@ -2514,6 +2569,13 @@ function Histo(cadre, col, qnts, Moy, vsel) {
 
     // abcisses
 
+    var Echelle = defEchelles(valmin,valmax,false);
+
+    var echmin = Echelle[0];
+    var echmax = Echelle[1];
+    var ech =   Echelle[2] ;
+
+    /*
     var pas =0.1
 
     valmaxtxt = String(valmax);
@@ -2532,7 +2594,10 @@ function Histo(cadre, col, qnts, Moy, vsel) {
     var reste = valmax%ech;
     var echmax = valmax + ech -reste;
 
+    */
+
     var amplix = echmax - echmin;
+
     var larbar = lardisp/amplix;
     //larbar=Math.round(larbar);
 
@@ -3837,8 +3902,8 @@ function khi(x,RgDpX,y,RgDpY){
 
 
     if (vP!=0){
-        strPiedPlain += 'Var. Pond. : ' + Libellé[vP] + '\r\n';
-        strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
+        strPiedPlain += '\r\n\v Var. Pond. : ' + Libellé[vP] + '\r\n';
+        strpied+=` \n Var. Pond. : ` + Libellé[vP]  + `<br>`
     }
 
     if (multi==false) {
@@ -3866,7 +3931,7 @@ function khi(x,RgDpX,y,RgDpY){
 
 
     } else {
-        strPiedPlain += 'Variable(s) multiple(s)! Les marges dépassent 100%';
+        strPiedPlain += '\r\n\v Variable(s) multiple(s)! Les marges dépassent 100%';
         strpied+=`<p style="color:rgb(255,10,10);font-size:0.75rem">Variable(s) multiple(s)! Les marges dépassent 100% </p>`
     }
 
@@ -4201,7 +4266,7 @@ function QtiQli(x,y) {
     }
 
     // extraction de la colonne pour le TOTAL
-    ExtractCol(y,0,0)
+    ExtractCol(y,NRY,0,0)
     TriParTas (Colonne);
 
     var nblig = Colonne.length
@@ -4263,7 +4328,7 @@ function QtiQli(x,y) {
 
     Pied  = document.createElement('p');
     Pied.id='Pied'+rg;
-    var champ = "Population totale (n=" + PopTot + ")";
+    var champ = "Population totale (n=" + nblig + " - manquantes : " + (PopTot - nblig) +  ")";
 
     if (EstVu("BlocFiltre")==true) {
         champ = ChampFiltre() + " (n=" + PopTot + ")";
@@ -4276,8 +4341,8 @@ function QtiQli(x,y) {
 
 
     if (vP!=0){
-        strPiedPlain = "Var. Pond. : " + Libellé[vP] + '\r\n';
-        strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
+        strPiedPlain = "\r\n\v Var. Pond. : " + Libellé[vP] + '\r\n';
+        strpied+=` \n Var. Pond. : ` + Libellé[vP]  + `<br>`
     }
 
 
@@ -4419,7 +4484,7 @@ function QtiQti(x,y) {
        
     
             //filtrage
-            if (EstVu('BlocFiltre')!=0 && Filtrer(l) == false ) { continue}
+            if (EstVu('BlocFiltre')!=0 && Filtrer(l) == false ) {continue}
     
             Cols[0].push(valx + ";" + valy)
 
@@ -4540,8 +4605,8 @@ function QtiQti(x,y) {
 
 
     if (vP!=0){
-        strPiedPlain = "Var. Pond. : " + Libellé[vP] + '\r\n';
-        strpied+=` Var. Pond. : ` + Libellé[vP]  + `<br>`
+        strPiedPlain = "\r\n\v Var. Pond. : " + Libellé[vP] + '\r\n';
+        strpied+=` \n Var. Pond. : ` + Libellé[vP]  + `<br>`
     }
 
 
@@ -4955,8 +5020,9 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
     // défilement des lignes
     for (l=0 ;l < nblig; l++) {
 
-        if (BDD[l][c] ==' '){continue;}// évitement des valeurs nulles
+        if (String(BDD[l][c]) ==' '){continue;}// évitement des valeurs nulles
         if (Number(BDD[l][c])==0 && NRC==false ){continue;}// évitement des zéros (si choisi)
+        if (Number(ValApRec(BDD[l][c],rgl))==0 && NRC==false ){continue;}// évitement des zéros APRES RECODAGE(si choisi)
 
         if (v2> 0) {
 
@@ -4998,7 +5064,7 @@ function ExtractCol(c,NRC, v2,m2){ //c=colonne  de la base à extraire , v2= 2è
     }
 
 
-
+  
     return Colonne;
 
 };
@@ -5215,6 +5281,7 @@ function TriGnrModas(type, sens) {
         //var rg = TabTap[m][0]
         //alert(rg + " -> " + ModaTemp[rg] )
         Moda[vL][m] = TabTap[m][1]
+        ModaO[vL][m] = TabTap[m][1]
         matRec[TabTap[m][0]]  = m;
     }
 
@@ -5421,6 +5488,7 @@ document.getElementsByClassName('ChkNR').onclick = function() {
 
 function Filtrer(ligne) {
     
+     
     // ancienne procédure
 
     /*var z = vF; 
@@ -5435,6 +5503,8 @@ function Filtrer(ligne) {
 
     // procédure multi variée
   
+    
+
     
     if (ExpFltr=="0") {return true} // s'il n'y a pas de filtre, on valide sans chercher
 
@@ -5464,13 +5534,15 @@ function Filtrer(ligne) {
                 
                 
                 var varf = Number(crit[0]) ;
-                var modf = crit[1] ;
+                var modf = Number(crit[1]) ;
                 var actf=true;
                 actf = crit[2] ;
+                var compar = crit[3];
+                var modf2 = Number(crit[4]);
                 
 
                 var valmod = BDD[ligne][varf] ;
-                var valmod2 = valmod;
+                var valmod2 = Number(valmod);
 
                 var rglreco= Reco[varf] // prise en compte du filtre
 
@@ -5478,9 +5550,16 @@ function Filtrer(ligne) {
                 if (rglreco != "" ) {  valmod2=ValApRec(valmod,rglreco)}
                 
                 
-                if(valmod2!=modf) { // la ligne est-elle concernée par le filtre (si la valeur )
+                if(compar =="=" && valmod2!=modf) { // la ligne est-elle concernée par le filtre (si la valeur est égale )
                     nonc=true // si oui, non concernée
+                    
                 }
+
+                if(compar =="<>" && valmod2>modf && valmod < modf2) { // la ligne est-elle concernée par le filtre (si la valeur est comprise entre bornes)
+                    nonc=true // si oui, non concernée
+                    
+                }
+
 
 
 
@@ -5758,4 +5837,19 @@ function croisetotal() {
     }
 
     endWait()
+}
+
+function MàJFiltreQti(event) {
+    var key = event.keyCode;
+
+
+
+    if (key===13) {
+       
+
+        defFiltre()
+        
+
+    }
+
 }

@@ -1,13 +1,34 @@
+<!--
+
+<Trideux.cloud, outil de correction des transcriptions 
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    contact : alber@univ-tours.fr
+-->
+
 <html lang="fr">
 
-<title> Trideux.cloud, logiciel d'analyse statistique gratuit en ligne</title>
+<title> Trideux.cloud</title>
+
 
 <head>
 
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 
 
-
+ 
     <!-- gestion des fichiers !-->
     <script src="FileSaver.js"></script>
     <script src="jszip.js"></script>
@@ -171,7 +192,7 @@
     <div id="entete" >
 
         <img src="Images\tri2.cloud3.PNG" height="60" width="111" alt="Trideux" class="logo" onclick="location.reload();">
-        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.6.3</label>
+        <label style="position:absolute;top:56px;left:15px;font-size:10px;color:rgb(92, 92, 155);"> v.0.6.9</label>
 
         <div class="btnfonction" id = "btnbase" style="position: relative; "  ><img src="Images\folder.png"   alt="Données"><label class='txtbtn txtbtn-bleu' id="lblbase"  > Ouvrir base </label>
             
@@ -213,10 +234,11 @@
                                                                 border-radius: 0 5px 5px 0;
                                                                 cursor: pointer;"
                                                                 >  
-                <img src="CSS\caret-bas.png" alt="plus d'options" style="margin: 10px;" >
+                <img src="CSS\plus.png" alt="plus d'options" style="margin: 10px;" >
                  
                 <div class="dropdown-content menudrlnt " id = "menuexport" style="left: calc(100vw - 370px)">
-                    <a> <label id="btnexport1" onclick="ExportBase()" style="cursor: pointer;">  Convertir au format trideux (DAT/POS/DIC)</label></a>
+                    <a> <label id="btnexport1" onclick="ExportTR2('true')" style="cursor: pointer;">  Exporter la base après filtrage (format TR2)</label></a>
+                    <a> <label id="btnexport2" onclick="ExportBase()" style="cursor: pointer;">  Convertir au format trideux (DAT/POS/DIC)</label></a>
                     <a> <label  id="btnexport3" onclick="ExportCSV()" style="cursor: pointer;">  Convertir en format CSV</label></a>
                     <a> <label  id="btnexport4" onclick="DicoVars()" style="cursor: pointer;">  Exporter dictionnaire des variables</label></a>
                     <a> <label  id="btnexport4" onclick="TapComplet()" style="cursor: pointer;">  Exporter tri à plat complet</label></a>
@@ -224,7 +246,7 @@
 
             </div>
 
-            <div class="btnfonction bouton-froid" id="btnexport"  onclick="ExportTR2()" style="float:right;
+            <div class="btnfonction bouton-froid" id="btnexport"  onclick="ExportTR2('false')" style="float:right;
                                                             border-right:0px;
                                                             border-radius: 5px 0 0 5px;">
 
@@ -233,10 +255,11 @@
                 
             </div>
             
+<!--
+             <div  class="btnfonction" onclick="DefNA()"><label class='txtbtn'>Fonction</label></div> 
 
-             <!--<div  class="btnfonction" onclick="redefModaO()"><label class='txtbtn'>Fonction</label></div> 
+              ="redefModaO()" "trimModa()" DefNA()!-->
 
-             ="redefModaO()" "trimModa()" DefNA()!-->
         </div>
 
     </div>
@@ -474,17 +497,29 @@
     
     <a>Trideux cloud est un logiciel en ligne d'analyse de bases de données. </a> <br> Il est totalement gratuit, ne nécessite aucune création de compte ni abonnement et ne dépose aucun cookie sur votre ordinateur.<br> 
 
-     
     <br>
+
+      <img src="Images/illus1.png"   > 
+      <img src="Images/illus4.png"  style = "height:306px" > 
+
+      <img src="Images/illus3.png"  style = "height:303px;width:600px" > 
+
+    <br>
+    <br>
+
     <p> <img src="Tutos/manuel.jpg" alt="Manuel"  style = "width:40px">
 
      <a href="Tutos/intro.html" target="_blank" rel="noopener noreferrer">+ d'informations et documentation</a>.</p>
-
-     
-     <a> <strong> Pour être sûr.e de travailler dans la version la plus à jour, tapez Ctrl + F5 ou Ctrl + maj + R. </strong> </a>
     
-
+     <a> <strong> Pour être sûr.e de travailler dans la version la plus à jour, tapez Ctrl + F5 ou Ctrl + maj + R. </strong> </a>
+   
     <br> 
+
+  
+
+
+
+
     <br> 
 
     <h2 style="font-size: 20px"> Bases de démonstration : <br> </h2>
@@ -497,7 +532,7 @@
     
     <a href="#" onclick="openFich('/Data/vico2020.TR2');" > <label style="cursor: pointer;">  . VICO2020 </label> </a> <a>(Enquête sur la vie en confinement - Extraits )</a> </p> 
     
-    <a href="#" onclick="openFich('/Data/ETUSOC_3.TR2');" > <label style="cursor: pointer;color:white">  . ETUSOC_2022 </label> </a> </a> </p> 
+    <a href="#" onclick="openFich('/Data/ETUBUD_2.TR2');" > <label style="cursor: pointer;color:white">  . ETUBUD_2023 </label> </a> </a> </p> 
 
      
 

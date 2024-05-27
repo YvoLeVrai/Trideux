@@ -1,3 +1,24 @@
+    /*
+    Trideux.cloud, logiciel d'analyse statistique gratuit en ligne
+    Copyright (C) 2023  A. Alber
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+    contact : alber@univ-tours.fr
+    */
+   
+
 var pas=0
 var timer;
 var pasprog=0
@@ -110,6 +131,7 @@ function HistoTcr(rg){
         return;
     }
     const cnv = canvas.getContext('2d');
+    cnv.clearRect(0, 0, canvas.width, canvas.height);
     
     // définition de la largeur 
     var lartab=document.getElementById("TabTCR").offsetWidth
@@ -515,23 +537,15 @@ function Moustaches(cadre, x, y,nbc) {
 
 
     // ordonnées
-    effmaxtxt = String(valmax);
-    pas = effmaxtxt.length;
 
-    var ech = 1;
-    if (pas>1) {
-        var ech = Math.pow(10,(pas-1))
-    } else {
-        ech=2;
-    }
 
-    ech=ech/2;
 
-    var reste = valmax%ech;
-    var echymax = valmax + ech - reste;
-    var reste = valmin%ech;
-    var echymin = valmin - ech - reste;
-    if (echymin<0){echymin=0}
+    var Echelle = defEchelles(valmin,valmax,true)
+
+    var echymin = Echelle[0]
+    var echymax = Echelle[1]
+    var ech =   Echelle[2]   
+     
 
 
     var hautech = haudisp/(echymax-echymin);
@@ -698,27 +712,20 @@ function Nuage(cadre, x, y ) {
     const cnv = canvas.getContext('2d');
 
 
-    // extraction de la colonne des y (sans filtrage pour échelle)
+     
 
-    // les non réponses sont-elles incluses?
-    var NRC = document.getElementById('ChkNRY').checked
-
-    var col = ExtractCol(y,NRC, 0,0)
-    TriParTas (col);
-
-    var rgl = Reco[y]
-
-
-
-    var valminx = ValApRec(jStat(Cols[1]).min(),rgl)
+    var valminx = ValApRec(jStat(Cols[1]).min(),Reco[x])
     valminx = Math.floor(valminx);
-    var valmaxx = ValApRec(jStat(Cols[1]).max(),rgl)
+  
+    var valmaxx = ValApRec(jStat(Cols[1]).max(),Reco[x])
     valmaxx= Math.floor(valmaxx);
-
-    var valminy = ValApRec(jStat(Cols[2]).min(),rgl)
-    valminy = Math.floor(valminy);
-    var valmaxy = ValApRec(jStat(Cols[2]).max(),rgl)
-    valmaxy= Math.floor(valmaxy);
+ 
+   
+    var valminy = ValApRec(jStat(Cols[2]).min(),Reco[y])
+    valminy = Math.floor(valminy)-1;
+   
+    var valmaxy = ValApRec(jStat(Cols[2]).max(),Reco[y])
+    valmaxy= Math.floor(valmaxy)+1;
 
 
     // définition des bornes (pour la légende)
@@ -804,31 +811,17 @@ function Nuage(cadre, x, y ) {
 
 
     // abscisse
-    effmaxtxt = String(valmaxx);
-    pas = effmaxtxt.length;
 
-    var ech = 1;
-    if (pas>1) {
-        var ech = Math.pow(10,(pas-1))
-    } else {
-        ech=2;
-    }
+    var Echelle = defEchelles(valminx,valmaxx,true)
 
-    ech=ech/2;
-    
-    var reste = valmaxx%ech;
-    if (reste>0) {var echxmax = valmaxx + ech - reste;} else {var echxmax = valmaxx; }
-    var reste = valminx%ech;
-    if (reste>0) {var  echxmin = valminx - ech - reste;} else {var echxmin = valminx  }
-    //var echxmin = valminx - ech - reste;
-    if (echxmin<0 && valminx > 0){echxmin=0}
-
-    
+    var echxmin = Echelle[0]
+    var echxmax = Echelle[1]
+    var ech =   Echelle[2]   
 
      
+     
     var larech = lardisp/(echxmax-echxmin);
-    
-
+   
     // légende en x 
     cnv.fillStyle = 'rgb(90 90 90)';
     cnv.fillRect(margG, margH, 1, haudisp);
@@ -836,16 +829,16 @@ function Nuage(cadre, x, y ) {
          
     for (b=echxmin;b<echxmax+1;b++) {
 
+         
         if (b%ech==0) {
              
             // effectifs (à gauche)
-            var posleg = margG + b*larech;
+            var posleg = margG + (b-echxmin) *larech;
             cnv.fillStyle = 'rgb(220 220 250)';
             cnv.fillRect( posleg, margH + haudisp, 1,10);
 
             cnv.fillStyle = 'rgb(90 90 90)';
             cnv.fillText(b,  posleg+2 , margH + haudisp+ 15);
-
 
            
 
@@ -859,23 +852,12 @@ function Nuage(cadre, x, y ) {
 
 
     // ordonnées
-    effmaxtxt = String(valmaxy);
-    pas = effmaxtxt.length;
 
-    var ech = 1;
-    if (pas>1) {
-        var ech = Math.pow(10,(pas-1))
-    } else {
-        ech=2;
-    }
+    var Echelle = defEchelles(valminy,valmaxy,true)
 
-    ech=ech/2;
-
-    var reste = valmaxy%ech;
-    if (reste > 0) {var echymax = valmaxy + ech - reste;} else {var echymax = valmaxy;} 
-    var reste = valminy%ech;
-    if (reste > 0) {var echymin = valminy - ech - reste;} else {var echymin = valminy;}
-    if (echymin < 0 && valminy >=0) {echymin=0;}
+    var echymin = Echelle[0]
+    var echymax = Echelle[1]
+    var ech =   Echelle[2]   
      
 
 
@@ -930,8 +912,8 @@ function Nuage(cadre, x, y ) {
 
          if (valx != valxs || valy != valys || l == Cols[1].length ) { // si la valeur suivante est différente ou si l'on est à la fin des enregistrements
             // définition de la position en fonction des valeurs
-            var posx = margG + valx / (echxmax - echxmin) * lardisp
-            var posy = margH + haudisp - valy / (echymax - echymin) * haudisp
+            var posx = margG + (valx-echxmin) / (echxmax - echxmin) * lardisp
+            var posy = margH + haudisp - (valy-echymin) / (echymax - echymin) * haudisp
             
             cnv.globalAlpha=0.2 +nbi*0.05;
 
@@ -1769,4 +1751,55 @@ function getTextWidth(text, font) {
     context.font = font;
     var metrics = context.measureText(text);
     return metrics.width;
+}
+
+function defEchelles(Vmin,Vmax,exact){
+
+
+    var amplitude = Vmax - Vmin;
+    amplitude = String(amplitude)
+    pas = amplitude.length;
+
+ 
+
+    var ech = 1;
+    if (pas>1) {
+        var ech = Math.pow(10,(pas-1))
+    } else {
+        ech=2;
+    }
+
+    ech=ech/2;
+
+
+    // évaluation du nombre de pas 
+    var nbpas = (Vmax- Vmin)/ech
+     
+    //alert("nbpas " + nbpas)
+    if (nbpas < 3) {ech=ech/5}
+    
+
+    if (exact == false ) {
+
+        var reste = Vmax%ech;
+        
+        if (reste>0) {var echmax = Vmax + ech - reste;} else {var echmax = Vmax; };
+        
+        var reste = Vmin%ech;
+        
+        if (reste>0) {var  echmin = Vmin - reste;} else {var echmin = Vmin  };
+        
+        if (echmin<0 && Vmin > 0){echmin=0};
+    
+    } else {
+
+        echmin = Vmin;
+        echmax = Vmax;
+    }
+
+
+    
+    return[echmin,echmax,ech];
+
+
 }
